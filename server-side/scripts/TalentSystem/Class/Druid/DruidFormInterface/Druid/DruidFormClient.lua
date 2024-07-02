@@ -871,7 +871,7 @@ if playerClass == "DRUID" then
 
     buttonOuvrirForms:SetScript("OnEnter", function(self)
         GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-        GameTooltip:SetText("|cffffffffForme|r |cffff7d0a(Druide)|r\n\nUtilisez le système de morph pour\nchanger l'apparence de votre druide tout en\nmaintenant les compétences de la forme choisie.")
+        GameTooltip:SetText("|cffffffffForme|r |cffff7d0a(Druide)|r\n\nChanger l'apparence de votre druide tout en\nmaintenant les compétences de la forme choisie.")
         GameTooltip:Show()
     end)
 
