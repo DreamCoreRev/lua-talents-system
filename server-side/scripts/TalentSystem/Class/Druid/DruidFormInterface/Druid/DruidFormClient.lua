@@ -26,6 +26,12 @@ frameFormDruid:SetBackdrop(
     edgeSize = 20,
     insets = { left = 5, right = 5, top = 5, bottom = 5 }
 })
+
+local formIcon = frameFormDruid:CreateTexture("FormIcon", "OVERLAY")
+formIcon:SetTexture("Interface\\TalentFrame\\Template\\Class\\Druid\\IconeDruid.blp")
+formIcon:SetSize(60, 60)
+formIcon:SetPoint("TOPLEFT", frameFormDruid, "TOPLEFT", -10, 10)
+
 frameFormDruid:SetScript("OnDragStart", frameFormDruid.StartMoving)
 frameFormDruid:SetScript("OnHide", frameFormDruid.StopMovingOrSizing)
 frameFormDruid:SetScript("OnDragStop", frameFormDruid.StopMovingOrSizing)
