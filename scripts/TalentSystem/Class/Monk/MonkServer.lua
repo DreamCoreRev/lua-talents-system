@@ -2,7 +2,7 @@ local AIO = AIO or require("AIO")
 local MonkHandlers = AIO.AddHandlers("TalentMonkspell", {})
 local TalentMonkPointsSpend = {}
 
-local MAX_TALENTS = 42
+local MAX_TALENTS = 44
 
 local talents = {
 	-- Template 1
