@@ -6,14 +6,12 @@ local MAX_TALENTS = 6
 
 local talents = {
 
-	-- Template 1
 	
 	["spellbeserker"] = {spellID = 381804, itemID = 338404},
     ["spellrallyingcry"] = {spellID = 382034, itemID = 338404},
     ["spellspeed"] = {spellID = 381712, itemID = 338404},
     ["spellruse"] = {spellID = 381972, itemID = 338404},
     ["spelldisengage"] = {spellID = 382000, itemID = 338404},
-	-- Template 2
 	
 	["spelllightningstrike"] = {spellID = 381740, itemID = 338404},
     ["spellfireball"] = {spellID = 381689, itemID = 338404},

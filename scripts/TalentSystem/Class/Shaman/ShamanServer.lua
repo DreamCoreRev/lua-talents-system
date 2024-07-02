@@ -5,9 +5,7 @@ local TalentShamanPointsSpend = {}
 local MAX_TALENTS = 41
 
 local talents = {
-	-- Template 1
 
-	-- Elémentaire
 	
 	["spellconvection"] = {spellID = 16112, itemID = 338404},
 	["spellconcussion"] = {spellID = 16108, itemID = 338404},
@@ -38,7 +36,6 @@ local talents = {
 	["spellearthsgrasp"] = {spellID = 16130, itemID = 338404},
 	["spellancestralknowledge"] = {spellID = 17489, itemID = 338404},
 	
-	-- Amélioration
 	
 	["spellguardiantotems"] = {spellID = 16293, itemID = 338404},
 	["spellthunderingstrikes"] = {spellID = 16305, itemID = 338404},
@@ -54,7 +51,6 @@ local talents = {
 	["spellmentaldexterity"] = {spellID = 51885, itemID = 338404},
 	["spellunleashedrage"] = {spellID = 30809, itemID = 338404},
 	
-	-- Template 2
 	
 	["spellweaponmastery"] = {spellID = 29086, itemID = 338404},
 	["spellfrozenpower"] = {spellID = 63374, itemID = 338404},
@@ -71,11 +67,10 @@ local talents = {
 	["spellferalspirit"] = {spellID = 51533, itemID = 338404},
 	["spellimprovedhealingwave"] = {spellID = 16229, itemID = 338404},
 	
-	-- Ombre
 	
 	["spelltotemicfocus"] = {spellID = 16225, itemID = 338404},
 	["spellimprovedreincarnation"] = {spellID = 16209, itemID = 338404},
-	["spellhealinggrace"] = {spellID = 29191, itemID = 338404},--
+	["spellhealinggrace"] = {spellID = 29191, itemID = 338404},
 	["spelltidalfocus"] = {spellID = 16217, itemID = 338404},
 	["spellimprovedwatershield"] = {spellID = 16198, itemID = 338404},
 	["spellhealingfocus"] = {spellID = 16232, itemID = 338404},

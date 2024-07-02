@@ -5,9 +5,7 @@ local TalentDeathknightPointsSpend = {}
 local MAX_TALENTS = 44
 
 local talents = {
-	-- Template 1
 
-	-- Sang
 	
 	["spellbutchery"] = {spellID = 49483, itemID = 338404},
 	["spellsubversion"] = {spellID = 49491, itemID = 338404},
@@ -38,7 +36,6 @@ local talents = {
 	["spellbloodgorged"] = {spellID = 61158, itemID = 338404},
 	["spelldancingruneweapon"] = {spellID = 49028, itemID = 338404},
 	
-	-- Givre
 	
 	["spellimprovedicytouch"] = {spellID = 51456, itemID = 338404},
 	["spellrunicpowermastery"] = {spellID = 50147, itemID = 338404},
@@ -57,7 +54,6 @@ local talents = {
 	["spelldeathchill"] = {spellID = 49796, itemID = 338404},
 	["spellimprovedicytalons"] = {spellID = 55610, itemID = 338404},
 	
-	-- Template 2
 	
 	["spellmercilesscombat"] = {spellID = 49538, itemID = 338404},
 	["spellrime"] = {spellID = 59057, itemID = 338404},
@@ -73,7 +69,6 @@ local talents = {
 	["spelltundrastalker"] = {spellID = 50130, itemID = 338404},
 	["spellhowlingblast"] = {spellID = 49184, itemID = 338404},
 	
-	-- Impie
 	
 	["spellviciousstrikes"] = {spellID = 51746, itemID = 338404},
 	["spellvirulence"] = {spellID = 49568, itemID = 338404},

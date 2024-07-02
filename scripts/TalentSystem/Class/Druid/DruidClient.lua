@@ -9,67 +9,54 @@ function DruidHandlers.ShowTalentDruid(player)
     frameTalentDruid:Show()
 end
 
-local MAX_TALENTS = 44 -- Définition du nombre maximal de talents que le joueur peut apprendre
+local MAX_TALENTS = 44
 
 local OPEN_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_72_artifact_forge_final_trait_unlocked.ogg"
 local CLOSE_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_72_artifact_forge_trait_refund_end.ogg"
 local SPELL_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_80_azeritearmor_rotationends_02.ogg"
 
--- Attribute window
 local frameTalentDruid = CreateFrame("Frame", "frameTalentDruid", UIParent)
 frameTalentDruid:SetSize(1200, 650)
 frameTalentDruid:SetMovable(true)
 frameTalentDruid:EnableMouse(true)
 frameTalentDruid:RegisterForDrag("LeftButton")
-frameTalentDruid:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 50, -50) -- Adjust the X and Y coordinates
+frameTalentDruid:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 50, -50)
 frameTalentDruid:SetBackdrop(
 {
-    -- bgFile = "interface/TalentFrame/talentsclassbackgroundDruid", --Interface/AchievementFrame/UI-Achievement-Parchment-Horizontal
-    bgFile = "interface/TalentFrame/Template/Class/Druid/talentsclassbackgrounddruid", --Interface/AchievementFrame/UI-Achievement-Parchment-Horizontal
-    edgeFile = "interface/tooltips/ui-tooltip-border-corrupteddruid", --Interface/DialogFrame/UI-DialogBox-Border
+    bgFile = "interface/TalentFrame/Template/Class/Druid/talentsclassbackgrounddruid",
+    edgeFile = "interface/tooltips/ui-tooltip-border-corrupteddruid",
     edgeSize = 20,
     insets = { left = 5, right = 5, top = 5, bottom = 5 }
 })
 
--- Ajoutez la texture de l'icône du Druid
 local druidIcon = frameTalentDruid:CreateTexture("DruidIcon", "OVERLAY")
 druidIcon:SetTexture("Interface\\TalentFrame\\Template\\Class\\Druid\\IconeDruid.blp")
 druidIcon:SetSize(60, 60)
 druidIcon:SetPoint("TOPLEFT", frameTalentDruid, "TOPLEFT", -10, 10)
 
--- Template Talent Frame
 
--- Ajoute une textureone pour l'image BLP
-local textureone = frameTalentDruid:CreateTexture("TemplateTalentFrame", "OVERLAY") -- Utilisez "OVERLAY" pour être au-dessus des autres éléments
+local textureone = frameTalentDruid:CreateTexture("TemplateTalentFrame", "OVERLAY")
 textureone:SetTexture("Interface\\TalentFrame\\Template\\Class\\Druid\\TalentFrameTemplate.blp")
-textureone:SetSize(928, 928) -- Remplacez width et height par les dimensions souhaitées
-textureone:SetPoint("TOPLEFT", frameTalentDruid, "TOPLEFT", -170, 140) -- Adjust the X and Y coordinates
+textureone:SetSize(928, 928)
+textureone:SetPoint("TOPLEFT", frameTalentDruid, "TOPLEFT", -170, 140)
 
--- Ajuste l'ordre des calques pour être devant les autres éléments
-frameTalentDruid:SetFrameLevel(100) -- Utilisez une valeur supérieure à celle des autres éléments
+frameTalentDruid:SetFrameLevel(100)
 
--- Ajoute une texturetwo pour l'image BLP
-local texturetwo = frameTalentDruid:CreateTexture("TemplateTalentFrame", "OVERLAY") -- Utilisez "OVERLAY" pour être au-dessus des autres éléments
+local texturetwo = frameTalentDruid:CreateTexture("TemplateTalentFrame", "OVERLAY")
 texturetwo:SetTexture("Interface\\TalentFrame\\Template\\Class\\Druid\\TalentFrameTemplateOriginal.blp")
-texturetwo:SetSize(928, 928) -- Remplacez width et height par les dimensions souhaitées
-texturetwo:SetPoint("TOPRIGHT", frameTalentDruid, "TOPRIGHT", 170, 140) -- Adjust the X and Y coordinates
+texturetwo:SetSize(928, 928)
+texturetwo:SetPoint("TOPRIGHT", frameTalentDruid, "TOPRIGHT", 170, 140)
 
--- Ajuste l'ordre des calques pour être devant les autres éléments
-frameTalentDruid:SetFrameLevel(100) -- Utilisez une valeur supérieure à celle des autres éléments
+frameTalentDruid:SetFrameLevel(100)
 
--- Drag & Drop
 frameTalentDruid:SetScript("OnDragStart", frameTalentDruid.StartMoving)
 frameTalentDruid:SetScript("OnHide", frameTalentDruid.StopMovingOrSizing)
 frameTalentDruid:SetScript("OnDragStop", frameTalentDruid.StopMovingOrSizing)
 frameTalentDruid:Hide()
 
--- Nouveau template d'arête
-frameTalentDruid:SetBackdropBorderColor(135, 135, 237) -- Couleur pourpre
+frameTalentDruid:SetBackdropBorderColor(135, 135, 237)
 
--- Nouveau template d'arête
--- frameTalentDruid:SetBackdropBorderColor(199, 156, 110) -- Couleur marron / talentsclassbackgroundDruid
 
--- Close button
 local buttonTalentDruidClose = CreateFrame("Button", "buttonTalentDruidClose", frameTalentDruid, "UIPanelCloseButton")
 buttonTalentDruidClose:SetPoint("TOPRIGHT", -12, -12)
 buttonTalentDruidClose:EnableMouse(true)
@@ -80,10 +67,8 @@ local function CloseTalentWindow()
     PlaySoundFile(CLOSE_TALENT_WINDOW_SOUND)
 end
 
--- Associez la fonction de fermeture au bouton de fermeture
 buttonTalentDruidClose:SetScript("OnClick", CloseTalentWindow)
 
--- Title bar
 local frameTalentDruidTitleBar = CreateFrame("Frame", "frameTalentDruidTitleBar", frameTalentDruid, nil)
 frameTalentDruidTitleBar:SetSize(135, 25)
 frameTalentDruidTitleBar:SetBackdrop(
@@ -106,21 +91,17 @@ fontTalentDruidTitleText:SetText("|cffFFC125Talents|r")
 local fontTalentDruidFrameText = frameTalentDruidTitleBar:CreateFontString("fontTalentDruidFrameText")
 fontTalentDruidFrameText:SetFont("Fonts\\FRIZQT__.TTF", 18)
 fontTalentDruidFrameText:SetSize(200, 5)
-fontTalentDruidFrameText:SetPoint("TOPLEFT", frameTalentDruidTitleBar, "BOTTOMLEFT", -30, -35) -- Adjust the Y offset as needed
+fontTalentDruidFrameText:SetPoint("TOPLEFT", frameTalentDruidTitleBar, "BOTTOMLEFT", -30, -35)
 fontTalentDruidFrameText:SetText("|cffFFC125Druide|r")
 
--- Remplacez votre ligne existante pour la création du texte par celle-ci
 local fontTalentDruidFrameText = frameTalentDruidTitleBar:CreateFontString("fontTalentDruidFrameText")
 fontTalentDruidFrameText:SetFont("Fonts\\FRIZQT__.TTF", 18)
 fontTalentDruidFrameText:SetSize(200, 5)
-fontTalentDruidFrameText:SetPoint("TOPLEFT", frameTalentDruidTitleBar, "BOTTOMLEFT", -30, -60) -- Adjust the Y offset as needed
-fontTalentDruidFrameText:SetText("0 / " .. MAX_TALENTS) -- Initialisez le texte avec 0 talents appris
+fontTalentDruidFrameText:SetPoint("TOPLEFT", frameTalentDruidTitleBar, "BOTTOMLEFT", -30, -60)
+fontTalentDruidFrameText:SetText("0 / " .. MAX_TALENTS)
 
--------------------------------------------------------------
 
--------------------------------------------------------------
 
--- Fonction générique pour créer un bouton de sort
 local function CreateSpellButton(name, texturePath, tooltipText, talentHandler, positionX, positionY)
     local buttonClicked = false
     local talentLearned = false
@@ -133,50 +114,44 @@ local function CreateSpellButton(name, texturePath, tooltipText, talentHandler, 
     button:SetHighlightTexture("Interface/Buttons/checkbuttonhilight")
     button:SetPoint("TOPLEFT", positionX, positionY)
 
-    -- Texture pour l'indicateur d'apprentissage
     local learnIndicator = button:CreateTexture(nil, "OVERLAY")
     learnIndicator:SetTexture("Interface/Buttons/UI-CheckBox-Check")
     learnIndicator:SetSize(30, 30)
     learnIndicator:SetPoint("BOTTOMRIGHT", -2, 2)
     learnIndicator:Hide()
 
-    -- Texte pour afficher l'état du bouton (0 ou 1)
     local buttonText = button:CreateFontString("buttonText", "OVERLAY", "GameFontHighlight")
     buttonText:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -2, 2)
 
-    -- Fonction pour mettre à jour l'état du bouton et de l'indicateur d'apprentissage
     local function UpdateButtonState()
         if talentLearned then
-            button:SetAlpha(1) -- Réduire l'opacité pour indiquer que le bouton est désactivé
-            learnIndicator:Show() -- Afficher l'indicateur d'apprentissage
-            buttonText:SetText("|cffffda2b1|r") -- Mettre à jour le texte pour afficher "1"
+            button:SetAlpha(1)
+            learnIndicator:Show()
+            buttonText:SetText("|cffffda2b1|r")
         else
-            button:SetAlpha(1) -- Rétablir l'opacité pour indiquer que le bouton est activé
-            learnIndicator:Hide() -- Cacher l'indicateur d'apprentissage
-            buttonText:SetText("|cff1aff1a0|r") -- Mettre à jour le texte pour afficher "0"
+            button:SetAlpha(1)
+            learnIndicator:Hide()
+            buttonText:SetText("|cff1aff1a0|r")
         end
     end
 
-    -- Fonction à exécuter lorsque le bouton est cliqué
     button:SetScript("OnMouseUp", function()
         if not buttonClicked and not talentLearned then
-            -- Ajouter une vérification pour s'assurer que le joueur a des points de talent
             local talentItemID = 338404
             local hasTalentPoints = GetItemCount(talentItemID, false, true) > 0
 
             if hasTalentPoints then
                 AIO.Handle("TalentDruidspell", talentHandler, 1)
                 PlaySoundFile(SPELL_TALENT_WINDOW_SOUND)
-                buttonClicked = true -- Marquer le bouton comme cliqué
-                talentLearned = true -- Marquer le talent comme appris
-                UpdateButtonState() -- Mettre à jour l'état du bouton
+                buttonClicked = true
+                talentLearned = true
+                UpdateButtonState()
             else
                 print("|cff00ffffVous n'avez plus de points de talent !|r")
             end
         end
     end)
 
-    -- Affichage du tooltip
     button:SetScript("OnEnter", function(self)
         GameTooltip:SetOwner(self, "TOPLEFT")
         GameTooltip:ClearLines()
@@ -184,24 +159,17 @@ local function CreateSpellButton(name, texturePath, tooltipText, talentHandler, 
         GameTooltip:Show()
     end)
 
-    -- Cacher le tooltip lorsque la souris quitte le bouton
     button:SetScript("OnLeave", function(self)
         GameTooltip:Hide()
     end)
 
-    -- Appel initial pour définir l'état du bouton au chargement
     UpdateButtonState()
 end
 
--- Utilisation de la fonction générique avec des positions spécifiques
 
--------------------------------------------------------------
 
--------------------------------------------------------------
 
--- Template 1
 
--- Equilibre
 
 CreateSpellButton("buttonSpellStarlightWrath", "Interface/icons/spell_nature_abolishmagic", "|cffffffffColère stellaire|r\n|cffffffffTalent|r |cff65ca00Equilibre|r\n|cffffffffRequiert|r |cffff7d0aDruide|r\n|cffffd100Réduit le temps d'incantation de vos sorts Colère et Feu Stellaire de 0.5 sec.|r", "spellstarlightwrath", 100, -80)
 CreateSpellButton("buttonSpellGenesis", "Interface/icons/spell_arcane_arcane03", "|cffffffffGenèse|r\n|cffffffffTalent|r |cff65ca00Equilibre|r\n|cffffffffRequiert|r |cffff7d0aDruide|r\n|cffffd100Augmente les dégâts et les soins produits par les effets de dégâts et de soins de vos sorts périodiques de 5%.|r", "spellgenesis", 205, -75)
@@ -232,7 +200,6 @@ CreateSpellButton("buttonSpellGaleWinds", "Interface/icons/ability_druid_galewin
 CreateSpellButton("buttonSpellEarthandMoon", "Interface/icons/ability_druid_earthandsky", "|cffffffffTerre et lune|r\n|cffffffffTalent|r |cff65ca00Equilibre|r\n|cffffffffRequiert|r |cffff7d0aDruide|r\n|cffffd100Vos sorts Colère et Feu stellaire ont 100% de chances d'appliquer l'effet Terre et lune sur la cible.\nCelui-ci augmente les dégâts des sorts infligés à la cible de 13% pendant 12 seconds.\nAugmente également vos dégâts des sorts de 6%.|r", "spellearthandmoon", 478, -350)
 CreateSpellButton("buttonSpellStarfall", "Interface/icons/ability_druid_starfall", "|cffffffffMétéores|r\n|cffffffffTalent|r |cff65ca00Equilibre|r\n|cffffffffRequiert|r |cffff7d0aDruide|r\n|cffffd100Un déluge de météores tombe du ciel sur toutes les cibles se trouvant à moins de a mètres du lanceur de sorts et chacun inflige 145 à 167 points de dégâts des Arcanes.\nInflige également 26 points de dégâts des Arcanes à tous les autres ennemis se trouvant à moins de 5 mètres de la cible ennemie.\n20 météores au maximum. Dure 10 seconds. Si vous changez de forme ou utilisez une monture, l'effet est annulé.\nTout effet qui vous fait perdre le contrôle de votre personnage l'annule également.|r", "spellstarfall", 98, -405)
 
--- Combat Farouche
 
 CreateSpellButton("buttonSpellFerocity", "Interface/icons/ability_hunter_pet_hyena", "|cffffffffFérocité|r\n|cffffffffTalent|r |cffa07db5Combat Farouche|r\n|cffffffffRequiert|r |cffff7d0aDruide|r\n|cffffd100Réduit le coût en rage ou en énergie de vos techniques Mutiler, Balayage, Griffe, Griffure et Mutilation de 5.|r", "spellferocity", 205, -405)
 CreateSpellButton("buttonSpellFeralAggression", "Interface/icons/ability_druid_demoralizingroar", "|cffffffffAgressivité farouche|r\n|cffffffffTalent|r |cffa07db5Combat Farouche|r\n|cffffffffRequiert|r |cffff7d0aDruide|r\n|cffffd100Augmente les effets de réduction de la puissance d'attaque de votre Rugissement démoralisant de 40% et les dégâts infligés par votre Morsure féroce de 15%.|r", "spellferalaggression", 315, -405)
@@ -247,7 +214,6 @@ CreateSpellButton("buttonSpellPredatoryStrikes", "Interface/icons/ability_hunter
 CreateSpellButton("buttonSpellPrimalFury", "Interface/icons/ability_racial_cannibalize", "|cffffffffFureur primitive|r\n|cffffffffTalent|r |cffa07db5Combat Farouche|r\n|cffffffffRequiert|r |cffff7d0aDruide|r\n|cffffd100Vous confère 100% de chances de générer 5 points de rage supplémentaires chaque fois que vous réussissez un coup critique en forme d'ours et d'ours redoutable\net vos coups critiques obtenus avec les techniques de la forme de félin qui ajoutent des points de combo ont 100% de chances d'ajouter un point de combo supplémentaire.|r", "spellprimalfury", 315, -510)
 CreateSpellButton("buttonSpellPrimalPrecision", "Interface/icons/ability_druid_primalprecision", "|cffffffffPrécision primale|r\n|cffffffffTalent|r |cffa07db5Combat Farouche|r\n|cffffffffRequiert|r |cffff7d0aDruide|r\n|cffffd100Augmente votre expertise de 10,\net vous êtes remboursé de 80% du coût en énergie d'un coup de grâce si celui-ci échoue.|r", "spellprimalprecision", 422, -510)
 
--- Template 2
 
 CreateSpellButton("buttonSpellImpactbrutal", "Interface/icons/ability_druid_bash", "|cffffffffImpact brutal|r\n|cffffffffTalent|r |cffa07db5Combat Farouche|r\n|cffffffffRequiert|r |cffff7d0aDruide|r\n|cffffd100Augmente la durée d'étourdissement de vos techniques Sonner\net Traquenard de 1 sec. et réduit le temps de recharge de Sonner de 30 sec.|r", "spellimpactbrutal", 663, -75)
 CreateSpellButton("buttonSpellFeralCharge", "Interface/icons/ability_hunter_pet_bear", "|cffffffffCharge farouche|r\n|cffffffffTalent|r |cffa07db5Combat Farouche|r\n|cffffffffRequiert|r |cffff7d0aDruide|r\n|cffffd100Apprend Charge farouche (ours) et Charge farouche (félin).\n\nCharge farouche (ours) - Vous chargez un ennemi, l'immobilisez et interrompez le sort qu'il incantait pendant 4 secondes.\nCette technique ne peut être utilisée qu'en forme d'ours et d'ours redoutable.\nTemps de recharge de 15 secondes.\n\nCharge farouche (félin) - Vous bondissez derrière un ennemi et l'hébétez pendant 3 secondes.\nTemps de recharge de 30 secondes.|r", "spellferalcharge", 770, -75)
@@ -269,7 +235,6 @@ CreateSpellButton("buttonSpellInfectedWounds", "Interface/icons/ability_druid_in
 CreateSpellButton("buttonSpellKingoftheJungle", "Interface/icons/ability_druid_kingofthejungle", "|cffffffffRoi de la jungle|r\n|cffffffffTalent|r |cffa07db5Combat Farouche|r\n|cffffffffRequiert|r |cffff7d0aDruide|r\n|cffffd100Lorsque vous utilisez votre technique Enragé en forme d'ours ou d'ours redoutable, vos dégâts sont augmentés de 15%,\net votre technique Fureur du tigre vous rend aussi immédiatement 60 points d'énergie.\nDe plus, le coût en mana des formes d'ours, de félin et d'ours redoutable est réduit de 60%.", "spellkingofthejungle", 1045, -240)
 
 
--- Restauration
 
 CreateSpellButton("buttonSpellImprovedMarkoftheWild", "Interface/icons/spell_nature_regeneration", "|cffffffffMarque du fauve améliorée|r\n|cffffffffTalent|r |cff9cef03Restauration|r\n|cffffffffRequiert|r |cffff7d0aDruide|r\n|cffffd100Augmente les effets de vos sorts Marque du fauve et Don du fauve de 40%,\net augmente l'ensemble de vos totaux de caractéristiques de 2%.|r", "spellimprovedmarkofthewild", 663, -293)
 CreateSpellButton("buttonSpellNaturesFocus", "Interface/icons/spell_nature_healingwavegreater", "|cffffffffFocalisation de la nature|r\n|cffffffffTalent|r |cff9cef03Restauration|r\n|cffffffffRequiert|r |cffff7d0aDruide|r\n|cffffd100Réduit de 70% l'interruption causée par les attaques infligeant des dégâts pendant que vous incantez\nToucher guérisseur, Colère, Sarments, Cyclone, Nourrir, Rétablissement et Tranquillité.|r", "spellnaturesfocus", 770, -293)
@@ -299,35 +264,28 @@ CreateSpellButton("buttonSpellImprovedBarkskin", "Interface/icons/spell_nature_s
 CreateSpellButton("buttonSpellGiftoftheEarthmother", "Interface/icons/ability_druid_manatree", "|cffffffffDon de la Terre-mère|r\n|cffffffffTalent|r |cff9cef03Restauration|r\n|cffffffffRequiert|r |cffff7d0aDruide|r\n|cffffd100Augmente votre total de hâte des sorts de 10%\net réduit le temps de recharge de base de votre sort Fleur de vie de 10%.|r", "spellgiftoftheearthmother", 934, -564)
 CreateSpellButton("buttonSpellWildGrowth", "Interface/icons/ability_druid_flourish", "|cffffffffCroissance sauvage|r\n|cffffffffTalent|r |cff9cef03Restauration|r\n|cffffffffRequiert|r |cffff7d0aDruide|r\n|cffffd100Rend à 5 membres au maximum du groupe ou du raid alliés se trouvant à moins de 15 mètres de la cible 686 points de vie en 7 seconds.\nLes soins sont prodigués rapidement au début, et ralentissent au fur et à mesure que Croissance sauvage atteint la fin de sa durée.|r", "spellwildgrowth", 1045, -564)
 
--------------------------------------------------------------
 
--------------------------------------------------------------
 
--- Ajoutez une variable pour suivre l'état du bouton Réinitialiser
 local resetButtonClicked = false
 
--- Créez le bouton Reset à l'intérieur de la fenêtre frameTalentDruid
 local buttonReset = CreateFrame("Button", "buttonReset", frameTalentDruid, "UIPanelButtonTemplate")
 buttonReset:SetSize(85, 25)
-buttonReset:SetPoint("BOTTOMRIGHT", buttonTalentDruidClose, "BOTTOMLEFT", -95, 5) -- Place le bouton Reset à gauche du bouton Reload
+buttonReset:SetPoint("BOTTOMRIGHT", buttonTalentDruidClose, "BOTTOMLEFT", -95, 5)
 buttonReset:SetText("Réinitialiser")
 
 local function ResetTalents()
-    -- Ajoutez ici la logique pour réinitialiser les talents du joueur
     AIO.Handle("TalentDruidspell", "ResetTalents")
-    resetButtonClicked = true -- Marquez le bouton Réinitialiser comme cliqué
+    resetButtonClicked = true
 end
 
 buttonReset:SetScript("OnClick", ResetTalents)
 
--- Créez le bouton Reload à l'intérieur de la fenêtre frameTalentDruid
 local buttonReload = CreateFrame("Button", "buttonReload", frameTalentDruid, "UIPanelButtonTemplate")
 buttonReload:SetSize(85, 25)
-buttonReload:SetPoint("BOTTOMRIGHT", buttonTalentDruidClose, "BOTTOMLEFT", -5, 5) -- Place le bouton Reload à gauche du bouton Close
+buttonReload:SetPoint("BOTTOMRIGHT", buttonTalentDruidClose, "BOTTOMLEFT", -5, 5)
 buttonReload:SetText("Actualiser")
 
 local function ReloadClient()
-    -- Ajoutez une vérification pour s'assurer que le bouton Réinitialiser a été cliqué
     if resetButtonClicked then
         ReloadUI()
     else
@@ -337,7 +295,6 @@ end
 
 buttonReload:SetScript("OnClick", ReloadClient)
 
--- Ajoutez une variable globale pour suivre l'état de la fenêtre des talents
 local talentsWindowOpen = false
 
 local function OuvrirFermerInterfaceTalents()
@@ -351,37 +308,30 @@ local function OuvrirFermerInterfaceTalents()
         PlaySoundFile(OPEN_TALENT_WINDOW_SOUND)
     end
 
-    -- Inversez l'état de la fenêtre des talents
     talentsWindowOpen = not talentsWindowOpen
 end
 
--- Vérifier si le joueur est un Druid avant de créer le bouton
-local playerClass = select(2, UnitClass("player")) -- Obtenir la classe du joueur
+local playerClass = select(2, UnitClass("player"))
 if playerClass == "DRUID" then
     local buttonOuvrirTalents = CreateFrame("Button", "buttonOuvrirTalents", UIParent)
     buttonOuvrirTalents:SetSize(32, 33)
-    buttonOuvrirTalents:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -171, 8) -- Placer en bas à droite avec un décalage de 10 pixels
+    buttonOuvrirTalents:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -171, 8)
 
-    -- Ajouter une texture BLP au bouton
     buttonOuvrirTalents:SetNormalTexture("Interface\\TalentFrame\\Template\\MicroButton\\ButtonSystemTalent.blp")
 
-    -- Ajouter une texture de surbrillance
     local highlightTexture = buttonOuvrirTalents:CreateTexture(nil, "HIGHLIGHT")
     highlightTexture:SetAllPoints(buttonOuvrirTalents)
     highlightTexture:SetTexture("Interface\\TalentFrame\\Template\\MicroButton\\ButtonSystemTalentLight.blp")
     buttonOuvrirTalents:SetHighlightTexture(highlightTexture)
 
-    -- Supprimer le texte du bouton
     buttonOuvrirTalents:SetText("")
 
-    -- Ajouter une info-bulle
     buttonOuvrirTalents:SetScript("OnEnter", function(self)
-        GameTooltip:SetOwner(self, "ANCHOR_RIGHT") -- Définir l'ancre de l'info-bulle
-        GameTooltip:SetText("|cffffffffTalents|r |cffff7d0a(Druide)|r\n\nL'éventail des talents disponibles\npour améliorer et spécialiser\nvotre personnage.") -- Texte de l'info-bulle
+        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+        GameTooltip:SetText("|cffffffffTalents|r |cffff7d0a(Druide)|r\n\nL'éventail des talents disponibles\npour améliorer et spécialiser\nvotre personnage.")
         GameTooltip:Show()
     end)
 
-    -- Masquer l'info-bulle lorsque la souris quitte le bouton
     buttonOuvrirTalents:SetScript("OnLeave", function(self)
         GameTooltip:Hide()
     end)

@@ -5,9 +5,7 @@ local TalentWarlockPointsSpend = {}
 local MAX_TALENTS = 41
 
 local talents = {
-	-- Template 1
 
-	-- Affliction
 	
 	["spellimprovedcurseofagony"] = {spellID = 18829, itemID = 338404},
 	["spellsuppression"] = {spellID = 18176, itemID = 338404},
@@ -38,7 +36,6 @@ local talents = {
 	["spelleverlastingaffliction"] = {spellID = 47205, itemID = 338404},
 	["spellhaunt"] = {spellID = 48181, itemID = 338404},
 	
-	-- Démonologie
 	
 	["spellimprovedhealthstone"] = {spellID = 18693, itemID = 338404},
 	["spellimprovedimp"] = {spellID = 18696, itemID = 338404},
@@ -54,7 +51,6 @@ local talents = {
 	["spellunholypower"] = {spellID = 18773, itemID = 338404},
 	["spellmastersummoner"] = {spellID = 18710, itemID = 338404},
 	
-	-- Template 2
 	
 	["spellmanafeed"] = {spellID = 30326, itemID = 338404},
 	["spellmasterconjuror"] = {spellID = 18768, itemID = 338404},
@@ -71,11 +67,10 @@ local talents = {
 	["spelldemonicpact"] = {spellID = 47240, itemID = 338404},
 	["spellmetamorphosis"] = {spellID = 59672, itemID = 338404},
 	
-	-- Destruction
 	
 	["spellimprovedshadowbolt"] = {spellID = 17803, itemID = 338404},
 	["spellbane"] = {spellID = 17792, itemID = 338404},
-	["spellaftermath"] = {spellID = 18120, itemID = 338404},--
+	["spellaftermath"] = {spellID = 18120, itemID = 338404},
 	["spellmoltenskin"] = {spellID = 63351, itemID = 338404},
 	["spellcataclysm"] = {spellID = 17780, itemID = 338404},
 	["spelldemonicpower"] = {spellID = 18127, itemID = 338404},

@@ -6,9 +6,7 @@ local MAX_TALENTS = 31
 
 local talents = {
 
-	-- Template 1
 	
-	-- Magie du sang
 	
 	["spellimprovedblood"] = {spellID = 300021, itemID = 338404},
 	["spellseedgrowth"] = {spellID = 300113, itemID = 338404},
@@ -36,9 +34,7 @@ local talents = {
 	["spellbloodstorm"] = {spellID = 300099, itemID = 338404},
 	["spellreinforcedblood"] = {spellID = 300125, itemID = 338404},
 	
-	-- Template 2
 	
-	-- Sacrifice de sang
 	
 	["spellabilitymotivation"] = {spellID = 300095, itemID = 338404},
 	["spellabilitybloodflow"] = {spellID = 300101, itemID = 338404},
@@ -52,7 +48,6 @@ local talents = {
 	["spellabilityimprovement"] = {spellID = 300180, itemID = 338404},
 	["spellabilitypotential"] = {spellID = 300175, itemID = 338404},
 	
-	-- Blessure de sang
 	
 	["spellbloodprovocation"] = {spellID = 1502003, itemID = 338404},
 	["spellmartialknowledge"] = {spellID = 300135, itemID = 338404},

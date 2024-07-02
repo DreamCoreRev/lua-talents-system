@@ -9,64 +9,53 @@ function RogueHandlers.ShowTalentRogue(player)
     frameTalentRogue:Show()
 end
 
-local MAX_TALENTS = 42 -- Définition du nombre maximal de talents que le joueur peut apprendre
+local MAX_TALENTS = 42
 
 local OPEN_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_72_artifact_forge_final_trait_unlocked.ogg"
 local CLOSE_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_72_artifact_forge_trait_refund_end.ogg"
 local SPELL_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_80_azeritearmor_rotationends_02.ogg"
 
--- Attribute window
 local frameTalentRogue = CreateFrame("Frame", "frameTalentRogue", UIParent)
 frameTalentRogue:SetSize(1200, 650)
 frameTalentRogue:SetMovable(true)
 frameTalentRogue:EnableMouse(true)
 frameTalentRogue:RegisterForDrag("LeftButton")
-frameTalentRogue:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 50, -50) -- Adjust the X and Y coordinates
+frameTalentRogue:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 50, -50)
 frameTalentRogue:SetBackdrop(
 {
-    -- bgFile = "interface/TalentFrame/talentsclassbackgroundRogue", --Interface/AchievementFrame/UI-Achievement-Parchment-Horizontal
-    bgFile = "interface/TalentFrame/Template/Class/Rogue/talentsclassbackgroundrogue2", --Interface/AchievementFrame/UI-Achievement-Parchment-Horizontal
-    edgeFile = "interface/tooltips/ui-tooltip-border-corruptedrogue", --Interface/DialogFrame/UI-DialogBox-Border
+    bgFile = "interface/TalentFrame/Template/Class/Rogue/talentsclassbackgroundrogue2",
+    edgeFile = "interface/tooltips/ui-tooltip-border-corruptedrogue",
     edgeSize = 20,
     insets = { left = 5, right = 5, top = 5, bottom = 5 }
 })
 
--- Ajoutez la texture de l'icône du Voleur
 local rogueIcon = frameTalentRogue:CreateTexture("RogueIcon", "OVERLAY")
 rogueIcon:SetTexture("Interface\\TalentFrame\\Template\\Class\\Rogue\\IconeRogue.blp")
 rogueIcon:SetSize(60, 60)
 rogueIcon:SetPoint("TOPLEFT", frameTalentRogue, "TOPLEFT", -10, 10)
 
--- Template Talent Frame
 
--- Ajoute une textureone pour l'image BLP
-local textureone = frameTalentRogue:CreateTexture("TemplateTalentFrame", "OVERLAY") -- Utilisez "OVERLAY" pour être au-dessus des autres éléments
+local textureone = frameTalentRogue:CreateTexture("TemplateTalentFrame", "OVERLAY")
 textureone:SetTexture("Interface\\TalentFrame\\Template\\Class\\Rogue\\TalentFrameTemplate.blp")
-textureone:SetSize(928, 928) -- Remplacez width et height par les dimensions souhaitées
-textureone:SetPoint("TOPLEFT", frameTalentRogue, "TOPLEFT", -170, 140) -- Adjust the X and Y coordinates
+textureone:SetSize(928, 928)
+textureone:SetPoint("TOPLEFT", frameTalentRogue, "TOPLEFT", -170, 140)
 
--- Ajuste l'ordre des calques pour être devant les autres éléments
-frameTalentRogue:SetFrameLevel(100) -- Utilisez une valeur supérieure à celle des autres éléments
+frameTalentRogue:SetFrameLevel(100)
 
--- Ajoute une texturetwo pour l'image BLP
-local texturetwo = frameTalentRogue:CreateTexture("TemplateTalentFrame", "OVERLAY") -- Utilisez "OVERLAY" pour être au-dessus des autres éléments
+local texturetwo = frameTalentRogue:CreateTexture("TemplateTalentFrame", "OVERLAY")
 texturetwo:SetTexture("Interface\\TalentFrame\\Template\\Class\\Rogue\\TalentFrameTemplateOriginal.blp")
-texturetwo:SetSize(928, 928) -- Remplacez width et height par les dimensions souhaitées
-texturetwo:SetPoint("TOPRIGHT", frameTalentRogue, "TOPRIGHT", 170, 140) -- Adjust the X and Y coordinates
+texturetwo:SetSize(928, 928)
+texturetwo:SetPoint("TOPRIGHT", frameTalentRogue, "TOPRIGHT", 170, 140)
 
--- Ajuste l'ordre des calques pour être devant les autres éléments
-frameTalentRogue:SetFrameLevel(100) -- Utilisez une valeur supérieure à celle des autres éléments
+frameTalentRogue:SetFrameLevel(100)
 
--- Drag & Drop
 frameTalentRogue:SetScript("OnDragStart", frameTalentRogue.StartMoving)
 frameTalentRogue:SetScript("OnHide", frameTalentRogue.StopMovingOrSizing)
 frameTalentRogue:SetScript("OnDragStop", frameTalentRogue.StopMovingOrSizing)
 frameTalentRogue:Hide()
 
--- Nouveau template d'arête
-frameTalentRogue:SetBackdropBorderColor(1, 1, 0.5) -- Couleur Jaune
+frameTalentRogue:SetBackdropBorderColor(1, 1, 0.5)
 
--- Close button
 local buttonTalentRogueClose = CreateFrame("Button", "buttonTalentRogueClose", frameTalentRogue, "UIPanelCloseButton")
 buttonTalentRogueClose:SetPoint("TOPRIGHT", -12, -12)
 buttonTalentRogueClose:EnableMouse(true)
@@ -77,10 +66,8 @@ local function CloseTalentWindow()
     PlaySoundFile(CLOSE_TALENT_WINDOW_SOUND)
 end
 
--- Associez la fonction de fermeture au bouton de fermeture
 buttonTalentRogueClose:SetScript("OnClick", CloseTalentWindow)
 
--- Title bar
 local frameTalentRogueTitleBar = CreateFrame("Frame", "frameTalentRogueTitleBar", frameTalentRogue, nil)
 frameTalentRogueTitleBar:SetSize(135, 25)
 frameTalentRogueTitleBar:SetBackdrop(
@@ -103,21 +90,17 @@ fontTalentRogueTitleText:SetText("|cffFFC125Talents|r")
 local fontTalentRogueFrameText = frameTalentRogueTitleBar:CreateFontString("fontTalentRogueFrameText")
 fontTalentRogueFrameText:SetFont("Fonts\\FRIZQT__.TTF", 18)
 fontTalentRogueFrameText:SetSize(200, 5)
-fontTalentRogueFrameText:SetPoint("TOPLEFT", frameTalentRogueTitleBar, "BOTTOMLEFT", -30, -35) -- Adjust the Y offset as needed
+fontTalentRogueFrameText:SetPoint("TOPLEFT", frameTalentRogueTitleBar, "BOTTOMLEFT", -30, -35)
 fontTalentRogueFrameText:SetText("|cffFFC125Voleur|r")
 
--- Remplacez votre ligne existante pour la création du texte par celle-ci
 local fontTalentRogueFrameText = frameTalentRogueTitleBar:CreateFontString("fontTalentRogueFrameText")
 fontTalentRogueFrameText:SetFont("Fonts\\FRIZQT__.TTF", 18)
 fontTalentRogueFrameText:SetSize(200, 5)
-fontTalentRogueFrameText:SetPoint("TOPLEFT", frameTalentRogueTitleBar, "BOTTOMLEFT", -30, -60) -- Adjust the Y offset as needed
-fontTalentRogueFrameText:SetText("0 / " .. MAX_TALENTS) -- Initialisez le texte avec 0 talents appris
+fontTalentRogueFrameText:SetPoint("TOPLEFT", frameTalentRogueTitleBar, "BOTTOMLEFT", -30, -60)
+fontTalentRogueFrameText:SetText("0 / " .. MAX_TALENTS)
 
--------------------------------------------------------------
 
--------------------------------------------------------------
 
--- Fonction générique pour créer un bouton de sort
 local function CreateSpellButton(name, texturePath, tooltipText, talentHandler, positionX, positionY)
     local buttonClicked = false
     local talentLearned = false
@@ -130,50 +113,44 @@ local function CreateSpellButton(name, texturePath, tooltipText, talentHandler, 
     button:SetHighlightTexture("Interface/Buttons/checkbuttonhilight")
     button:SetPoint("TOPLEFT", positionX, positionY)
 
-    -- Texture pour l'indicateur d'apprentissage
     local learnIndicator = button:CreateTexture(nil, "OVERLAY")
     learnIndicator:SetTexture("Interface/Buttons/UI-CheckBox-Check")
     learnIndicator:SetSize(30, 30)
     learnIndicator:SetPoint("BOTTOMRIGHT", -2, 2)
     learnIndicator:Hide()
 
-    -- Texte pour afficher l'état du bouton (0 ou 1)
     local buttonText = button:CreateFontString("buttonText", "OVERLAY", "GameFontHighlight")
     buttonText:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -2, 2)
 
-    -- Fonction pour mettre à jour l'état du bouton et de l'indicateur d'apprentissage
     local function UpdateButtonState()
         if talentLearned then
-            button:SetAlpha(1) -- Réduire l'opacité pour indiquer que le bouton est désactivé
-            learnIndicator:Show() -- Afficher l'indicateur d'apprentissage
-            buttonText:SetText("|cffffda2b1|r") -- Mettre à jour le texte pour afficher "1"
+            button:SetAlpha(1)
+            learnIndicator:Show()
+            buttonText:SetText("|cffffda2b1|r")
         else
-            button:SetAlpha(1) -- Rétablir l'opacité pour indiquer que le bouton est activé
-            learnIndicator:Hide() -- Cacher l'indicateur d'apprentissage
-            buttonText:SetText("|cff1aff1a0|r") -- Mettre à jour le texte pour afficher "0"
+            button:SetAlpha(1)
+            learnIndicator:Hide()
+            buttonText:SetText("|cff1aff1a0|r")
         end
     end
 
-    -- Fonction à exécuter lorsque le bouton est cliqué
     button:SetScript("OnMouseUp", function()
         if not buttonClicked and not talentLearned then
-            -- Ajouter une vérification pour s'assurer que le joueur a des points de talent
             local talentItemID = 338404
             local hasTalentPoints = GetItemCount(talentItemID, false, true) > 0
 
             if hasTalentPoints then
                 AIO.Handle("TalentRoguespell", talentHandler, 1)
                 PlaySoundFile(SPELL_TALENT_WINDOW_SOUND)
-                buttonClicked = true -- Marquer le bouton comme cliqué
-                talentLearned = true -- Marquer le talent comme appris
-                UpdateButtonState() -- Mettre à jour l'état du bouton
+                buttonClicked = true
+                talentLearned = true
+                UpdateButtonState()
             else
                 print("|cff00ffffVous n'avez plus de points de talent !|r")
             end
         end
     end)
 
-    -- Affichage du tooltip
     button:SetScript("OnEnter", function(self)
         GameTooltip:SetOwner(self, "TOPLEFT")
         GameTooltip:ClearLines()
@@ -181,24 +158,17 @@ local function CreateSpellButton(name, texturePath, tooltipText, talentHandler, 
         GameTooltip:Show()
     end)
 
-    -- Cacher le tooltip lorsque la souris quitte le bouton
     button:SetScript("OnLeave", function(self)
         GameTooltip:Hide()
     end)
 
-    -- Appel initial pour définir l'état du bouton au chargement
     UpdateButtonState()
 end
 
--- Utilisation de la fonction générique avec des positions spécifiques
 
--------------------------------------------------------------
 
--------------------------------------------------------------
 
--- Template 1
 
--- Assassinat
 
 CreateSpellButton("buttonSpellImprovedEviscerate", "Interface/icons/ability_rogue_eviscerate", "|cffffffffEviscération améliorée|r\n|cffffffffTalent|r |cffea0000Assassinat|r\n|cffffffffRequiert|r |cfffff569Voleur|r\n|cffffd100Augmente les dégâts infligés par votre technique Eviscération de 20%.|r", "spellimprovedeviscerate", 100, -80)
 CreateSpellButton("buttonSpellRemorselessAttacks", "Interface/icons/ability_fiegndead", "|cffffffffAttaques impitoyables|r\n|cffffffffTalent|r |cffea0000Assassinat|r\n|cffffffffRequiert|r |cfffff569Voleur|r\n|cffffd100Lorsque vous tuez un adversaire qui vous fait gagner de l'expérience ou de l'honneur,\nvous avez 40% de chances d'infliger un coup critique lors de votre prochaine attaque avec\nAttaque pernicieuse, Hémorragie, Attaque sournoise, Estropier, Embuscade ou Frappe fantomatique.\nDure 20 seconds.|r", "spellremorselessattacks", 205, -75)
@@ -228,7 +198,6 @@ CreateSpellButton("buttonSpellTurntheTables", "Interface/icons/ability_rogue_tur
 CreateSpellButton("buttonSpellCuttotheChase", "Interface/icons/ability_rogue_cuttothechase", "|cffffffffTailler dans le vif|r\n|cffffffffTalent|r |cffea0000Assassinat|r\n|cffffffffRequiert|r |cfffff569Voleur|r\n|cffffd100Vos techniques Eviscération et Envenimer ont 100% de chances de réinitialiser la durée de Débiter à son maximum de 5 points de combo.|r", "spellcuttothechase", 260, -350)
 CreateSpellButton("buttonSpellHungerForBlood", "Interface/icons/ability_rogue_hungerforblood", "|cffffffffSoif de sang|r\n|cffffffffTalent|r |cffea0000Assassinat|r\n|cffffffffRequiert|r |cfffff569Voleur|r\n|cffffd100Vous fait enrager, ce qui augmente tous les dégâts causés de 5%.\nNécessite qu'un effet de saignement soit actif sur la cible.\nDure 60 seconds.|r", "spellhungerforblood", 150, -350)
 
--- Combat
 
 CreateSpellButton("buttonSpellImprovedSinisterStrike", "Interface/icons/spell_shadow_ritualofsacrifice", "|cffffffffAttaque pernicieuse améliorée|r\n|cffffffffTalent|r |cfffd7e00Combat|r\n|cffffffffRequiert|r |cfffff569Voleur|r\n|cffffd100Réduit de 5 le coût en énergie de votre technique Attaque pernicieuse.|r", "spellimprovedsinisterstrike", 368, -350)
 CreateSpellButton("buttonSpellDualWieldSpecialization", "Interface/icons/ability_dualwield", "|cffffffffSpécialisation Ambidextrie|r\n|cffffffffTalent|r |cfffd7e00Combat|r\n|cffffffffRequiert|r |cfffff569Voleur|r\n|cffffd100Augmente les points de dégâts infligés par l'arme que vous utilisez en main gauche de 50%.|r", "spelldualwieldspecialization", 527, -402)
@@ -247,7 +216,6 @@ CreateSpellButton("buttonSpellMaceSpecialization", "Interface/icons/inv_mace_01"
 CreateSpellButton("buttonSpellBladeFlurry", "Interface/icons/ability_warrior_punishingblow", "|cffffffffDéluge de lames|r\n|cffffffffTalent|r |cfffd7e00Combat|r\n|cffffffffRequiert|r |cfffff569Voleur|r\n|cffffd100Augmente votre vitesse d'attaque de 20%.\nDe plus, vos attaques frappent un adversaire proche supplémentaire.\nDure 15 seconds.|r", "spellbladeflurry", 315, -510)
 CreateSpellButton("buttonSpellHackandSlash", "Interface/icons/inv_sword_27", "|cffffffffTaillader et trancher|r\n|cffffffffTalent|r |cfffd7e00Combat|r\n|cffffffffRequiert|r |cfffff569Voleur|r\n|cffffd100Vous confère 5% de chances de bénéficier d'une attaque supplémentaire sur la même cible après avoir frappé votre cible avec votre épée ou votre hache.|r", "spellhackandslash", 422, -510)
 
--- Template 2
 
 CreateSpellButton("buttonSpellWeaponExpertise", "Interface/icons/spell_holy_blessingofstrength", "|cffffffffExpertise en armes|r\n|cffffffffTalent|r |cfffd7e00Combat|r\n|cffffffffRequiert|r |cfffff569Voleur|r\n|cffffd100Augmente votre expertise de 10.|r", "spellweaponexpertise", 663, -75)
 CreateSpellButton("buttonSpellBladeTwisting", "Interface/icons/ability_rogue_bladetwisting", "|cffffffffTournoiement de lames|r\n|cffffffffTalent|r |cfffd7e00Combat|r\n|cffffffffRequiert|r |cfffff569Voleur|r\n|cffffd100Augmente de 10% les dégâts infligés par Attaque pernicieuse et Attaque sournoise.\nDe plus, vos attaques en mêlée qui infligent des dégâts ont 10% de chances d'hébéter la cible pendant 8 seconds.|r", "spellbladetwisting", 770, -75)
@@ -264,7 +232,6 @@ CreateSpellButton("buttonSpellPreyontheWeak", "Interface/icons/ability_rogue_pre
 CreateSpellButton("buttonSpellKillingSpree", "Interface/icons/ability_rogue_murderspree", "|cffffffffSérie meurtrière|r\n|cffffffffTalent|r |cfffd7e00Combat|r\n|cffffffffRequiert|r |cfffff569Voleur|r\n|cffffd100Marche à travers les ombres d'ennemi en ennemi se trouvant à moins de 10 mètres et attaque un ennemi toutes les 0,5 sec.\navec les deux armes jusqu'à ce que 5 assauts aient été effectués.\nAugmente tous les dégâts de 20% pendant ce temps.\nPeut toucher la même cible plusieurs fois.\nNe peut pas toucher les cibles invisibles ou camouflées.|r", "spellkillingspree", 990, -184)
 
 
--- Finesse
 
 CreateSpellButton("buttonSpellRelentlessStrikes", "Interface/icons/ability_warrior_decisivestrike", "|cffffffffFrappes implacables|r\n|cffffffffTalent|r |cffffff00Finesse|r\n|cffffffffRequiert|r |cfffff569Voleur|r\n|cffffd100Vos coups de grâce ont 20% de chances par point de combo de vous rendre 25 points d'énergie.|r", "spellrelentlessstrikes", 1100, -184)
 CreateSpellButton("buttonSpellMasterofDeception", "Interface/icons/spell_shadow_charm", "|cffffffffMaître des illusions|r\n|cffffffffTalent|r |cffffff00Finesse|r\n|cffffffffRequiert|r |cfffff569Voleur|r\n|cffffd100Réduit les chances de vos ennemis de vous détecter lorsque vous êtes en camouflage.\nPlus efficace que Maître des illusions (Rang 2).|r", "spellmasterofdeception", 718, -240)
@@ -296,35 +263,28 @@ CreateSpellButton("buttonSpellSlaughterfromtheShadows", "Interface/icons/ability
 CreateSpellButton("buttonSpellShadowDance", "Interface/icons/ability_rogue_shadowdance", "|cffffffffDanse de l'ombre|r\n|cffffffffTalent|r |cffffff00Finesse|r\n|cffffffffRequiert|r |cfffff569Voleur|r\n|cffffd100Entame la Danse de l'ombre, qui dure 6 seconds. et permet l'utilisation d'Assommer, Garrot, Embuscade, Coup bas,\nPréméditation, Vol à la tire et Désarmement de piège même sans être camouflé.|r", "spellshadowdance", 1100, -510)
 
 
--------------------------------------------------------------
 
--------------------------------------------------------------
 
--- Ajoutez une variable pour suivre l'état du bouton Réinitialiser
 local resetButtonClicked = false
 
--- Créez le bouton Reset à l'intérieur de la fenêtre frameTalentRogue
 local buttonReset = CreateFrame("Button", "buttonReset", frameTalentRogue, "UIPanelButtonTemplate")
 buttonReset:SetSize(85, 25)
-buttonReset:SetPoint("BOTTOMRIGHT", buttonTalentRogueClose, "BOTTOMLEFT", -95, 5) -- Place le bouton Reset à gauche du bouton Reload
+buttonReset:SetPoint("BOTTOMRIGHT", buttonTalentRogueClose, "BOTTOMLEFT", -95, 5)
 buttonReset:SetText("Réinitialiser")
 
 local function ResetTalents()
-    -- Ajoutez ici la logique pour réinitialiser les talents du joueur
     AIO.Handle("TalentRoguespell", "ResetTalents")
-    resetButtonClicked = true -- Marquez le bouton Réinitialiser comme cliqué
+    resetButtonClicked = true
 end
 
 buttonReset:SetScript("OnClick", ResetTalents)
 
--- Créez le bouton Reload à l'intérieur de la fenêtre frameTalentRogue
 local buttonReload = CreateFrame("Button", "buttonReload", frameTalentRogue, "UIPanelButtonTemplate")
 buttonReload:SetSize(85, 25)
-buttonReload:SetPoint("BOTTOMRIGHT", buttonTalentRogueClose, "BOTTOMLEFT", -5, 5) -- Place le bouton Reload à gauche du bouton Close
+buttonReload:SetPoint("BOTTOMRIGHT", buttonTalentRogueClose, "BOTTOMLEFT", -5, 5)
 buttonReload:SetText("Actualiser")
 
 local function ReloadClient()
-    -- Ajoutez une vérification pour s'assurer que le bouton Réinitialiser a été cliqué
     if resetButtonClicked then
         ReloadUI()
     else
@@ -334,7 +294,6 @@ end
 
 buttonReload:SetScript("OnClick", ReloadClient)
 
--- Ajoutez une variable globale pour suivre l'état de la fenêtre des talents
 local talentsWindowOpen = false
 
 local function OuvrirFermerInterfaceTalents()
@@ -348,37 +307,30 @@ local function OuvrirFermerInterfaceTalents()
         PlaySoundFile(OPEN_TALENT_WINDOW_SOUND)
     end
 
-    -- Inversez l'état de la fenêtre des talents
     talentsWindowOpen = not talentsWindowOpen
 end
 
--- Vérifier si le joueur est un Rogue avant de créer le bouton
-local playerClass = select(2, UnitClass("player")) -- Obtenir la classe du joueur
+local playerClass = select(2, UnitClass("player"))
 if playerClass == "ROGUE" then
     local buttonOuvrirTalents = CreateFrame("Button", "buttonOuvrirTalents", UIParent)
     buttonOuvrirTalents:SetSize(32, 33)
-    buttonOuvrirTalents:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -171, 8) -- Placer en bas à droite avec un décalage de 10 pixels
+    buttonOuvrirTalents:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -171, 8)
 
-    -- Ajouter une texture BLP au bouton
     buttonOuvrirTalents:SetNormalTexture("Interface\\TalentFrame\\Template\\MicroButton\\ButtonSystemTalent.blp")
 
-    -- Ajouter une texture de surbrillance
     local highlightTexture = buttonOuvrirTalents:CreateTexture(nil, "HIGHLIGHT")
     highlightTexture:SetAllPoints(buttonOuvrirTalents)
     highlightTexture:SetTexture("Interface\\TalentFrame\\Template\\MicroButton\\ButtonSystemTalentLight.blp")
     buttonOuvrirTalents:SetHighlightTexture(highlightTexture)
 
-    -- Supprimer le texte du bouton
     buttonOuvrirTalents:SetText("")
 
-    -- Ajouter une info-bulle
     buttonOuvrirTalents:SetScript("OnEnter", function(self)
-        GameTooltip:SetOwner(self, "ANCHOR_RIGHT") -- Définir l'ancre de l'info-bulle
-        GameTooltip:SetText("|cffffffffTalents|r |cfffff569(Voleur)|r\n\nL'éventail des talents disponibles\npour améliorer et spécialiser\nvotre personnage.") -- Texte de l'info-bulle
+        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+        GameTooltip:SetText("|cffffffffTalents|r |cfffff569(Voleur)|r\n\nL'éventail des talents disponibles\npour améliorer et spécialiser\nvotre personnage.")
         GameTooltip:Show()
     end)
 
-    -- Masquer l'info-bulle lorsque la souris quitte le bouton
     buttonOuvrirTalents:SetScript("OnLeave", function(self)
         GameTooltip:Hide()
     end)

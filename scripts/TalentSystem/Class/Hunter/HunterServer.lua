@@ -5,9 +5,7 @@ local TalentHunterPointsSpend = {}
 local MAX_TALENTS = 41
 
 local talents = {
-	-- Template 1
 
-	-- Maitrise des Bêtes
 	
 	["spellimprovedaspectofthehawk"] = {spellID = 19556, itemID = 338404},
 	["spellendurancetraining"] = {spellID = 19587, itemID = 338404},
@@ -38,7 +36,6 @@ local talents = {
 	["spellimprovedconcussiveshot"] = {spellID = 19412, itemID = 338404},
 	["spellfocusedaim"] = {spellID = 53622, itemID = 338404},
 	
-	-- Précision
 	
 	["spelllethalshots"] = {spellID = 19431, itemID = 338404},
 	["spellcarefulaim"] = {spellID = 34484, itemID = 338404},
@@ -54,7 +51,6 @@ local talents = {
 	["spellreadiness"] = {spellID = 23989, itemID = 338404},
 	["spellbarrage"] = {spellID = 24691, itemID = 338404},
 	
-	-- Template 2
 	
 	["spellcombatexperience"] = {spellID = 34476, itemID = 338404},
 	["spellrangedweaponspecialization"] = {spellID = 19509, itemID = 338404},
@@ -71,11 +67,10 @@ local talents = {
 	["spellimprovedtracking"] = {spellID = 52788, itemID = 338404},
 	["spellhawkeye"] = {spellID = 19500, itemID = 338404},
 	
-	-- Destruction
 	
 	["spellsavagestrikes"] = {spellID = 19160, itemID = 338404},
 	["spellsurefooted"] = {spellID = 24283, itemID = 338404},
-	["spellentrapment"] = {spellID = 19388, itemID = 338404},--
+	["spellentrapment"] = {spellID = 19388, itemID = 338404},
 	["spelltrapmastery"] = {spellID = 63468, itemID = 338404},
 	["spellsurvivalinstincts"] = {spellID = 34496, itemID = 338404},
 	["spellsurvivalist"] = {spellID = 19259, itemID = 338404},

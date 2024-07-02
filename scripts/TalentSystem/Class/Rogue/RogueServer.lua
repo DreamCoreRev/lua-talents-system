@@ -5,9 +5,7 @@ local TalentRoguePointsSpend = {}
 local MAX_TALENTS = 42
 
 local talents = {
-	-- Template 1
 
-	-- Assassinat
 	
 	["spellimprovedeviscerate"] = {spellID = 14164, itemID = 338404},
 	["spellremorselessattacks"] = {spellID = 14148, itemID = 338404},
@@ -37,7 +35,6 @@ local talents = {
 	["spellcuttothechase"] = {spellID = 51669, itemID = 338404},
 	["spellhungerforblood"] = {spellID = 51662, itemID = 338404},
 	
-	-- Combat
 	
 	["spellimprovedgouge"] = {spellID = 13792, itemID = 338404},
 	["spellimprovedsinisterstrike"] = {spellID = 13863, itemID = 338404},
@@ -57,7 +54,6 @@ local talents = {
 	["spellbladeflurry"] = {spellID = 13877, itemID = 338404},
 	["spellhackandslash"] = {spellID = 13964, itemID = 338404},
 	
-	-- Template 2
 	
 	["spellweaponexpertise"] = {spellID = 30920, itemID = 338404},
 	["spellbladetwisting"] = {spellID = 31126, itemID = 338404},
@@ -72,7 +68,6 @@ local talents = {
 	["spellpreyontheweak"] = {spellID = 51689, itemID = 338404},
 	["spellkillingspree"] = {spellID = 51690, itemID = 338404},
 	
-	-- Finesse
 	
 	["spellrelentlessstrikes"] = {spellID = 58425, itemID = 338404},
 	["spellmasterofdeception"] = {spellID = 13971, itemID = 338404},

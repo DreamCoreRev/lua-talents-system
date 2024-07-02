@@ -5,9 +5,7 @@ local TalentDruidPointsSpend = {}
 local MAX_TALENTS = 44
 
 local talents = {
-	-- Template 1
 
-	-- Equilibre
 	
 	["spellstarlightwrath"] = {spellID = 16818, itemID = 338404},
 	["spellgenesis"] = {spellID = 57814, itemID = 338404},
@@ -38,7 +36,6 @@ local talents = {
 	["spellearthandmoon"] = {spellID = 48511, itemID = 338404},
 	["spellstarfall"] = {spellID = 48505, itemID = 338404},
 	
-	-- Combat Farouche
 	
 	["spellferocity"] = {spellID = 16938, itemID = 338404},
 	["spellferalaggression"] = {spellID = 16862, itemID = 338404},
@@ -53,7 +50,6 @@ local talents = {
 	["spellprimalfury"] = {spellID = 37117, itemID = 338404},
 	["spellprimalprecision"] = {spellID = 48410, itemID = 338404},
 	
-	-- Template 2
 	
 	["spellimpactbrutal"] = {spellID = 16941, itemID = 338404},
 	["spellferalcharge"] = {spellID = 49377, itemID = 338404},
@@ -74,7 +70,6 @@ local talents = {
 	["spellinfectedwounds"] = {spellID = 48485, itemID = 338404},
 	["spellkingofthejungle"] = {spellID = 48495, itemID = 338404},
 	
-	-- Restauration
 	
 	["spellimprovedmarkofthewild"] = {spellID = 17051, itemID = 338404},
 	["spellnaturesfocus"] = {spellID = 17066, itemID = 338404},

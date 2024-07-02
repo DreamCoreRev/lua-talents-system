@@ -5,9 +5,7 @@ local TalentPriestPointsSpend = {}
 local MAX_TALENTS = 42
 
 local talents = {
-	-- Template 1
 
-	-- Maitrise des Bêtes
 	
 	["spellunbreakablewill"] = {spellID = 14791, itemID = 338404},
 	["spelltwindisciplines"] = {spellID = 52803, itemID = 338404},
@@ -38,7 +36,6 @@ local talents = {
 	["spellborrowedtime"] = {spellID = 52800, itemID = 338404},
 	["spellpenance"] = {spellID = 47540, itemID = 338404},
 	
-	-- Sacré
 	
 	["spellhealingfocus"] = {spellID = 15012, itemID = 338404},
 	["spellimprovedrenew"] = {spellID = 17191, itemID = 338404},
@@ -54,7 +51,6 @@ local talents = {
 	["spellhealingprayers"] = {spellID = 15018, itemID = 338404},
 	["spellspiritofredemption"] = {spellID = 20711, itemID = 338404},
 	
-	-- Template 2
 	
 	["spellspiritualguidance"] = {spellID = 15031, itemID = 338404},
 	["spellsurgeoflight"] = {spellID = 33154, itemID = 338404},
@@ -71,11 +67,10 @@ local talents = {
 	["spelldivineprovidence"] = {spellID = 47567, itemID = 338404},
 	["spellguardianspirit"] = {spellID = 47788, itemID = 338404},
 	
-	-- Ombre
 	
 	["spellspirittap"] = {spellID = 15336, itemID = 338404},
 	["spellimprovedspirittap"] = {spellID = 15338, itemID = 338404},
-	["spelldarkness"] = {spellID = 15310, itemID = 338404},--
+	["spelldarkness"] = {spellID = 15310, itemID = 338404},
 	["spellshadowaffinity"] = {spellID = 15320, itemID = 338404},
 	["spellimprovedshadowwordpain"] = {spellID = 15317, itemID = 338404},
 	["spellshadowfocus"] = {spellID = 15328, itemID = 338404},

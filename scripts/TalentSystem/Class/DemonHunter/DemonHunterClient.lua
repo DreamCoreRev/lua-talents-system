@@ -9,64 +9,53 @@ function DemonhunterHandlers.ShowTalentDemonhunter(player)
     frameTalentDemonhunter:Show()
 end
 
-local MAX_TALENTS = 21 -- Définition du nombre maximal de talents que le joueur peut apprendre
+local MAX_TALENTS = 21
 
 local OPEN_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_72_artifact_forge_final_trait_unlocked.ogg"
 local CLOSE_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_72_artifact_forge_trait_refund_end.ogg"
 local SPELL_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_80_azeritearmor_rotationends_02.ogg"
 
--- Attribute window
 local frameTalentDemonhunter = CreateFrame("Frame", "frameTalentDemonhunter", UIParent)
 frameTalentDemonhunter:SetSize(1200, 650)
 frameTalentDemonhunter:SetMovable(true)
 frameTalentDemonhunter:EnableMouse(true)
 frameTalentDemonhunter:RegisterForDrag("LeftButton")
-frameTalentDemonhunter:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 50, -50) -- Adjust the X and Y coordinates
+frameTalentDemonhunter:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 50, -50)
 frameTalentDemonhunter:SetBackdrop(
 {
-    -- bgFile = "interface/TalentFrame/talentsclassbackgroundDemonhunter", --Interface/AchievementFrame/UI-Achievement-Parchment-Horizontal
-    bgFile = "interface/TalentFrame/Template/Class/DemonHunter/talentsclassbackgrounddemonhunter2", --Interface/AchievementFrame/UI-Achievement-Parchment-Horizontal
-    edgeFile = "interface/tooltips/ui-tooltip-border-corruptedwarlock", --Interface/DialogFrame/UI-DialogBox-Border
+    bgFile = "interface/TalentFrame/Template/Class/DemonHunter/talentsclassbackgrounddemonhunter2",
+    edgeFile = "interface/tooltips/ui-tooltip-border-corruptedwarlock",
     edgeSize = 20,
     insets = { left = 5, right = 5, top = 5, bottom = 5 }
 })
 
--- Ajoutez la texture de l'icône du Chasseur de démons
 local demonhunterIcon = frameTalentDemonhunter:CreateTexture("DemonhunterIcon", "OVERLAY")
 demonhunterIcon:SetTexture("Interface\\TalentFrame\\Template\\Class\\DemonHunter\\IconeDemonHunter.blp")
 demonhunterIcon:SetSize(60, 60)
 demonhunterIcon:SetPoint("TOPLEFT", frameTalentDemonhunter, "TOPLEFT", -10, 10)
 
--- Template Talent Frame
 
--- Ajoute une textureone pour l'image BLP
-local textureone = frameTalentDemonhunter:CreateTexture("TemplateTalentFrame", "OVERLAY") -- Utilisez "OVERLAY" pour être au-dessus des autres éléments
+local textureone = frameTalentDemonhunter:CreateTexture("TemplateTalentFrame", "OVERLAY")
 textureone:SetTexture("Interface\\TalentFrame\\Template\\Class\\Demonhunter\\TalentFrameTemplate.blp")
-textureone:SetSize(928, 928) -- Remplacez width et height par les dimensions souhaitées
-textureone:SetPoint("TOPLEFT", frameTalentDemonhunter, "TOPLEFT", -150, 90) -- Adjust the X and Y coordinates
+textureone:SetSize(928, 928)
+textureone:SetPoint("TOPLEFT", frameTalentDemonhunter, "TOPLEFT", -150, 90)
 
--- Ajuste l'ordre des calques pour être devant les autres éléments
-frameTalentDemonhunter:SetFrameLevel(100) -- Utilisez une valeur supérieure à celle des autres éléments
+frameTalentDemonhunter:SetFrameLevel(100)
 
--- Ajoute une texturetwo pour l'image BLP
-local texturetwo = frameTalentDemonhunter:CreateTexture("TemplateTalentFrame", "OVERLAY") -- Utilisez "OVERLAY" pour être au-dessus des autres éléments
+local texturetwo = frameTalentDemonhunter:CreateTexture("TemplateTalentFrame", "OVERLAY")
 texturetwo:SetTexture("Interface\\TalentFrame\\Template\\Class\\Demonhunter\\TalentFrameTemplateOriginal.blp")
-texturetwo:SetSize(928, 928) -- Remplacez width et height par les dimensions souhaitées
-texturetwo:SetPoint("TOPRIGHT", frameTalentDemonhunter, "TOPRIGHT", 150, 35) -- Adjust the X and Y coordinates
+texturetwo:SetSize(928, 928)
+texturetwo:SetPoint("TOPRIGHT", frameTalentDemonhunter, "TOPRIGHT", 150, 35)
 
--- Ajuste l'ordre des calques pour être devant les autres éléments
-frameTalentDemonhunter:SetFrameLevel(100) -- Utilisez une valeur supérieure à celle des autres éléments
+frameTalentDemonhunter:SetFrameLevel(100)
 
--- Drag & Drop
 frameTalentDemonhunter:SetScript("OnDragStart", frameTalentDemonhunter.StartMoving)
 frameTalentDemonhunter:SetScript("OnHide", frameTalentDemonhunter.StopMovingOrSizing)
 frameTalentDemonhunter:SetScript("OnDragStop", frameTalentDemonhunter.StopMovingOrSizing)
 frameTalentDemonhunter:Hide()
 
--- Nouveau template d'arête
-frameTalentDemonhunter:SetBackdropBorderColor(135, 135, 237) -- Couleur pourpre
+frameTalentDemonhunter:SetBackdropBorderColor(135, 135, 237)
 
--- Close button
 local buttonTalentDemonhunterClose = CreateFrame("Button", "buttonTalentDemonhunterClose", frameTalentDemonhunter, "UIPanelCloseButton")
 buttonTalentDemonhunterClose:SetPoint("TOPRIGHT", -12, -12)
 buttonTalentDemonhunterClose:EnableMouse(true)
@@ -77,10 +66,8 @@ local function CloseTalentWindow()
     PlaySoundFile(CLOSE_TALENT_WINDOW_SOUND)
 end
 
--- Associez la fonction de fermeture au bouton de fermeture
 buttonTalentDemonhunterClose:SetScript("OnClick", CloseTalentWindow)
 
--- Title bar
 local frameTalentDemonhunterTitleBar = CreateFrame("Frame", "frameTalentDemonhunterTitleBar", frameTalentDemonhunter, nil)
 frameTalentDemonhunterTitleBar:SetSize(135, 25)
 frameTalentDemonhunterTitleBar:SetBackdrop(
@@ -103,21 +90,17 @@ fontTalentDemonhunterTitleText:SetText("|cffFFC125Talents|r")
 local fontTalentDemonhunterFrameText = frameTalentDemonhunterTitleBar:CreateFontString("fontTalentDemonhunterFrameText")
 fontTalentDemonhunterFrameText:SetFont("Fonts\\FRIZQT__.TTF", 18)
 fontTalentDemonhunterFrameText:SetSize(200, 5)
-fontTalentDemonhunterFrameText:SetPoint("TOPLEFT", frameTalentDemonhunterTitleBar, "BOTTOMLEFT", -30, -35) -- Adjust the Y offset as needed
+fontTalentDemonhunterFrameText:SetPoint("TOPLEFT", frameTalentDemonhunterTitleBar, "BOTTOMLEFT", -30, -35)
 fontTalentDemonhunterFrameText:SetText("|cffFFC125Chasseur de démons|r")
 
--- Remplacez votre ligne existante pour la création du texte par celle-ci
 local fontTalentDemonhunterFrameText = frameTalentDemonhunterTitleBar:CreateFontString("fontTalentDemonhunterFrameText")
 fontTalentDemonhunterFrameText:SetFont("Fonts\\FRIZQT__.TTF", 18)
 fontTalentDemonhunterFrameText:SetSize(200, 5)
-fontTalentDemonhunterFrameText:SetPoint("TOPLEFT", frameTalentDemonhunterTitleBar, "BOTTOMLEFT", -30, -60) -- Adjust the Y offset as needed
-fontTalentDemonhunterFrameText:SetText("0 / " .. MAX_TALENTS) -- Initialisez le texte avec 0 talents appris
+fontTalentDemonhunterFrameText:SetPoint("TOPLEFT", frameTalentDemonhunterTitleBar, "BOTTOMLEFT", -30, -60)
+fontTalentDemonhunterFrameText:SetText("0 / " .. MAX_TALENTS)
 
--------------------------------------------------------------
 
--------------------------------------------------------------
 
--- Fonction générique pour créer un bouton de sort
 local function CreateSpellButton(name, texturePath, tooltipText, talentHandler, positionX, positionY)
     local buttonClicked = false
     local talentLearned = false
@@ -130,50 +113,44 @@ local function CreateSpellButton(name, texturePath, tooltipText, talentHandler, 
     button:SetHighlightTexture("Interface/Buttons/checkbuttonhilight")
     button:SetPoint("TOPLEFT", positionX, positionY)
 
-    -- Texture pour l'indicateur d'apprentissage
     local learnIndicator = button:CreateTexture(nil, "OVERLAY")
     learnIndicator:SetTexture("Interface/Buttons/UI-CheckBox-Check")
     learnIndicator:SetSize(30, 30)
     learnIndicator:SetPoint("BOTTOMRIGHT", -2, 2)
     learnIndicator:Hide()
 
-    -- Texte pour afficher l'état du bouton (0 ou 1)
     local buttonText = button:CreateFontString("buttonText", "OVERLAY", "GameFontHighlight")
     buttonText:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -2, 2)
 
-    -- Fonction pour mettre à jour l'état du bouton et de l'indicateur d'apprentissage
     local function UpdateButtonState()
         if talentLearned then
-            button:SetAlpha(1) -- Réduire l'opacité pour indiquer que le bouton est désactivé
-            learnIndicator:Show() -- Afficher l'indicateur d'apprentissage
-            buttonText:SetText("|cffffda2b1|r") -- Mettre à jour le texte pour afficher "1"
+            button:SetAlpha(1)
+            learnIndicator:Show()
+            buttonText:SetText("|cffffda2b1|r")
         else
-            button:SetAlpha(1) -- Rétablir l'opacité pour indiquer que le bouton est activé
-            learnIndicator:Hide() -- Cacher l'indicateur d'apprentissage
-            buttonText:SetText("|cff1aff1a0|r") -- Mettre à jour le texte pour afficher "0"
+            button:SetAlpha(1)
+            learnIndicator:Hide()
+            buttonText:SetText("|cff1aff1a0|r")
         end
     end
 
-    -- Fonction à exécuter lorsque le bouton est cliqué
     button:SetScript("OnMouseUp", function()
         if not buttonClicked and not talentLearned then
-            -- Ajouter une vérification pour s'assurer que le joueur a des points de talent
             local talentItemID = 338404
             local hasTalentPoints = GetItemCount(talentItemID, false, true) > 0
 
             if hasTalentPoints then
                 AIO.Handle("TalentDemonhunterspell", talentHandler, 1)
                 PlaySoundFile(SPELL_TALENT_WINDOW_SOUND)
-                buttonClicked = true -- Marquer le bouton comme cliqué
-                talentLearned = true -- Marquer le talent comme appris
-                UpdateButtonState() -- Mettre à jour l'état du bouton
+                buttonClicked = true
+                talentLearned = true
+                UpdateButtonState()
             else
                 print("|cff00ffffVous n'avez plus de points de talent !|r")
             end
         end
     end)
 
-    -- Affichage du tooltip
     button:SetScript("OnEnter", function(self)
         GameTooltip:SetOwner(self, "TOPLEFT")
         GameTooltip:ClearLines()
@@ -181,24 +158,17 @@ local function CreateSpellButton(name, texturePath, tooltipText, talentHandler, 
         GameTooltip:Show()
     end)
 
-    -- Cacher le tooltip lorsque la souris quitte le bouton
     button:SetScript("OnLeave", function(self)
         GameTooltip:Hide()
     end)
 
-    -- Appel initial pour définir l'état du bouton au chargement
     UpdateButtonState()
 end
 
--- Utilisation de la fonction générique avec des positions spécifiques
 
--------------------------------------------------------------
 
--------------------------------------------------------------
 
--- Template 1
 
--- Dévastation
 
 CreateSpellButton("buttonSpellWarglaivesChaos", "Interface/icons/inv_glaive_1h_artifactazgalor_d_03", "|cffffffffGlaives de guerre du chaos|r\n|cffffffffTalent|r |cff00bb00Dévastation|r\n|cffffffffRequiert|r |cffa330c9Chasseur de démons|r\n|cffffd100Augmente les dégâts des coups critiques infligés par Frappe du chaos de 21%.|r", "spellwarglaiveschaos", 170, -180)
 CreateSpellButton("buttonSpellDemonSpeed", "Interface/icons/ability_demonhunter_doublejump", "|cffffffffVitesse démoniaque|r\n|cffffffffTalent|r |cff00bb00Dévastation|r\n|cffffffffRequiert|r |cffa330c9Chasseur de démons|r\n|cffffd100Voile corrompu octroie maintenant un bonus de 30% à la vitesse de déplacement.|r", "spelldemonspeed", 280, -180)
@@ -220,14 +190,11 @@ CreateSpellButton("buttonSpellDemonic", "Interface/icons/Spell_Shadow_DemonForm"
 CreateSpellButton("buttonSpellFelWounds", "Interface/icons/Spell_Fire_FelHellfire", "|cffffffffBlessures gangrenées|r\n|cffffffffTalent|r |cff00bb00Dévastation|r\n|cffffffffRequiert|r |cffa330c9Chasseur de démons|r\n|cffffd100La Danse des lames fait saigner tous les ennemis à 8 mètres de distance pour 150% des dégâts infligés sur 10 sec.|r", "spellfelwounds", 495, -398)
 CreateSpellButton("buttonSpellFelBarrage", "Interface/icons/inv_felbarrage", "|cffffffffBarrage gangrené|r\n|cffffffffTalent|r |cff00bb00Dévastation|r\n|cffffffffRequiert|r |cffa330c9Chasseur de démons|r\n|cffffd100Lance un torrent d'énergie Fel sur 3 sec, infligeant [ 314,6% de la puissance d'attaque ] des dégâts de feu à tous les ennemis dans un rayon de 8 m.|r", "spellfelbarrage", 60, -398)
 
--- Template 2
 
--- Vengeance
 
 CreateSpellButton("buttonSpellThickSkin", "Interface/icons/sha_spell_warlock_demonsoul", "|cffffffffPeau dure|r\n|cffffffffTalent|r |cff0000d5Vengeance|r\n|cffffffffRequiert|r |cffa330c9Chasseur de démons|r\n|cffffd100Une énergie gangrenée épaissit votre peau dans des proportions démoniaques, ce qui augmente votre Endurance de 65% et votre Armure de 130%.|r", "spellthickskin", 645, -290)
 CreateSpellButton("buttonSpellDemonicWards", "Interface/icons/inv_belt_leather_demonhunter_a_01", "|cffffffffProtections démoniaques|r\n|cffffffffTalent|r |cff0000d5Vengeance|r\n|cffffffffRequiert|r |cffa330c9Chasseur de démons|r\n|cffffd100Vos tatouages réduisent [les dégâts magiques subis de 10% et les dégâts physiques subis de 10%.][les dégâts subis de 10%.]|r", "spelldemonicwards", 1075, -290)
 
--- Maître du glaive
 
 CreateSpellButton("buttonSpellSharpenedGlaives", "Interface/icons/ability_demonhunter_throwglaive", "|cffffffffGlaives aiguisées|r\n|cffffffffTalent|r |cffc7690cMaître du glaive|r\n|cffffffffRequiert|r |cffa330c9Chasseur de démons|r\n|cffffd100Augmente les dégâts de Lancer de glaive de 50%.|r", "spellsharpenedglaives", 805, -235)
 CreateSpellButton("buttonSpellDisorientGlaives", "Interface/icons/inv_glaive_1h_demonhunter_a_01", "|cffffffffGlaives désorientées|r\n|cffffffffTalent|r |cffc7690cMaître du glaive|r\n|cffffffffRequiert|r |cffa330c9Chasseur de démons|r\n|cffffd100Lancer de glaive piège tous les ennemis touchés de 30% pendant 5 sec.|r", "spelldisorientglaives", 860, -180)
@@ -242,35 +209,28 @@ CreateSpellButton("buttonSpellBloodlet", "Interface/icons/ability_demonhunter_bl
 CreateSpellButton("buttonSpellRapidGlaives", "Interface/icons/inv_glaive_1h_npc_c_02", "|cffffffffGlaives rapides|r\n|cffffffffTalent|r |cffc7690cMaître du glaive|r\n|cffffffffRequiert|r |cffa330c9Chasseur de démons|r\n|cffffd100Lance simultanément vos Glaives, infligeant des dégâts à un maximum de 3 cibles toutes les 0.5 sec, dure 3 seconds.|r", "spellrapidglaives", 805, -345)
 CreateSpellButton("buttonSpellVenomlet", "Interface/icons/inv_glaive_1h_artifactazgalor_d_02dual", "|cffffffffVenomlet|r\n|cffffffffTalent|r |cffc7690cMaître du glaive|r\n|cffffffffRequiert|r |cffa330c9Chasseur de démons|r\n|cffffd100Lancer de glaive empoisonne vos ennemis en leur infligeant 15% des dégâts infligés\net réduit leur résistance à la nature de 2000, cumulable 3 fois sur 15 sec.|r", "spellvenomlet", 1075, -398)
 
--------------------------------------------------------------
 
--------------------------------------------------------------
 
--- Ajoutez une variable pour suivre l'état du bouton Réinitialiser
 local resetButtonClicked = false
 
--- Créez le bouton Reset à l'intérieur de la fenêtre frameTalentDemonhunter
 local buttonReset = CreateFrame("Button", "buttonReset", frameTalentDemonhunter, "UIPanelButtonTemplate")
 buttonReset:SetSize(85, 25)
-buttonReset:SetPoint("BOTTOMRIGHT", buttonTalentDemonhunterClose, "BOTTOMLEFT", -95, 5) -- Place le bouton Reset à gauche du bouton Reload
+buttonReset:SetPoint("BOTTOMRIGHT", buttonTalentDemonhunterClose, "BOTTOMLEFT", -95, 5)
 buttonReset:SetText("Réinitialiser")
 
 local function ResetTalents()
-    -- Ajoutez ici la logique pour réinitialiser les talents du joueur
     AIO.Handle("TalentDemonhunterspell", "ResetTalents")
-    resetButtonClicked = true -- Marquez le bouton Réinitialiser comme cliqué
+    resetButtonClicked = true
 end
 
 buttonReset:SetScript("OnClick", ResetTalents)
 
--- Créez le bouton Reload à l'intérieur de la fenêtre frameTalentDemonhunter
 local buttonReload = CreateFrame("Button", "buttonReload", frameTalentDemonhunter, "UIPanelButtonTemplate")
 buttonReload:SetSize(85, 25)
-buttonReload:SetPoint("BOTTOMRIGHT", buttonTalentDemonhunterClose, "BOTTOMLEFT", -5, 5) -- Place le bouton Reload à gauche du bouton Close
+buttonReload:SetPoint("BOTTOMRIGHT", buttonTalentDemonhunterClose, "BOTTOMLEFT", -5, 5)
 buttonReload:SetText("Actualiser")
 
 local function ReloadClient()
-    -- Ajoutez une vérification pour s'assurer que le bouton Réinitialiser a été cliqué
     if resetButtonClicked then
         ReloadUI()
     else
@@ -280,7 +240,6 @@ end
 
 buttonReload:SetScript("OnClick", ReloadClient)
 
--- Ajoutez une variable globale pour suivre l'état de la fenêtre des talents
 local talentsWindowOpen = false
 
 local function OuvrirFermerInterfaceTalents()
@@ -294,37 +253,30 @@ local function OuvrirFermerInterfaceTalents()
         PlaySoundFile(OPEN_TALENT_WINDOW_SOUND)
     end
 
-    -- Inversez l'état de la fenêtre des talents
     talentsWindowOpen = not talentsWindowOpen
 end
 
--- Vérifier si le joueur est un Demonhunter avant de créer le bouton
-local playerClass = select(2, UnitClass("player")) -- Obtenir la classe du joueur
+local playerClass = select(2, UnitClass("player"))
 if playerClass == "DEMONHUNTER" then
     local buttonOuvrirTalents = CreateFrame("Button", "buttonOuvrirTalents", UIParent)
     buttonOuvrirTalents:SetSize(32, 33)
-    buttonOuvrirTalents:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -171, 8) -- Placer en bas à droite avec un décalage de 10 pixels
+    buttonOuvrirTalents:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -171, 8)
 
-    -- Ajouter une texture BLP au bouton
     buttonOuvrirTalents:SetNormalTexture("Interface\\TalentFrame\\Template\\MicroButton\\ButtonSystemTalent.blp")
 
-    -- Ajouter une texture de surbrillance
     local highlightTexture = buttonOuvrirTalents:CreateTexture(nil, "HIGHLIGHT")
     highlightTexture:SetAllPoints(buttonOuvrirTalents)
     highlightTexture:SetTexture("Interface\\TalentFrame\\Template\\MicroButton\\ButtonSystemTalentLight.blp")
     buttonOuvrirTalents:SetHighlightTexture(highlightTexture)
 
-    -- Supprimer le texte du bouton
     buttonOuvrirTalents:SetText("")
 
-    -- Ajouter une info-bulle
     buttonOuvrirTalents:SetScript("OnEnter", function(self)
-        GameTooltip:SetOwner(self, "ANCHOR_RIGHT") -- Définir l'ancre de l'info-bulle
-        GameTooltip:SetText("|cffffffffTalents|r |cffa330c9(Chasseur de démons)|r\n\nL'éventail des talents disponibles\npour améliorer et spécialiser\nvotre personnage.") -- Texte de l'info-bulle
+        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+        GameTooltip:SetText("|cffffffffTalents|r |cffa330c9(Chasseur de démons)|r\n\nL'éventail des talents disponibles\npour améliorer et spécialiser\nvotre personnage.")
         GameTooltip:Show()
     end)
 
-    -- Masquer l'info-bulle lorsque la souris quitte le bouton
     buttonOuvrirTalents:SetScript("OnLeave", function(self)
         GameTooltip:Hide()
     end)

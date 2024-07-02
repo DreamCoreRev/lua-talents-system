@@ -9,64 +9,53 @@ function BloodbattlemageHandlers.ShowTalentBloodbattlemage(player)
     frameTalentBloodbattlemage:Show()
 end
 
-local MAX_TALENTS = 31 -- Définition du nombre maximal de talents que le joueur peut apprendre
+local MAX_TALENTS = 31
 
 local OPEN_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_72_artifact_forge_final_trait_unlocked.ogg"
 local CLOSE_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_72_artifact_forge_trait_refund_end.ogg"
 local SPELL_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_80_azeritearmor_rotationends_02.ogg"
 
--- Attribute window
 local frameTalentBloodbattlemage = CreateFrame("Frame", "frameTalentBloodbattlemage", UIParent)
 frameTalentBloodbattlemage:SetSize(1200, 650)
 frameTalentBloodbattlemage:SetMovable(true)
 frameTalentBloodbattlemage:EnableMouse(true)
 frameTalentBloodbattlemage:RegisterForDrag("LeftButton")
-frameTalentBloodbattlemage:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 50, -50) -- Adjust the X and Y coordinates
+frameTalentBloodbattlemage:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 50, -50)
 frameTalentBloodbattlemage:SetBackdrop(
 {
-    -- bgFile = "interface/TalentFrame/talentsclassbackgroundbbm2", --Interface/AchievementFrame/UI-Achievement-Parchment-Horizontal
-    bgFile = "interface/TalentFrame/Template/Class/BloodBattleMage/talentsclassbackgroundbloodbattlemage2", --Interface/AchievementFrame/UI-Achievement-Parchment-Horizontal
-    edgeFile = "interface/tooltips/ui-tooltip-border-corruptedbbm", --Interface/DialogFrame/UI-DialogBox-Border
+    bgFile = "interface/TalentFrame/Template/Class/BloodBattleMage/talentsclassbackgroundbloodbattlemage2",
+    edgeFile = "interface/tooltips/ui-tooltip-border-corruptedbbm",
     edgeSize = 20,
     insets = { left = 5, right = 5, top = 5, bottom = 5 }
 })
 
--- Ajoutez la texture de l'icône du Mage de combat sanglant
 local bloodbattlemageIcon = frameTalentBloodbattlemage:CreateTexture("BloodbattlemageIcon", "OVERLAY")
 bloodbattlemageIcon:SetTexture("Interface\\TalentFrame\\Template\\Class\\BloodBattleMage\\IconeBloodbattlemage.blp")
 bloodbattlemageIcon:SetSize(60, 60)
 bloodbattlemageIcon:SetPoint("TOPLEFT", frameTalentBloodbattlemage, "TOPLEFT", -10, 10)
 
--- Template Talent Frame
 
--- Ajoute une textureone pour l'image BLP
-local textureone = frameTalentBloodbattlemage:CreateTexture("TemplateTalentFrame", "OVERLAY") -- Utilisez "OVERLAY" pour être au-dessus des autres éléments
+local textureone = frameTalentBloodbattlemage:CreateTexture("TemplateTalentFrame", "OVERLAY")
 textureone:SetTexture("Interface\\TalentFrame\\Template\\Class\\Bloodbattlemage\\TalentFrameTemplate.blp")
-textureone:SetSize(928, 928) -- Remplacez width et height par les dimensions souhaitées
-textureone:SetPoint("TOPLEFT", frameTalentBloodbattlemage, "TOPLEFT", -150, 120) -- Adjust the X and Y coordinates
+textureone:SetSize(928, 928)
+textureone:SetPoint("TOPLEFT", frameTalentBloodbattlemage, "TOPLEFT", -150, 120)
 
--- Ajuste l'ordre des calques pour être devant les autres éléments
-frameTalentBloodbattlemage:SetFrameLevel(100) -- Utilisez une valeur supérieure à celle des autres éléments
+frameTalentBloodbattlemage:SetFrameLevel(100)
 
--- Ajoute une texturetwo pour l'image BLP
-local texturetwo = frameTalentBloodbattlemage:CreateTexture("TemplateTalentFrame", "OVERLAY") -- Utilisez "OVERLAY" pour être au-dessus des autres éléments
+local texturetwo = frameTalentBloodbattlemage:CreateTexture("TemplateTalentFrame", "OVERLAY")
 texturetwo:SetTexture("Interface\\TalentFrame\\Template\\Class\\BloodBattleMage\\TalentFrameTemplateOriginal.blp")
-texturetwo:SetSize(928, 928) -- Remplacez width et height par les dimensions souhaitées
-texturetwo:SetPoint("TOPRIGHT", frameTalentBloodbattlemage, "TOPRIGHT", 150, 160) -- Adjust the X and Y coordinates
+texturetwo:SetSize(928, 928)
+texturetwo:SetPoint("TOPRIGHT", frameTalentBloodbattlemage, "TOPRIGHT", 150, 160)
 
--- Ajuste l'ordre des calques pour être devant les autres éléments
-frameTalentBloodbattlemage:SetFrameLevel(100) -- Utilisez une valeur supérieure à celle des autres éléments
+frameTalentBloodbattlemage:SetFrameLevel(100)
 
--- Drag & Drop
 frameTalentBloodbattlemage:SetScript("OnDragStart", frameTalentBloodbattlemage.StartMoving)
 frameTalentBloodbattlemage:SetScript("OnHide", frameTalentBloodbattlemage.StopMovingOrSizing)
 frameTalentBloodbattlemage:SetScript("OnDragStop", frameTalentBloodbattlemage.StopMovingOrSizing)
 frameTalentBloodbattlemage:Hide()
 
--- Nouveau template d'arête
-frameTalentBloodbattlemage:SetBackdropBorderColor(0.5, 0, 0) -- Couleur rouge
+frameTalentBloodbattlemage:SetBackdropBorderColor(0.5, 0, 0)
 
--- Close button
 local buttonTalentBloodbattlemageClose = CreateFrame("Button", "buttonTalentBloodbattlemageClose", frameTalentBloodbattlemage, "UIPanelCloseButton")
 buttonTalentBloodbattlemageClose:SetPoint("TOPRIGHT", -12, -12)
 buttonTalentBloodbattlemageClose:EnableMouse(true)
@@ -77,10 +66,8 @@ local function CloseTalentWindow()
     PlaySoundFile(CLOSE_TALENT_WINDOW_SOUND)
 end
 
--- Associez la fonction de fermeture au bouton de fermeture
 buttonTalentBloodbattlemageClose:SetScript("OnClick", CloseTalentWindow)
 
--- Title bar
 local frameTalentBloodbattlemageTitleBar = CreateFrame("Frame", "frameTalentBloodbattlemageTitleBar", frameTalentBloodbattlemage, nil)
 frameTalentBloodbattlemageTitleBar:SetSize(135, 25)
 frameTalentBloodbattlemageTitleBar:SetBackdrop(
@@ -103,21 +90,17 @@ fontTalentBloodbattlemageTitleText:SetText("|cffFFC125Talents|r")
 local fontTalentBloodbattlemageFrameText = frameTalentBloodbattlemageTitleBar:CreateFontString("fontTalentBloodbattlemageFrameText")
 fontTalentBloodbattlemageFrameText:SetFont("Fonts\\FRIZQT__.TTF", 18)
 fontTalentBloodbattlemageFrameText:SetSize(200, 5)
-fontTalentBloodbattlemageFrameText:SetPoint("TOPLEFT", frameTalentBloodbattlemageTitleBar, "BOTTOMLEFT", -30, -35) -- Adjust the Y offset as needed
+fontTalentBloodbattlemageFrameText:SetPoint("TOPLEFT", frameTalentBloodbattlemageTitleBar, "BOTTOMLEFT", -30, -35)
 fontTalentBloodbattlemageFrameText:SetText("|cffFFC125Mage de combat|r")
 
--- Remplacez votre ligne existante pour la création du texte par celle-ci
 local fontTalentBloodbattlemageFrameText = frameTalentBloodbattlemageTitleBar:CreateFontString("fontTalentBloodbattlemageFrameText")
 fontTalentBloodbattlemageFrameText:SetFont("Fonts\\FRIZQT__.TTF", 18)
 fontTalentBloodbattlemageFrameText:SetSize(200, 5)
-fontTalentBloodbattlemageFrameText:SetPoint("TOPLEFT", frameTalentBloodbattlemageTitleBar, "BOTTOMLEFT", -30, -60) -- Adjust the Y offset as needed
-fontTalentBloodbattlemageFrameText:SetText("0 / " .. MAX_TALENTS) -- Initialisez le texte avec 0 talents appris
+fontTalentBloodbattlemageFrameText:SetPoint("TOPLEFT", frameTalentBloodbattlemageTitleBar, "BOTTOMLEFT", -30, -60)
+fontTalentBloodbattlemageFrameText:SetText("0 / " .. MAX_TALENTS)
 
--------------------------------------------------------------
 
--------------------------------------------------------------
 
--- Fonction générique pour créer un bouton de sort
 local function CreateSpellButton(name, texturePath, tooltipText, talentHandler, positionX, positionY)
     local buttonClicked = false
     local talentLearned = false
@@ -130,50 +113,44 @@ local function CreateSpellButton(name, texturePath, tooltipText, talentHandler, 
     button:SetHighlightTexture("Interface/Buttons/checkbuttonhilight")
     button:SetPoint("TOPLEFT", positionX, positionY)
 
-    -- Texture pour l'indicateur d'apprentissage
     local learnIndicator = button:CreateTexture(nil, "OVERLAY")
     learnIndicator:SetTexture("Interface/Buttons/UI-CheckBox-Check")
     learnIndicator:SetSize(30, 30)
     learnIndicator:SetPoint("BOTTOMRIGHT", -2, 2)
     learnIndicator:Hide()
 
-    -- Texte pour afficher l'état du bouton (0 ou 1)
     local buttonText = button:CreateFontString("buttonText", "OVERLAY", "GameFontHighlight")
     buttonText:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -2, 2)
 
-    -- Fonction pour mettre à jour l'état du bouton et de l'indicateur d'apprentissage
     local function UpdateButtonState()
         if talentLearned then
-            button:SetAlpha(1) -- Réduire l'opacité pour indiquer que le bouton est désactivé
-            learnIndicator:Show() -- Afficher l'indicateur d'apprentissage
-            buttonText:SetText("|cffffda2b1|r") -- Mettre à jour le texte pour afficher "1"
+            button:SetAlpha(1)
+            learnIndicator:Show()
+            buttonText:SetText("|cffffda2b1|r")
         else
-            button:SetAlpha(1) -- Rétablir l'opacité pour indiquer que le bouton est activé
-            learnIndicator:Hide() -- Cacher l'indicateur d'apprentissage
-            buttonText:SetText("|cff1aff1a0|r") -- Mettre à jour le texte pour afficher "0"
+            button:SetAlpha(1)
+            learnIndicator:Hide()
+            buttonText:SetText("|cff1aff1a0|r")
         end
     end
 
-    -- Fonction à exécuter lorsque le bouton est cliqué
     button:SetScript("OnMouseUp", function()
         if not buttonClicked and not talentLearned then
-            -- Ajouter une vérification pour s'assurer que le joueur a des points de talent
             local talentItemID = 338404
             local hasTalentPoints = GetItemCount(talentItemID, false, true) > 0
 
             if hasTalentPoints then
                 AIO.Handle("TalentBloodbattlemagespell", talentHandler, 1)
                 PlaySoundFile(SPELL_TALENT_WINDOW_SOUND)
-                buttonClicked = true -- Marquer le bouton comme cliqué
-                talentLearned = true -- Marquer le talent comme appris
-                UpdateButtonState() -- Mettre à jour l'état du bouton
+                buttonClicked = true
+                talentLearned = true
+                UpdateButtonState()
             else
                 print("|cff00ffffVous n'avez plus de points de talent !|r")
             end
         end
     end)
 
-    -- Affichage du tooltip
     button:SetScript("OnEnter", function(self)
         GameTooltip:SetOwner(self, "TOPLEFT")
         GameTooltip:ClearLines()
@@ -181,24 +158,17 @@ local function CreateSpellButton(name, texturePath, tooltipText, talentHandler, 
         GameTooltip:Show()
     end)
 
-    -- Cacher le tooltip lorsque la souris quitte le bouton
     button:SetScript("OnLeave", function(self)
         GameTooltip:Hide()
     end)
 
-    -- Appel initial pour définir l'état du bouton au chargement
     UpdateButtonState()
 end
 
--- Utilisation de la fonction générique avec des positions spécifiques
 
--------------------------------------------------------------
 
--------------------------------------------------------------
 
--- Template 1
 
--- Magie du sang
 
 CreateSpellButton("buttonSpellImprovedBlood", "Interface/icons/ability_skeer_bloodletting", "|cffffffffSanguinaire améliorée|r\n|cffffffffTalent|r |cfffc6703Magie du Sang|r\n|cffffffffRequiert|r |cffeb0000Mage de combat sanglant|r\n|cffffd100A chacune de vos compétence de Sanguinaire, vous récupérer 5 point de sang.|r", "spellimprovedblood", 225, -95)
 CreateSpellButton("buttonSpellSeedGrowth", "Interface/icons/spell_animarevendreth_orb", "|cffffffffCroissance de graine|r\n|cffffffffTalent|r |cfffc6703Magie du Sang|r\n|cffffffffRequiert|r |cffeb0000Mage de combat sanglant|r\n|cffffd100Votre graine de sang croît de manière efficace, lui permettant d'augmenter la durée de son effet de 5 secondes.|r", "spellseedgrowth", 335, -95)
@@ -226,9 +196,7 @@ CreateSpellButton("buttonSpellBloodFlow", "Interface/icons/inv_artifact_corrupte
 CreateSpellButton("buttonSpellBloodStorm", "Interface/icons/spell_sandstorm", "|cffffffffTempête de sang|r\n|cffffffffTalent|r |cfffc6703Magie du Sang|r\n|cffffffffRequiert|r |cffeb0000Mage de combat sanglant|r\n|cffffd100Votre tempête de sang inflige des dégâts imparable de 115% des dégâts de l'arme en main droite et 115% dégâts de l'arme en main gauche à tout les ennemis proches.|r", "spellbloodstorm", 390, -478)
 CreateSpellButton("buttonSpellReinforcedBlood", "Interface/icons/ability_malkorok_blightofyshaarj_red", "|cffffffffSang renforcé|r\n|cffffffffTalent|r |cfff2f200Sacrifice de sang|r\n|cffffffffRequiert|r |cffeb0000Mage de combat sanglant|r\n|cffffd100Renforce votre sang augmentant votre endurance de 5%.|r", "spellreinforcedblood", 335, -530)
 
--- Template 2
 
--- Sacrifice de sang
 
 CreateSpellButton("buttonSpellAbilityMotivation", "Interface/icons/spell_halo_purple", "|cffffffffAptitude : Motivation|r\n|cffffffffTalent|r |cfff2f200Sacrifice de sang|r\n|cffffffffRequiert|r |cffeb0000Mage de combat sanglant|r\n|cffffd100Canalise un puissant terrain de soutien, augmentant la vitesse de déplacement de 30% pour tout les alliés dans la zone.|r", "spellabilitymotivation", 805, -110)
 CreateSpellButton("buttonSpellAbilityBloodFlow", "Interface/icons/sha_spell_shadow_shadesofdarkness_nightmare", "|cffffffffAptitude : Afflux de sang|r\n|cffffffffTalent|r |cfff2f200Sacrifice de sang|r\n|cffffffffRequiert|r |cffeb0000Mage de combat sanglant|r\n|cffffd100Provoque un afflux de sang soudain à la tête aux ennemis proche de vous. Etourdisant les cibles dans une portée de 8 mètres pendand 1 seconds.|r", "spellabilitybloodflow", 915, -110)
@@ -242,7 +210,6 @@ CreateSpellButton("buttonSpellBloodBarrier", "Interface/icons/achievement_emeral
 CreateSpellButton("buttonSpellAbilityImprovement", "Interface/icons/inv_misc_clothscrap_02", "|cffffffffAptitude : Amélioration|r\n|cffffffffTalent|r |cfff2f200Sacrifice de sang|r\n|cffffffffRequiert|r |cffeb0000Mage de combat sanglant|r\n|cffffd100Vous donnez de la force à vos alliés à moins de 40 mètres, leurs procurant de la puissance d'attaque à hauteur de 10% de votre force.|r", "spellabilityimprovement", 750, -273)
 CreateSpellButton("buttonSpellAbilityPotential", "Interface/icons/inv_misc_clothscrap_03", "|cffffffffAptitude :  Potentiel|r\n|cffffffffTalent|r |cfff2f200Sacrifice de sang|r\n|cffffffffRequiert|r |cffeb0000Mage de combat sanglant|r\n|cffffd100Vous donnez du pouvoir à vos alliés à moins de 40 mètres, leurs procurant de la puissance de sort à hauteur de 10% de votre force.|r", "spellabilitypotential", 970, -273)
 
--- Blessure de sang
 
 CreateSpellButton("buttonSpellBloodProvocation", "Interface/icons/ability_revendreth_monk", "|cffffffffProvocation sanguine|r\n|cffffffffTalent|r |cff00bfffBlessure de sang|r\n|cffffffffRequiert|r |cffeb0000Mage de combat sanglant|r\n|cffffd100Provoque la cible et la force à vous attaquer. Aucun effet si la cible est déjà en train de vous attaquer.|r", "spellbloodprovocation", 699, -325)
 CreateSpellButton("buttonSpellMartialKnowledge", "Interface/icons/spell_misc_warsongfocus", "|cffffffffConnaissance martial|r\n|cffffffffTalent|r |cff00bfffBlessure de sang|r\n|cffffffffRequiert|r |cffeb0000Mage de combat sanglant|r\n|cffffd100Augmente les chances de coups critiques de 100%.|r", "spellmartialknowledge", 805, -325)
@@ -258,35 +225,28 @@ CreateSpellButton("buttonSpellLethalPowerfulImpulse", "Interface/icons/inv_throw
 CreateSpellButton("buttonSpellInternalHemorrhage", "Interface/icons/inv_misc_food_legion_gooamber_multi", "|cffffffffHémorragie interne|r\n|cffffffffTalent|r |cff00bfffBlessure de sang|r\n|cffffffffRequiert|r |cffeb0000Mage de combat sanglant|r\n|cffffd100Augmente les dégâts produits par votre saignement Mortel : Frappe chirurgical de 100%.|r", "spellinternalhemorrhage", 805, -434)
 CreateSpellButton("buttonSpellAnticipatedDestruction", "Interface/icons/ability_butcher_exsanguination", "|cffffffffDestruction anticipé|r\n|cffffffffTalent|r |cff00bfffBlessure de sang|r\n|cffffffffRequiert|r |cffeb0000Mage de combat sanglant|r\n|cffffd100Vous avez un taux de chance (avec vos saignements) de 15% de pouvoir éxécuter votre Mortel : Destruction peu importe la santé de votre ennemi, et ne vous couteras pas de point de vie.|r", "spellanticipateddestruction", 750, -490)
 
--------------------------------------------------------------
 
--------------------------------------------------------------
 
--- Ajoutez une variable pour suivre l'état du bouton Réinitialiser
 local resetButtonClicked = false
 
--- Créez le bouton Reset à l'intérieur de la fenêtre frameTalentBloodbattlemage
 local buttonReset = CreateFrame("Button", "buttonReset", frameTalentBloodbattlemage, "UIPanelButtonTemplate")
 buttonReset:SetSize(85, 25)
-buttonReset:SetPoint("BOTTOMRIGHT", buttonTalentBloodbattlemageClose, "BOTTOMLEFT", -95, 5) -- Place le bouton Reset à gauche du bouton Reload
+buttonReset:SetPoint("BOTTOMRIGHT", buttonTalentBloodbattlemageClose, "BOTTOMLEFT", -95, 5)
 buttonReset:SetText("Réinitialiser")
 
 local function ResetTalents()
-    -- Ajoutez ici la logique pour réinitialiser les talents du joueur
     AIO.Handle("TalentBloodbattlemagespell", "ResetTalents")
-    resetButtonClicked = true -- Marquez le bouton Réinitialiser comme cliqué
+    resetButtonClicked = true
 end
 
 buttonReset:SetScript("OnClick", ResetTalents)
 
--- Créez le bouton Reload à l'intérieur de la fenêtre frameTalentBloodbattlemage
 local buttonReload = CreateFrame("Button", "buttonReload", frameTalentBloodbattlemage, "UIPanelButtonTemplate")
 buttonReload:SetSize(85, 25)
-buttonReload:SetPoint("BOTTOMRIGHT", buttonTalentBloodbattlemageClose, "BOTTOMLEFT", -5, 5) -- Place le bouton Reload à gauche du bouton Close
+buttonReload:SetPoint("BOTTOMRIGHT", buttonTalentBloodbattlemageClose, "BOTTOMLEFT", -5, 5)
 buttonReload:SetText("Actualiser")
 
 local function ReloadClient()
-    -- Ajoutez une vérification pour s'assurer que le bouton Réinitialiser a été cliqué
     if resetButtonClicked then
         ReloadUI()
     else
@@ -296,7 +256,6 @@ end
 
 buttonReload:SetScript("OnClick", ReloadClient)
 
--- Ajoutez une variable globale pour suivre l'état de la fenêtre des talents
 local talentsWindowOpen = false
 
 local function OuvrirFermerInterfaceTalents()
@@ -310,37 +269,30 @@ local function OuvrirFermerInterfaceTalents()
         PlaySoundFile(OPEN_TALENT_WINDOW_SOUND)
     end
 
-    -- Inversez l'état de la fenêtre des talents
     talentsWindowOpen = not talentsWindowOpen
 end
 
--- Vérifier si le joueur est un Bloodbattlemage avant de créer le bouton
-local playerClass = select(2, UnitClass("player")) -- Obtenir la classe du joueur
+local playerClass = select(2, UnitClass("player"))
 if playerClass == "BLOODMAGE" then
     local buttonOuvrirTalents = CreateFrame("Button", "buttonOuvrirTalents", UIParent)
     buttonOuvrirTalents:SetSize(32, 33)
-    buttonOuvrirTalents:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -171, 8) -- Placer en bas à droite avec un décalage de 10 pixels
+    buttonOuvrirTalents:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -171, 8)
 
-    -- Ajouter une texture BLP au bouton
     buttonOuvrirTalents:SetNormalTexture("Interface\\TalentFrame\\Template\\MicroButton\\ButtonSystemTalent.blp")
 
-    -- Ajouter une texture de surbrillance
     local highlightTexture = buttonOuvrirTalents:CreateTexture(nil, "HIGHLIGHT")
     highlightTexture:SetAllPoints(buttonOuvrirTalents)
     highlightTexture:SetTexture("Interface\\TalentFrame\\Template\\MicroButton\\ButtonSystemTalentLight.blp")
     buttonOuvrirTalents:SetHighlightTexture(highlightTexture)
 
-    -- Supprimer le texte du bouton
     buttonOuvrirTalents:SetText("")
 
-    -- Ajouter une info-bulle
     buttonOuvrirTalents:SetScript("OnEnter", function(self)
-        GameTooltip:SetOwner(self, "ANCHOR_RIGHT") -- Définir l'ancre de l'info-bulle
-        GameTooltip:SetText("|cffffffffTalents|r |cffeb0000(Mage de combat sanglant)|r\n\nL'éventail des talents disponibles\npour améliorer et spécialiser\nvotre personnage.") -- Texte de l'info-bulle
+        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+        GameTooltip:SetText("|cffffffffTalents|r |cffeb0000(Mage de combat sanglant)|r\n\nL'éventail des talents disponibles\npour améliorer et spécialiser\nvotre personnage.")
         GameTooltip:Show()
     end)
 
-    -- Masquer l'info-bulle lorsque la souris quitte le bouton
     buttonOuvrirTalents:SetScript("OnLeave", function(self)
         GameTooltip:Hide()
     end)

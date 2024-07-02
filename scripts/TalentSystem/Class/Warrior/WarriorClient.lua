@@ -9,64 +9,53 @@ function WarriorHandlers.ShowTalentWarrior(player)
     frameTalentWarrior:Show()
 end
 
-local MAX_TALENTS = 44 -- Définition du nombre maximal de talents que le joueur peut apprendre
+local MAX_TALENTS = 44
 
 local OPEN_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_72_artifact_forge_final_trait_unlocked.ogg"
 local CLOSE_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_72_artifact_forge_trait_refund_end.ogg"
 local SPELL_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_80_azeritearmor_rotationends_02.ogg"
 
--- Attribute window
 local frameTalentWarrior = CreateFrame("Frame", "frameTalentWarrior", UIParent)
 frameTalentWarrior:SetSize(1200, 650)
 frameTalentWarrior:SetMovable(true)
 frameTalentWarrior:EnableMouse(true)
 frameTalentWarrior:RegisterForDrag("LeftButton")
-frameTalentWarrior:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 50, -50) -- Adjust the X and Y coordinates
+frameTalentWarrior:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 50, -50)
 frameTalentWarrior:SetBackdrop(
 {
-    -- bgFile = "interface/TalentFrame/talentsclassbackgroundWarrior", --Interface/AchievementFrame/UI-Achievement-Parchment-Horizontal
-    bgFile = "interface/TalentFrame/Template/Class/Warrior/talentsclassbackgroundwarrior", --Interface/AchievementFrame/UI-Achievement-Parchment-Horizontal
-    edgeFile = "interface/tooltips/ui-tooltip-border-corruptedwarrior", --Interface/DialogFrame/UI-DialogBox-Border
+    bgFile = "interface/TalentFrame/Template/Class/Warrior/talentsclassbackgroundwarrior",
+    edgeFile = "interface/tooltips/ui-tooltip-border-corruptedwarrior",
     edgeSize = 20,
     insets = { left = 5, right = 5, top = 5, bottom = 5 }
 })
 
--- Ajoutez la texture de l'icône du Guerrier
 local warriorIcon = frameTalentWarrior:CreateTexture("WarriorIcon", "OVERLAY")
 warriorIcon:SetTexture("Interface\\TalentFrame\\Template\\Class\\Warrior\\IconeWarrior.blp")
 warriorIcon:SetSize(60, 60)
 warriorIcon:SetPoint("TOPLEFT", frameTalentWarrior, "TOPLEFT", -10, 10)
 
--- Template Talent Frame
 
--- Ajoute une textureone pour l'image BLP
-local textureone = frameTalentWarrior:CreateTexture("TemplateTalentFrame", "OVERLAY") -- Utilisez "OVERLAY" pour être au-dessus des autres éléments
+local textureone = frameTalentWarrior:CreateTexture("TemplateTalentFrame", "OVERLAY")
 textureone:SetTexture("Interface\\TalentFrame\\Template\\Class\\Warrior\\TalentFrameTemplate.blp")
-textureone:SetSize(928, 928) -- Remplacez width et height par les dimensions souhaitées
-textureone:SetPoint("TOPLEFT", frameTalentWarrior, "TOPLEFT", -170, 140) -- Adjust the X and Y coordinates
+textureone:SetSize(928, 928)
+textureone:SetPoint("TOPLEFT", frameTalentWarrior, "TOPLEFT", -170, 140)
 
--- Ajuste l'ordre des calques pour être devant les autres éléments
-frameTalentWarrior:SetFrameLevel(100) -- Utilisez une valeur supérieure à celle des autres éléments
+frameTalentWarrior:SetFrameLevel(100)
 
--- Ajoute une texturetwo pour l'image BLP
-local texturetwo = frameTalentWarrior:CreateTexture("TemplateTalentFrame", "OVERLAY") -- Utilisez "OVERLAY" pour être au-dessus des autres éléments
+local texturetwo = frameTalentWarrior:CreateTexture("TemplateTalentFrame", "OVERLAY")
 texturetwo:SetTexture("Interface\\TalentFrame\\Template\\Class\\Warrior\\TalentFrameTemplateOriginal.blp")
-texturetwo:SetSize(928, 928) -- Remplacez width et height par les dimensions souhaitées
-texturetwo:SetPoint("TOPRIGHT", frameTalentWarrior, "TOPRIGHT", 170, 140) -- Adjust the X and Y coordinates
+texturetwo:SetSize(928, 928)
+texturetwo:SetPoint("TOPRIGHT", frameTalentWarrior, "TOPRIGHT", 170, 140)
 
--- Ajuste l'ordre des calques pour être devant les autres éléments
-frameTalentWarrior:SetFrameLevel(100) -- Utilisez une valeur supérieure à celle des autres éléments
+frameTalentWarrior:SetFrameLevel(100)
 
--- Drag & Drop
 frameTalentWarrior:SetScript("OnDragStart", frameTalentWarrior.StartMoving)
 frameTalentWarrior:SetScript("OnHide", frameTalentWarrior.StopMovingOrSizing)
 frameTalentWarrior:SetScript("OnDragStop", frameTalentWarrior.StopMovingOrSizing)
 frameTalentWarrior:Hide()
 
--- Nouveau template d'arête
-frameTalentWarrior:SetBackdropBorderColor(199, 156, 110) -- Couleur marron
+frameTalentWarrior:SetBackdropBorderColor(199, 156, 110)
 
--- Close button
 local buttonTalentWarriorClose = CreateFrame("Button", "buttonTalentWarriorClose", frameTalentWarrior, "UIPanelCloseButton")
 buttonTalentWarriorClose:SetPoint("TOPRIGHT", -12, -12)
 buttonTalentWarriorClose:EnableMouse(true)
@@ -77,10 +66,8 @@ local function CloseTalentWindow()
     PlaySoundFile(CLOSE_TALENT_WINDOW_SOUND)
 end
 
--- Associez la fonction de fermeture au bouton de fermeture
 buttonTalentWarriorClose:SetScript("OnClick", CloseTalentWindow)
 
--- Title bar
 local frameTalentWarriorTitleBar = CreateFrame("Frame", "frameTalentWarriorTitleBar", frameTalentWarrior, nil)
 frameTalentWarriorTitleBar:SetSize(135, 25)
 frameTalentWarriorTitleBar:SetBackdrop(
@@ -103,21 +90,17 @@ fontTalentWarriorTitleText:SetText("|cffFFC125Talents|r")
 local fontTalentWarriorFrameText = frameTalentWarriorTitleBar:CreateFontString("fontTalentWarriorFrameText")
 fontTalentWarriorFrameText:SetFont("Fonts\\FRIZQT__.TTF", 18)
 fontTalentWarriorFrameText:SetSize(200, 5)
-fontTalentWarriorFrameText:SetPoint("TOPLEFT", frameTalentWarriorTitleBar, "BOTTOMLEFT", -30, -35) -- Adjust the Y offset as needed
+fontTalentWarriorFrameText:SetPoint("TOPLEFT", frameTalentWarriorTitleBar, "BOTTOMLEFT", -30, -35)
 fontTalentWarriorFrameText:SetText("|cffFFC125Guerrier|r")
 
--- Remplacez votre ligne existante pour la création du texte par celle-ci
 local fontTalentWarriorFrameText = frameTalentWarriorTitleBar:CreateFontString("fontTalentWarriorFrameText")
 fontTalentWarriorFrameText:SetFont("Fonts\\FRIZQT__.TTF", 18)
 fontTalentWarriorFrameText:SetSize(200, 5)
-fontTalentWarriorFrameText:SetPoint("TOPLEFT", frameTalentWarriorTitleBar, "BOTTOMLEFT", -30, -60) -- Adjust the Y offset as needed
-fontTalentWarriorFrameText:SetText("0 / " .. MAX_TALENTS) -- Initialisez le texte avec 0 talents appris
+fontTalentWarriorFrameText:SetPoint("TOPLEFT", frameTalentWarriorTitleBar, "BOTTOMLEFT", -30, -60)
+fontTalentWarriorFrameText:SetText("0 / " .. MAX_TALENTS)
 
--------------------------------------------------------------
 
--------------------------------------------------------------
 
--- Fonction générique pour créer un bouton de sort
 local function CreateSpellButton(name, texturePath, tooltipText, talentHandler, positionX, positionY)
     local buttonClicked = false
     local talentLearned = false
@@ -130,50 +113,44 @@ local function CreateSpellButton(name, texturePath, tooltipText, talentHandler, 
     button:SetHighlightTexture("Interface/Buttons/checkbuttonhilight")
     button:SetPoint("TOPLEFT", positionX, positionY)
 
-    -- Texture pour l'indicateur d'apprentissage
     local learnIndicator = button:CreateTexture(nil, "OVERLAY")
     learnIndicator:SetTexture("Interface/Buttons/UI-CheckBox-Check")
     learnIndicator:SetSize(30, 30)
     learnIndicator:SetPoint("BOTTOMRIGHT", -2, 2)
     learnIndicator:Hide()
 
-    -- Texte pour afficher l'état du bouton (0 ou 1)
     local buttonText = button:CreateFontString("buttonText", "OVERLAY", "GameFontHighlight")
     buttonText:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -2, 2)
 
-    -- Fonction pour mettre à jour l'état du bouton et de l'indicateur d'apprentissage
     local function UpdateButtonState()
         if talentLearned then
-            button:SetAlpha(1) -- Réduire l'opacité pour indiquer que le bouton est désactivé
-            learnIndicator:Show() -- Afficher l'indicateur d'apprentissage
-            buttonText:SetText("|cffffda2b1|r") -- Mettre à jour le texte pour afficher "1"
+            button:SetAlpha(1)
+            learnIndicator:Show()
+            buttonText:SetText("|cffffda2b1|r")
         else
-            button:SetAlpha(1) -- Rétablir l'opacité pour indiquer que le bouton est activé
-            learnIndicator:Hide() -- Cacher l'indicateur d'apprentissage
-            buttonText:SetText("|cff1aff1a0|r") -- Mettre à jour le texte pour afficher "0"
+            button:SetAlpha(1)
+            learnIndicator:Hide()
+            buttonText:SetText("|cff1aff1a0|r")
         end
     end
 
-    -- Fonction à exécuter lorsque le bouton est cliqué
     button:SetScript("OnMouseUp", function()
         if not buttonClicked and not talentLearned then
-            -- Ajouter une vérification pour s'assurer que le joueur a des points de talent
             local talentItemID = 338404
             local hasTalentPoints = GetItemCount(talentItemID, false, true) > 0
 
             if hasTalentPoints then
                 AIO.Handle("TalentWarriorspell", talentHandler, 1)
                 PlaySoundFile(SPELL_TALENT_WINDOW_SOUND)
-                buttonClicked = true -- Marquer le bouton comme cliqué
-                talentLearned = true -- Marquer le talent comme appris
-                UpdateButtonState() -- Mettre à jour l'état du bouton
+                buttonClicked = true
+                talentLearned = true
+                UpdateButtonState()
             else
                 print("|cff00ffffVous n'avez plus de points de talent !|r")
             end
         end
     end)
 
-    -- Affichage du tooltip
     button:SetScript("OnEnter", function(self)
         GameTooltip:SetOwner(self, "TOPLEFT")
         GameTooltip:ClearLines()
@@ -181,24 +158,17 @@ local function CreateSpellButton(name, texturePath, tooltipText, talentHandler, 
         GameTooltip:Show()
     end)
 
-    -- Cacher le tooltip lorsque la souris quitte le bouton
     button:SetScript("OnLeave", function(self)
         GameTooltip:Hide()
     end)
 
-    -- Appel initial pour définir l'état du bouton au chargement
     UpdateButtonState()
 end
 
--- Utilisation de la fonction générique avec des positions spécifiques
 
--------------------------------------------------------------
 
--------------------------------------------------------------
 
--- Template 1
 
--- Armes
 
 CreateSpellButton("buttonSpellImprovedHeroicStrike", "Interface/icons/spell_magic_magearmor", "|cffffffffFrappe héroïque améliorée|r\n|cffffffffTalent|r |cffc0c0c0Armes|r\n|cffffffffRequiert|r |cffc79c6eGuerrier|r\n|cffffd100Réduit le coût en rage de votre technique Frappe héroïque de 3 points.|r", "spellimprovedheroicstrike", 100, -80)
 CreateSpellButton("buttonSpellDeflection", "Interface/icons/ability_parry", "|cffffffffDéviation|r\n|cffffffffTalent|r |cffc0c0c0Armes|r\n|cffffffffRequiert|r |cffc79c6eGuerrier|r\n|cffffd100Augmente vos chances de Parer de 5%.|r", "spelldeflection", 205, -75)
@@ -229,7 +199,6 @@ CreateSpellButton("buttonSpellUnrelentingAssault|r", "Interface/icons/ability_wa
 CreateSpellButton("buttonSpellSuddenDeath", "Interface/icons/ability_warrior_improveddisciplines", "|cffffffffMort soudaine|r\n|cffffffffTalent|r |cff9e604eFureur|r\n|cffffffffRequiert|r |cffc79c6eGuerrier|r\n|cffffd100Vos coups en mêlée ont 9% de chances de permettre l'utilisation d'Exécution quel que soit le montant de points de vie restant à la cible.\nDe plus, vous conservez 10 points de rage après avoir utilisé Exécution.|r", "spellsuddendeath", 368, -350)
 CreateSpellButton("buttonSpellEndlessRage", "Interface/icons/ability_warrior_endlessrage", "|cffffffffRage infinie|r\n|cffffffffTalent|r |cff9e604eFureur|r\n|cffffffffRequiert|r |cffc79c6eGuerrier|r\n|cffffd100Vous générez 25% de rage supplémentaires lorsque vous infligez des dégâts.|r", "spellendlessrage", 478, -350)
 
--- Sacré
 
 CreateSpellButton("buttonSpellBloodFrenzy", "Interface/icons/ability_warrior_bloodfrenzy", "|cffffffffFrénésie sanglante|r\n|cffffffffTalent|r |cff9e604eFureur|r\n|cffffffffRequiert|r |cffc79c6eGuerrier|r\n|cffffd100Augmente votre vitesse d'attaque en mêlée de 10%.\nDe plus, vos techniques Pourfendre et Blessures profondes augmentent aussi tous les dégâts physiques infligés à cette cible de 4%.|r", "spellbloodfrenzy", 98, -405)
 CreateSpellButton("buttonSpellWreckingCrew", "Interface/icons/ability_warrior_trauma", "|cffffffffDémolisseurs|r\n|cffffffffTalent|r |cff9e604eFureur|r\n|cffffffffRequiert|r |cffc79c6eGuerrier|r\n|cffffd100Vos coups critiques en mêlée vous font Enrager, ce qui augmente tous les dégâts infligés de 10% pendant 12 secondes.\nCet effet ne se cumule pas avec Enrager.|r", "spellwreckingcrew", 205, -405)
@@ -245,7 +214,6 @@ CreateSpellButton("buttonSpellBloodCraze", "Interface/icons/spell_shadow_summoni
 CreateSpellButton("buttonSpellCommandingPresence", "Interface/icons/spell_nature_focusedmind", "|cffffffffPrésence impérieuse|r\n|cffffffffTalent|r |cff9e604eFureur|r\n|cffffffffRequiert|r |cffc79c6eGuerrier|r\n|cffffd100Augmente de 25% le bonus à la puissance d'attaque en mêlée de votre Cri de guerre et le bonus aux points de vie de votre Cri de commandement.|r", "spellcommandingpresence", 315, -510)
 CreateSpellButton("buttonSpellDualWieldSpecialization", "Interface/icons/ability_dualwield", "|cffffffffSpécialisation Ambidextrie|r\n|cffffffffTalent|r |cff9e604eFureur|r\n|cffffffffRequiert|r |cffc79c6eGuerrier|r\n|cffffd100Augmente de 25% les points de dégâts infligés par l'arme que vous utilisez en main gauche.|r", "spelldualwieldspecialization", 422, -510)
 
--- Template 2
 
 CreateSpellButton("buttonSpellImprovedExecute", "Interface/icons/inv_sword_48", "|cffffffffExécution améliorée|r\n|cffffffffTalent|r |cff9e604eFureur|r\n|cffffffffRequiert|r |cffc79c6eGuerrier|r\n|cffffd100Réduit le coût en rage de votre technique Exécution de 5.|r", "spellimprovedexecute", 663, -75)
 CreateSpellButton("buttonSpellEnrage", "Interface/icons/spell_holy_surgeoflight", "|cffffffffEnrager|r\n|cffffffffTalent|r |cff9e604eFureur|r\n|cffffffffRequiert|r |cffc79c6eGuerrier|r\n|cffffd100Vous confère 30% de chances de bénéficier d'un bonus aux dégâts en mêlée de 10% pendant 12 secondes lorsque vous êtes victime d'une attaque qui vous inflige des dégâts.\nCet effet ne se cumule pas avec Démolisseurs.|r", "spellenrage", 770, -75)
@@ -263,7 +231,6 @@ CreateSpellButton("buttonSpellHeroicFury", "Interface/icons/ability_heroicleap",
 CreateSpellButton("buttonSpellRampage", "Interface/icons/ability_warrior_rampage", "|cffffffffSaccager|r\n|cffffffffTalent|r |cff9e604eFureur|r\n|cffffffffRequiert|r |cffc79c6eGuerrier|r\n|cffffd100Augmente de 5% les chances de coup critique en mêlée et à distance de tous les membres du groupe ou raid se trouvant à moins de 100 mètres.", "spellrampage", 1100, -184)
 
 
--- Protection
 
 CreateSpellButton("buttonSpellBloodsurge", "Interface/icons/ability_warrior_bloodsurge", "|cffffffffAfflux sanguin|r\n|cffffffffTalent|r |cff9e604eFureur|r\n|cffffffffRequiert|r |cffc79c6eGuerrier|r\n|cffffd100Vos coups réussis avec Frappe héroïque, Sanguinaire et Tourbillon ont 20% de chances de rendre votre prochain Heurtoir instantané pendant 5 secondes.|r", "spellbloodsurge", 718, -240)
 CreateSpellButton("buttonSpellUnendingFury", "Interface/icons/ability_warrior_intensifyrage", "|cffffffffFureur sans fin|r\n|cffffffffTalent|r |cff9e604eFureur|r\n|cffffffffRequiert|r |cffc79c6eGuerrier|r\n|cffffd100Augmente les dégâts infligés par vos techniques Heurtoir, Tourbillon et Sanguinaire de 10%.|r", "spellunendingfury", 825, -240)
@@ -296,35 +263,28 @@ CreateSpellButton("buttonSpellSwordandBoard", "Interface/icons/ability_warrior_s
 CreateSpellButton("buttonSpellDamageShield", "Interface/icons/inv_shield_31", "|cffffffffBouclier de dégâts|r\n|cffffffffTalent|r |cff03c0cfProtection|r\n|cffffffffRequiert|r |cffc79c6eGuerrier|r\n|cffffd100Chaque fois qu'une attaque en mêlée vous inflige des dégâts ou que vous la bloquez, vous infligez un montant de dégâts égal à 20% de votre valeur de blocage.|r", "spelldamageshield", 934, -564)
 CreateSpellButton("buttonSpellShockwave", "Interface/icons/ability_warrior_shockwave", "|cffffffffOnde de choc|r\n|cffffffffTalent|r |cff03c0cfProtection|r\n|cffffffffRequiert|r |cffc79c6eGuerrier|r\n|cffffd100Projette une onde de force devant le guerrier, qui inflige 879 points de dégâts (en fonction de la puissance d'attaque)\net étourdit toutes les cibles ennemies se trouvant à moins de 10 mètres dans un cône devant lui pendant 4 secondes.|r", "spellshockwave", 1045, -564)
 
--------------------------------------------------------------
 
--------------------------------------------------------------
 
--- Ajoutez une variable pour suivre l'état du bouton Réinitialiser
 local resetButtonClicked = false
 
--- Créez le bouton Reset à l'intérieur de la fenêtre frameTalentWarrior
 local buttonReset = CreateFrame("Button", "buttonReset", frameTalentWarrior, "UIPanelButtonTemplate")
 buttonReset:SetSize(85, 25)
-buttonReset:SetPoint("BOTTOMRIGHT", buttonTalentWarriorClose, "BOTTOMLEFT", -95, 5) -- Place le bouton Reset à gauche du bouton Reload
+buttonReset:SetPoint("BOTTOMRIGHT", buttonTalentWarriorClose, "BOTTOMLEFT", -95, 5)
 buttonReset:SetText("Réinitialiser")
 
 local function ResetTalents()
-    -- Ajoutez ici la logique pour réinitialiser les talents du joueur
     AIO.Handle("TalentWarriorspell", "ResetTalents")
-    resetButtonClicked = true -- Marquez le bouton Réinitialiser comme cliqué
+    resetButtonClicked = true
 end
 
 buttonReset:SetScript("OnClick", ResetTalents)
 
--- Créez le bouton Reload à l'intérieur de la fenêtre frameTalentWarrior
 local buttonReload = CreateFrame("Button", "buttonReload", frameTalentWarrior, "UIPanelButtonTemplate")
 buttonReload:SetSize(85, 25)
-buttonReload:SetPoint("BOTTOMRIGHT", buttonTalentWarriorClose, "BOTTOMLEFT", -5, 5) -- Place le bouton Reload à gauche du bouton Close
+buttonReload:SetPoint("BOTTOMRIGHT", buttonTalentWarriorClose, "BOTTOMLEFT", -5, 5)
 buttonReload:SetText("Actualiser")
 
 local function ReloadClient()
-    -- Ajoutez une vérification pour s'assurer que le bouton Réinitialiser a été cliqué
     if resetButtonClicked then
         ReloadUI()
     else
@@ -334,7 +294,6 @@ end
 
 buttonReload:SetScript("OnClick", ReloadClient)
 
--- Ajoutez une variable globale pour suivre l'état de la fenêtre des talents
 local talentsWindowOpen = false
 
 local function OuvrirFermerInterfaceTalents()
@@ -348,37 +307,30 @@ local function OuvrirFermerInterfaceTalents()
         PlaySoundFile(OPEN_TALENT_WINDOW_SOUND)
     end
 
-    -- Inversez l'état de la fenêtre des talents
     talentsWindowOpen = not talentsWindowOpen
 end
 
--- Vérifier si le joueur est un Warrior avant de créer le bouton
-local playerClass = select(2, UnitClass("player")) -- Obtenir la classe du joueur
+local playerClass = select(2, UnitClass("player"))
 if playerClass == "WARRIOR" then
     local buttonOuvrirTalents = CreateFrame("Button", "buttonOuvrirTalents", UIParent)
     buttonOuvrirTalents:SetSize(32, 33)
-    buttonOuvrirTalents:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -171, 8) -- Placer en bas à droite avec un décalage de 10 pixels
+    buttonOuvrirTalents:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -171, 8)
 
-    -- Ajouter une texture BLP au bouton
     buttonOuvrirTalents:SetNormalTexture("Interface\\TalentFrame\\Template\\MicroButton\\ButtonSystemTalent.blp")
 
-    -- Ajouter une texture de surbrillance
     local highlightTexture = buttonOuvrirTalents:CreateTexture(nil, "HIGHLIGHT")
     highlightTexture:SetAllPoints(buttonOuvrirTalents)
     highlightTexture:SetTexture("Interface\\TalentFrame\\Template\\MicroButton\\ButtonSystemTalentLight.blp")
     buttonOuvrirTalents:SetHighlightTexture(highlightTexture)
 
-    -- Supprimer le texte du bouton
     buttonOuvrirTalents:SetText("")
 
-    -- Ajouter une info-bulle
     buttonOuvrirTalents:SetScript("OnEnter", function(self)
-        GameTooltip:SetOwner(self, "ANCHOR_RIGHT") -- Définir l'ancre de l'info-bulle
-        GameTooltip:SetText("|cffffffffTalents|r |cffc79c6e(Guerrier)|r\n\nL'éventail des talents disponibles\npour améliorer et spécialiser\nvotre personnage.") -- Texte de l'info-bulle
+        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+        GameTooltip:SetText("|cffffffffTalents|r |cffc79c6e(Guerrier)|r\n\nL'éventail des talents disponibles\npour améliorer et spécialiser\nvotre personnage.")
         GameTooltip:Show()
     end)
 
-    -- Masquer l'info-bulle lorsque la souris quitte le bouton
     buttonOuvrirTalents:SetScript("OnLeave", function(self)
         GameTooltip:Hide()
     end)

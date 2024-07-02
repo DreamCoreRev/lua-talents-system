@@ -9,64 +9,53 @@ function ShamanHandlers.ShowTalentShaman(player)
     frameTalentShaman:Show()
 end
 
-local MAX_TALENTS = 41 -- Définition du nombre maximal de talents que le joueur peut apprendre
+local MAX_TALENTS = 41
 
 local OPEN_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_72_artifact_forge_final_trait_unlocked.ogg"
 local CLOSE_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_72_artifact_forge_trait_refund_end.ogg"
 local SPELL_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_80_azeritearmor_rotationends_02.ogg"
 
--- Attribute window
 local frameTalentShaman = CreateFrame("Frame", "frameTalentShaman", UIParent)
 frameTalentShaman:SetSize(1200, 650)
 frameTalentShaman:SetMovable(true)
 frameTalentShaman:EnableMouse(true)
 frameTalentShaman:RegisterForDrag("LeftButton")
-frameTalentShaman:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 50, -50) -- Adjust the X and Y coordinates
+frameTalentShaman:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 50, -50)
 frameTalentShaman:SetBackdrop(
 {
-    -- bgFile = "interface/TalentFrame/talentsclassbackgroundShaman", --Interface/AchievementFrame/UI-Achievement-Parchment-Horizontal
-    bgFile = "interface/TalentFrame/Template/Class/Shaman/talentsclassbackgroundShaman", --Interface/AchievementFrame/UI-Achievement-Parchment-Horizontal
-    edgeFile = "interface/tooltips/ui-tooltip-border-corruptedshaman", --Interface/DialogFrame/UI-DialogBox-Border
+    bgFile = "interface/TalentFrame/Template/Class/Shaman/talentsclassbackgroundShaman",
+    edgeFile = "interface/tooltips/ui-tooltip-border-corruptedshaman",
     edgeSize = 20,
     insets = { left = 5, right = 5, top = 5, bottom = 5 }
 })
 
--- Ajoutez la texture de l'icône du Démoniste
 local shamanIcon = frameTalentShaman:CreateTexture("ShamanIcon", "OVERLAY")
 shamanIcon:SetTexture("Interface\\TalentFrame\\Template\\Class\\Shaman\\IconeShaman.blp")
 shamanIcon:SetSize(60, 60)
 shamanIcon:SetPoint("TOPLEFT", frameTalentShaman, "TOPLEFT", -10, 10)
 
--- Template Talent Frame
 
--- Ajoute une textureone pour l'image BLP
-local textureone = frameTalentShaman:CreateTexture("TemplateTalentFrame", "OVERLAY") -- Utilisez "OVERLAY" pour être au-dessus des autres éléments
+local textureone = frameTalentShaman:CreateTexture("TemplateTalentFrame", "OVERLAY")
 textureone:SetTexture("Interface\\TalentFrame\\Template\\Class\\Shaman\\TalentFrameTemplate.blp")
-textureone:SetSize(928, 928) -- Remplacez width et height par les dimensions souhaitées
-textureone:SetPoint("TOPLEFT", frameTalentShaman, "TOPLEFT", -170, 140) -- Adjust the X and Y coordinates
+textureone:SetSize(928, 928)
+textureone:SetPoint("TOPLEFT", frameTalentShaman, "TOPLEFT", -170, 140)
 
--- Ajuste l'ordre des calques pour être devant les autres éléments
-frameTalentShaman:SetFrameLevel(100) -- Utilisez une valeur supérieure à celle des autres éléments
+frameTalentShaman:SetFrameLevel(100)
 
--- Ajoute une texturetwo pour l'image BLP
-local texturetwo = frameTalentShaman:CreateTexture("TemplateTalentFrame", "OVERLAY") -- Utilisez "OVERLAY" pour être au-dessus des autres éléments
+local texturetwo = frameTalentShaman:CreateTexture("TemplateTalentFrame", "OVERLAY")
 texturetwo:SetTexture("Interface\\TalentFrame\\Template\\Class\\Shaman\\TalentFrameTemplateOriginal.blp")
-texturetwo:SetSize(928, 928) -- Remplacez width et height par les dimensions souhaitées
-texturetwo:SetPoint("TOPRIGHT", frameTalentShaman, "TOPRIGHT", 170, 140) -- Adjust the X and Y coordinates
+texturetwo:SetSize(928, 928)
+texturetwo:SetPoint("TOPRIGHT", frameTalentShaman, "TOPRIGHT", 170, 140)
 
--- Ajuste l'ordre des calques pour être devant les autres éléments
-frameTalentShaman:SetFrameLevel(100) -- Utilisez une valeur supérieure à celle des autres éléments
+frameTalentShaman:SetFrameLevel(100)
 
--- Drag & Drop
 frameTalentShaman:SetScript("OnDragStart", frameTalentShaman.StartMoving)
 frameTalentShaman:SetScript("OnHide", frameTalentShaman.StopMovingOrSizing)
 frameTalentShaman:SetScript("OnDragStop", frameTalentShaman.StopMovingOrSizing)
 frameTalentShaman:Hide()
 
--- Nouveau template d'arête
-frameTalentShaman:SetBackdropBorderColor(0, 112, 222) -- Couleur bleu
+frameTalentShaman:SetBackdropBorderColor(0, 112, 222)
 
--- Close button
 local buttonTalentShamanClose = CreateFrame("Button", "buttonTalentShamanClose", frameTalentShaman, "UIPanelCloseButton")
 buttonTalentShamanClose:SetPoint("TOPRIGHT", -12, -12)
 buttonTalentShamanClose:EnableMouse(true)
@@ -77,10 +66,8 @@ local function CloseTalentWindow()
     PlaySoundFile(CLOSE_TALENT_WINDOW_SOUND)
 end
 
--- Associez la fonction de fermeture au bouton de fermeture
 buttonTalentShamanClose:SetScript("OnClick", CloseTalentWindow)
 
--- Title bar
 local frameTalentShamanTitleBar = CreateFrame("Frame", "frameTalentShamanTitleBar", frameTalentShaman, nil)
 frameTalentShamanTitleBar:SetSize(135, 25)
 frameTalentShamanTitleBar:SetBackdrop(
@@ -103,21 +90,17 @@ fontTalentShamanTitleText:SetText("|cffFFC125Talents|r")
 local fontTalentShamanFrameText = frameTalentShamanTitleBar:CreateFontString("fontTalentShamanFrameText")
 fontTalentShamanFrameText:SetFont("Fonts\\FRIZQT__.TTF", 18)
 fontTalentShamanFrameText:SetSize(200, 5)
-fontTalentShamanFrameText:SetPoint("TOPLEFT", frameTalentShamanTitleBar, "BOTTOMLEFT", -30, -35) -- Adjust the Y offset as needed
+fontTalentShamanFrameText:SetPoint("TOPLEFT", frameTalentShamanTitleBar, "BOTTOMLEFT", -30, -35)
 fontTalentShamanFrameText:SetText("|cffFFC125Chaman|r")
 
--- Remplacez votre ligne existante pour la création du texte par celle-ci
 local fontTalentShamanFrameText = frameTalentShamanTitleBar:CreateFontString("fontTalentShamanFrameText")
 fontTalentShamanFrameText:SetFont("Fonts\\FRIZQT__.TTF", 18)
 fontTalentShamanFrameText:SetSize(200, 5)
-fontTalentShamanFrameText:SetPoint("TOPLEFT", frameTalentShamanTitleBar, "BOTTOMLEFT", -30, -60) -- Adjust the Y offset as needed
-fontTalentShamanFrameText:SetText("0 / " .. MAX_TALENTS) -- Initialisez le texte avec 0 talents appris
+fontTalentShamanFrameText:SetPoint("TOPLEFT", frameTalentShamanTitleBar, "BOTTOMLEFT", -30, -60)
+fontTalentShamanFrameText:SetText("0 / " .. MAX_TALENTS)
 
--------------------------------------------------------------
 
--------------------------------------------------------------
 
--- Fonction générique pour créer un bouton de sort
 local function CreateSpellButton(name, texturePath, tooltipText, talentHandler, positionX, positionY)
     local buttonClicked = false
     local talentLearned = false
@@ -130,50 +113,44 @@ local function CreateSpellButton(name, texturePath, tooltipText, talentHandler, 
     button:SetHighlightTexture("Interface/Buttons/checkbuttonhilight")
     button:SetPoint("TOPLEFT", positionX, positionY)
 
-    -- Texture pour l'indicateur d'apprentissage
     local learnIndicator = button:CreateTexture(nil, "OVERLAY")
     learnIndicator:SetTexture("Interface/Buttons/UI-CheckBox-Check")
     learnIndicator:SetSize(30, 30)
     learnIndicator:SetPoint("BOTTOMRIGHT", -2, 2)
     learnIndicator:Hide()
 
-    -- Texte pour afficher l'état du bouton (0 ou 1)
     local buttonText = button:CreateFontString("buttonText", "OVERLAY", "GameFontHighlight")
     buttonText:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -2, 2)
 
-    -- Fonction pour mettre à jour l'état du bouton et de l'indicateur d'apprentissage
     local function UpdateButtonState()
         if talentLearned then
-            button:SetAlpha(1) -- Réduire l'opacité pour indiquer que le bouton est désactivé
-            learnIndicator:Show() -- Afficher l'indicateur d'apprentissage
-            buttonText:SetText("|cffffda2b1|r") -- Mettre à jour le texte pour afficher "1"
+            button:SetAlpha(1)
+            learnIndicator:Show()
+            buttonText:SetText("|cffffda2b1|r")
         else
-            button:SetAlpha(1) -- Rétablir l'opacité pour indiquer que le bouton est activé
-            learnIndicator:Hide() -- Cacher l'indicateur d'apprentissage
-            buttonText:SetText("|cff1aff1a0|r") -- Mettre à jour le texte pour afficher "0"
+            button:SetAlpha(1)
+            learnIndicator:Hide()
+            buttonText:SetText("|cff1aff1a0|r")
         end
     end
 
-    -- Fonction à exécuter lorsque le bouton est cliqué
     button:SetScript("OnMouseUp", function()
         if not buttonClicked and not talentLearned then
-            -- Ajouter une vérification pour s'assurer que le joueur a des points de talent
             local talentItemID = 338404
             local hasTalentPoints = GetItemCount(talentItemID, false, true) > 0
 
             if hasTalentPoints then
                 AIO.Handle("TalentShamanspell", talentHandler, 1)
                 PlaySoundFile(SPELL_TALENT_WINDOW_SOUND)
-                buttonClicked = true -- Marquer le bouton comme cliqué
-                talentLearned = true -- Marquer le talent comme appris
-                UpdateButtonState() -- Mettre à jour l'état du bouton
+                buttonClicked = true
+                talentLearned = true
+                UpdateButtonState()
             else
                 print("|cff00ffffVous n'avez plus de points de talent !|r")
             end
         end
     end)
 
-    -- Affichage du tooltip
     button:SetScript("OnEnter", function(self)
         GameTooltip:SetOwner(self, "TOPLEFT")
         GameTooltip:ClearLines()
@@ -181,24 +158,17 @@ local function CreateSpellButton(name, texturePath, tooltipText, talentHandler, 
         GameTooltip:Show()
     end)
 
-    -- Cacher le tooltip lorsque la souris quitte le bouton
     button:SetScript("OnLeave", function(self)
         GameTooltip:Hide()
     end)
 
-    -- Appel initial pour définir l'état du bouton au chargement
     UpdateButtonState()
 end
 
--- Utilisation de la fonction générique avec des positions spécifiques
 
--------------------------------------------------------------
 
--------------------------------------------------------------
 
--- Template 1
 
--- Elémentaire
 
 CreateSpellButton("buttonSpellConvection", "Interface/icons/spell_nature_wispsplode", "|cffffffffConvection|r\n|cffffffffTalent|r |cffca95ffElémentaire|r\n|cffffffffRequiert|r |cff0070deChaman|r\n|cffffd100Réduit le coût en mana de vos Horions ainsi que de vos sorts Eclair, Chaîne d'éclairs, Explosion de lave et Cisaille de vent de 10%.|r", "spellconvection", 100, -80)
 CreateSpellButton("buttonSpellConcussion", "Interface/icons/spell_fire_fireball", "|cffffffffCommotion|r\n|cffffffffTalent|r |cffca95ffElémentaire|r\n|cffffffffRequiert|r |cff0070deChaman|r\n|cffffd100Augmente les dégâts infligés par vos sorts Eclair, Chaîne d'éclairs, Orage et Explosion de lave ainsi que vos Horions de 5%.|r", "spellconcussion", 205, -75)
@@ -229,7 +199,6 @@ CreateSpellButton("buttonSpellEnhancingTotems", "Interface/icons/spell_nature_ea
 CreateSpellButton("buttonSpellEarthsGrasp", "Interface/icons/spell_nature_stoneclawtotem", "|cffffffffEmprise de la terre|r\n|cffffffffTalent|r |cffff8c1aAmélioration|r\n|cffffffffRequiert|r |cff0070deChaman|r\n|cffffd100Augmente les points de vie de votre Totem de griffes de pierre de 50% et le rayon de votre Totem de lien terrestre de 20%, en plus de réduire le temps de recharge des deux totems de 30%.|r", "spellearthsgrasp", 368, -350)
 CreateSpellButton("buttonSpellAncestralKnowledge", "Interface/icons/spell_shadow_grimward", "|cffffffffConnaissance ancestrale|r\n|cffffffffTalent|r |cffff8c1aAmélioration|r\n|cffffffffRequiert|r |cff0070deChaman|r\n|cffffd100Augmente votre Intelligence de 10%.|r", "spellancestralknowledge", 478, -350)
 
--- Amélioration
 
 CreateSpellButton("buttonSpellGuardianTotems", "Interface/icons/spell_nature_stoneskintotem", "|cffffffffTotems gardiens|r\n|cffffffffTalent|r |cffff8c1aAmélioration|r\n|cffffffffRequiert|r |cff0070deChaman|r\n|cffffd100Augmente de 20% le montant de points d'armure augmentés par votre Totem Peau de pierre et réduit le temps de recharge de votre Totem de glèbe de 2 sec.|r", "spellguardiantotems", 98, -405)
 CreateSpellButton("buttonSpellThunderingStrikes", "Interface/icons/ability_thunderbolt", "|cffffffffFrappe foudroyante|r\n|cffffffffTalent|r |cffff8c1aAmélioration|r\n|cffffffffRequiert|r |cff0070deChaman|r\n|cffffd100Augmente de 5% vos chances d'infliger un coup critique avec tous les sorts et attaques.|r", "spellthunderingstrikes", 205, -405)
@@ -245,7 +214,6 @@ CreateSpellButton("buttonSpellSpiritWeapons", "Interface/icons/ability_parry", "
 CreateSpellButton("buttonSpellMentalDexterity", "Interface/icons/spell_nature_bloodlust", "|cffffffffDextérité mentale|r\n|cffffffffTalent|r |cffff8c1aAmélioration|r\n|cffffffffRequiert|r |cff0070deChaman|r\n|cffffd100Augmente votre puissance d'attaque de 100% de votre Intelligence.|r", "spellmentaldexterity", 315, -510)
 CreateSpellButton("buttonSpellUnleashedRage", "Interface/icons/spell_nature_unleashedrage", "|cffffffffRage libérée|r\n|cffffffffTalent|r |cffff8c1aAmélioration|r\n|cffffffffRequiert|r |cff0070deChaman|r\n|cffffd100Augmente votre expertise de 9, et augmente de 10% la puissance d'attaque de tous les membres du groupe ou du raid s'ils se trouvent à moins de 100 mètres du chaman.|r", "spellunleashedrage", 422, -510)
 
--- Template 2
 
 CreateSpellButton("buttonSpellWeaponMastery", "Interface/icons/ability_hunter_swiftstrike", "|cffffffffMaîtrise des armes|r\n|cffffffffTalent|r |cffff8c1aAmélioration|r\n|cffffffffRequiert|r |cff0070deChaman|r\n|cffffd100Augmente de 10% les dégâts que vous infligez avec toutes les armes.|r", "spellweaponmastery", 663, -75)
 CreateSpellButton("buttonSpellFrozenPower", "Interface/icons/spell_fire_bluecano", "|cffffffffPuissance gelée|r\n|cffffffffTalent|r |cffff8c1aAmélioration|r\n|cffffffffRequiert|r |cff0070deChaman|r\n|cffffd100Augmente de 10% les dégâts infligés par vos sorts Eclair, Chaîne d'éclairs, Fouet de lave et Horion sur les cibles affectées par l'effet de votre Attaque Arme de givre,\net votre Horion de givre a 100% de chances d'immobiliser la cible dans la glace pendant 5 seconds.\nlorsqu'il est utilisé sur des cibles se trouvant à 15 mètres ou plus de vous.|r", "spellfrozenpower", 770, -75)
@@ -263,7 +231,6 @@ CreateSpellButton("buttonSpellFeralSpirit", "Interface/icons/spell_shaman_ferals
 CreateSpellButton("buttonSpellImprovedHealingWave", "Interface/icons/spell_nature_magicimmunity", "|cffffffffVague de soins améliorée|r\n|cffffffffTalent|r |cff0cf200Restauration|r\n|cffffffffRequiert|r |cff0070deChaman|r\n|cffffd100Réduit le temps d'incantation de votre sort Vague de soins de 0,5 secondes.", "spellimprovedhealingwave", 1100, -184)
 
 
--- Restauration
 
 CreateSpellButton("buttonSpellTotemicFocus", "Interface/icons/spell_nature_moonglow", "|cffffffffFocalisation totémique|r\n|cffffffffTalent|r |cff0cf200Restauration|r\n|cffffffffRequiert|r |cff0070deChaman|r\n|cffffd100Réduit le coût en mana de vos totems de 25%.|r", "spelltotemicfocus", 718, -240)
 CreateSpellButton("buttonSpellImprovedReincarnation", "Interface/icons/spell_nature_reincarnation", "|cffffffffRéincarnation améliorée|r\n|cffffffffTalent|r |cff0cf200Restauration|r\n|cffffffffRequiert|r |cff0070deChaman|r\n|cffffd100Réduit le temps de recharge de votre sort Réincarnation de 15 min.\net augmente les montants de points de vie et de mana avec lesquels vous vous réincarnez de 20% supplémentaires.|r", "spellimprovedreincarnation", 825, -240)
@@ -291,35 +258,28 @@ CreateSpellButton("buttonSpellImprovedEarthShield", "Interface/icons/spell_natur
 CreateSpellButton("buttonSpellTidalWaves", "Interface/icons/spell_shaman_tidalwaves", "|cffffffffRaz-de-marée|r\n|cffffffffTalent|r |cff0cf200Restauration|r\n|cffffffffRequiert|r |cff0070deChaman|r\n|cffffd100Vous avez 100% de chances après avoir lancé Salve de guérison ou Remous de réduire le temps d'incantation de votre sort Vague de soins de 30% et d'augmenter les chances d'effet critique de votre sort\nVague de soins inférieurs de 25% jusqu'à ce que deux de ces sorts aient été lancés.\nDe plus, votre Vague de soins bénéficie de 20% supplémentaires des effets du bonus relatif aux soins et votre Vague de soins inférieurs de 10% supplémentaires des effets du bonus relatif aux soins.|r", "spelltidalwaves", 880, -510)
 CreateSpellButton("buttonSpellRiptide", "Interface/icons/spell_nature_riptide", "|cffffffffRemous|r\n|cffffffffTalent|r |cff0cf200Restauration|r\n|cffffffffRequiert|r |cff0070deChaman|r\n|cffffd100Rend à une cible alliée 639 à 691 points de vie plus 665 points de vie en 15 seconds.\nVotre prochaine Salve de guérison lancée sur cette cible primaire dans les 15 seconds consommera l'effet de soins sur la durée et augmentera le montant de soins de votre Salve de guérison de 25%.|r", "spellriptide", 990, -510)
 
--------------------------------------------------------------
 
--------------------------------------------------------------
 
--- Ajoutez une variable pour suivre l'état du bouton Réinitialiser
 local resetButtonClicked = false
 
--- Créez le bouton Reset à l'intérieur de la fenêtre frameTalentShaman
 local buttonReset = CreateFrame("Button", "buttonReset", frameTalentShaman, "UIPanelButtonTemplate")
 buttonReset:SetSize(85, 25)
-buttonReset:SetPoint("BOTTOMRIGHT", buttonTalentShamanClose, "BOTTOMLEFT", -95, 5) -- Place le bouton Reset à gauche du bouton Reload
+buttonReset:SetPoint("BOTTOMRIGHT", buttonTalentShamanClose, "BOTTOMLEFT", -95, 5)
 buttonReset:SetText("Réinitialiser")
 
 local function ResetTalents()
-    -- Ajoutez ici la logique pour réinitialiser les talents du joueur
     AIO.Handle("TalentShamanspell", "ResetTalents")
-    resetButtonClicked = true -- Marquez le bouton Réinitialiser comme cliqué
+    resetButtonClicked = true
 end
 
 buttonReset:SetScript("OnClick", ResetTalents)
 
--- Créez le bouton Reload à l'intérieur de la fenêtre frameTalentShaman
 local buttonReload = CreateFrame("Button", "buttonReload", frameTalentShaman, "UIPanelButtonTemplate")
 buttonReload:SetSize(85, 25)
-buttonReload:SetPoint("BOTTOMRIGHT", buttonTalentShamanClose, "BOTTOMLEFT", -5, 5) -- Place le bouton Reload à gauche du bouton Close
+buttonReload:SetPoint("BOTTOMRIGHT", buttonTalentShamanClose, "BOTTOMLEFT", -5, 5)
 buttonReload:SetText("Actualiser")
 
 local function ReloadClient()
-    -- Ajoutez une vérification pour s'assurer que le bouton Réinitialiser a été cliqué
     if resetButtonClicked then
         ReloadUI()
     else
@@ -329,7 +289,6 @@ end
 
 buttonReload:SetScript("OnClick", ReloadClient)
 
--- Ajoutez une variable globale pour suivre l'état de la fenêtre des talents
 local talentsWindowOpen = false
 
 local function OuvrirFermerInterfaceTalents()
@@ -343,37 +302,30 @@ local function OuvrirFermerInterfaceTalents()
         PlaySoundFile(OPEN_TALENT_WINDOW_SOUND)
     end
 
-    -- Inversez l'état de la fenêtre des talents
     talentsWindowOpen = not talentsWindowOpen
 end
 
--- Vérifier si le joueur est un Shaman avant de créer le bouton
-local playerClass = select(2, UnitClass("player")) -- Obtenir la classe du joueur
+local playerClass = select(2, UnitClass("player"))
 if playerClass == "SHAMAN" then
     local buttonOuvrirTalents = CreateFrame("Button", "buttonOuvrirTalents", UIParent)
     buttonOuvrirTalents:SetSize(32, 33)
-    buttonOuvrirTalents:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -171, 8) -- Placer en bas à droite avec un décalage de 10 pixels
+    buttonOuvrirTalents:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -171, 8)
 
-    -- Ajouter une texture BLP au bouton
     buttonOuvrirTalents:SetNormalTexture("Interface\\TalentFrame\\Template\\MicroButton\\ButtonSystemTalent.blp")
 
-    -- Ajouter une texture de surbrillance
     local highlightTexture = buttonOuvrirTalents:CreateTexture(nil, "HIGHLIGHT")
     highlightTexture:SetAllPoints(buttonOuvrirTalents)
     highlightTexture:SetTexture("Interface\\TalentFrame\\Template\\MicroButton\\ButtonSystemTalentLight.blp")
     buttonOuvrirTalents:SetHighlightTexture(highlightTexture)
 
-    -- Supprimer le texte du bouton
     buttonOuvrirTalents:SetText("")
 
-    -- Ajouter une info-bulle
     buttonOuvrirTalents:SetScript("OnEnter", function(self)
-        GameTooltip:SetOwner(self, "ANCHOR_RIGHT") -- Définir l'ancre de l'info-bulle
-        GameTooltip:SetText("|cffffffffTalents|r |cff0070de(Chaman)|r\n\nL'éventail des talents disponibles\npour améliorer et spécialiser\nvotre personnage.") -- Texte de l'info-bulle
+        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+        GameTooltip:SetText("|cffffffffTalents|r |cff0070de(Chaman)|r\n\nL'éventail des talents disponibles\npour améliorer et spécialiser\nvotre personnage.")
         GameTooltip:Show()
     end)
 
-    -- Masquer l'info-bulle lorsque la souris quitte le bouton
     buttonOuvrirTalents:SetScript("OnLeave", function(self)
         GameTooltip:Hide()
     end)

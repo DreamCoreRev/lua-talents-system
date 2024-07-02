@@ -5,9 +5,7 @@ local TalentWarriorPointsSpend = {}
 local MAX_TALENTS = 44
 
 local talents = {
-	-- Template 1
 
-	-- Armes
 	
 	["spellimprovedheroicstrike"] = {spellID = 12664, itemID = 338404},
 	["spelldeflection"] = {spellID = 16466, itemID = 338404},
@@ -38,7 +36,6 @@ local talents = {
 	["spellsuddendeath"] = {spellID = 29724, itemID = 338404},
 	["spellendlessrage"] = {spellID = 29623, itemID = 338404},
 	
-	-- Fureur
 	
 	["spellbloodfrenzy"] = {spellID = 29859, itemID = 338404},
 	["spellwreckingcrew"] = {spellID = 56614, itemID = 338404},
@@ -54,7 +51,6 @@ local talents = {
 	["spellcommandingpresence"] = {spellID = 12861, itemID = 338404},
 	["spelldualwieldspecialization"] = {spellID = 23588, itemID = 338404},
 	
-	-- Template 2
 	
 	["spellimprovedexecute"] = {spellID = 20503, itemID = 338404},
 	["spellenrage"] = {spellID = 13048, itemID = 338404},
@@ -71,7 +67,6 @@ local talents = {
 	["spellheroicfury"] = {spellID = 60970, itemID = 338404},
 	["spellrampage"] = {spellID = 29801, itemID = 338404},
 	
-	-- Protection
 	
 	["spellbloodsurge"] = {spellID = 46915, itemID = 338404},
 	["spellunendingfury"] = {spellID = 56932, itemID = 338404},

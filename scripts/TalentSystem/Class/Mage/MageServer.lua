@@ -5,9 +5,7 @@ local TalentMagePointsSpend = {}
 local MAX_TALENTS = 43
 
 local talents = {
-	-- Template 1
 
-	-- Arcanes
 	
 	["spellarcanesubtlety"] = {spellID = 12592, itemID = 338404},
 	["spellarcanefocus"] = {spellID = 12840, itemID = 338404},
@@ -37,7 +35,6 @@ local talents = {
 	["spellslow"] = {spellID = 31589, itemID = 338404},
 	["spellmissilebarrage"] = {spellID = 54490, itemID = 338404},
 	
-	-- Feu
 	
 	["spellnetherwindpresence"] = {spellID = 44403, itemID = 338404},
 	["spellspellpower"] = {spellID = 35581, itemID = 338404},
@@ -53,7 +50,6 @@ local talents = {
 	["spellpyroblast"] = {spellID = 11366, itemID = 338404},
 	["spellburningsoul"] = {spellID = 12351, itemID = 338404},
 	
-	-- Template 2
 	
 	["spellimprovedscorch"] = {spellID = 12873, itemID = 338404},
 	["spellmoltenshields"] = {spellID = 13043, itemID = 338404},
@@ -70,11 +66,10 @@ local talents = {
 	["spellempoweredfire"] = {spellID = 31658, itemID = 338404},
 	["spellfirestarter"] = {spellID = 44443, itemID = 338404},
 	
-	-- Destruction
 	
 	["spelldragonsbreath"] = {spellID = 31661, itemID = 338404},
 	["spellhotstreak"] = {spellID = 44448, itemID = 338404},
-	["spellburnout"] = {spellID = 44472, itemID = 338404},--
+	["spellburnout"] = {spellID = 44472, itemID = 338404},
 	["spelllivingbomb"] = {spellID = 44457, itemID = 338404},
 	["spellfrostbite"] = {spellID = 12497, itemID = 338404},
 	["spellimprovedfrostbolt"] = {spellID = 16766, itemID = 338404},

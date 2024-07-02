@@ -9,67 +9,54 @@ function MageHandlers.ShowTalentMage(player)
     frameTalentMage:Show()
 end
 
-local MAX_TALENTS = 43 -- Définition du nombre maximal de talents que le joueur peut apprendre
+local MAX_TALENTS = 43
 
 local OPEN_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_72_artifact_forge_final_trait_unlocked.ogg"
 local CLOSE_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_72_artifact_forge_trait_refund_end.ogg"
 local SPELL_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_80_azeritearmor_rotationends_02.ogg"
 
--- Attribute window
 local frameTalentMage = CreateFrame("Frame", "frameTalentMage", UIParent)
 frameTalentMage:SetSize(1200, 650)
 frameTalentMage:SetMovable(true)
 frameTalentMage:EnableMouse(true)
 frameTalentMage:RegisterForDrag("LeftButton")
-frameTalentMage:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 50, -50) -- Adjust the X and Y coordinates
+frameTalentMage:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 50, -50)
 frameTalentMage:SetBackdrop(
 {
-    -- bgFile = "interface/TalentFrame/talentsclassbackgroundMage", --Interface/AchievementFrame/UI-Achievement-Parchment-Horizontal
-    bgFile = "interface/TalentFrame/Template/Class/Mage/talentsclassbackgroundmage2", --Interface/AchievementFrame/UI-Achievement-Parchment-Horizontal
-    edgeFile = "interface/tooltips/ui-tooltip-border-corruptedmage", --Interface/DialogFrame/UI-DialogBox-Border
+    bgFile = "interface/TalentFrame/Template/Class/Mage/talentsclassbackgroundmage2",
+    edgeFile = "interface/tooltips/ui-tooltip-border-corruptedmage",
     edgeSize = 20,
     insets = { left = 5, right = 5, top = 5, bottom = 5 }
 })
 
--- Ajoutez la texture de l'icône du Mage
 local mageIcon = frameTalentMage:CreateTexture("MageIcon", "OVERLAY")
 mageIcon:SetTexture("Interface\\TalentFrame\\Template\\Class\\Mage\\IconeMage.blp")
 mageIcon:SetSize(60, 60)
 mageIcon:SetPoint("TOPLEFT", frameTalentMage, "TOPLEFT", -10, 10)
 
--- Template Talent Frame
 
--- Ajoute une textureone pour l'image BLP
-local textureone = frameTalentMage:CreateTexture("TemplateTalentFrame", "OVERLAY") -- Utilisez "OVERLAY" pour être au-dessus des autres éléments
+local textureone = frameTalentMage:CreateTexture("TemplateTalentFrame", "OVERLAY")
 textureone:SetTexture("Interface\\TalentFrame\\Template\\Class\\Mage\\TalentFrameTemplate.blp")
-textureone:SetSize(928, 928) -- Remplacez width et height par les dimensions souhaitées
-textureone:SetPoint("TOPLEFT", frameTalentMage, "TOPLEFT", -170, 140) -- Adjust the X and Y coordinates
+textureone:SetSize(928, 928)
+textureone:SetPoint("TOPLEFT", frameTalentMage, "TOPLEFT", -170, 140)
 
--- Ajuste l'ordre des calques pour être devant les autres éléments
-frameTalentMage:SetFrameLevel(100) -- Utilisez une valeur supérieure à celle des autres éléments
+frameTalentMage:SetFrameLevel(100)
 
--- Ajoute une texturetwo pour l'image BLP
-local texturetwo = frameTalentMage:CreateTexture("TemplateTalentFrame", "OVERLAY") -- Utilisez "OVERLAY" pour être au-dessus des autres éléments
+local texturetwo = frameTalentMage:CreateTexture("TemplateTalentFrame", "OVERLAY")
 texturetwo:SetTexture("Interface\\TalentFrame\\Template\\Class\\Mage\\TalentFrameTemplateOriginal.blp")
-texturetwo:SetSize(928, 928) -- Remplacez width et height par les dimensions souhaitées
-texturetwo:SetPoint("TOPRIGHT", frameTalentMage, "TOPRIGHT", 170, 140) -- Adjust the X and Y coordinates
+texturetwo:SetSize(928, 928)
+texturetwo:SetPoint("TOPRIGHT", frameTalentMage, "TOPRIGHT", 170, 140)
 
--- Ajuste l'ordre des calques pour être devant les autres éléments
-frameTalentMage:SetFrameLevel(100) -- Utilisez une valeur supérieure à celle des autres éléments
+frameTalentMage:SetFrameLevel(100)
 
--- Drag & Drop
 frameTalentMage:SetScript("OnDragStart", frameTalentMage.StartMoving)
 frameTalentMage:SetScript("OnHide", frameTalentMage.StopMovingOrSizing)
 frameTalentMage:SetScript("OnDragStop", frameTalentMage.StopMovingOrSizing)
 frameTalentMage:Hide()
 
--- Nouveau template d'arête
-frameTalentMage:SetBackdropBorderColor(0.5, 0.7, 1) -- Couleur Bleu Ciel / talentsclassbackgroundmage2 / talentsclassbackgroundmage3
+frameTalentMage:SetBackdropBorderColor(0.5, 0.7, 1)
 
--- Nouveau template d'arête
--- frameTalentMage:SetBackdropBorderColor(199, 156, 110) -- Couleur marron / talentsclassbackgroundmage
 
--- Close button
 local buttonTalentMageClose = CreateFrame("Button", "buttonTalentMageClose", frameTalentMage, "UIPanelCloseButton")
 buttonTalentMageClose:SetPoint("TOPRIGHT", -12, -12)
 buttonTalentMageClose:EnableMouse(true)
@@ -80,10 +67,8 @@ local function CloseTalentWindow()
     PlaySoundFile(CLOSE_TALENT_WINDOW_SOUND)
 end
 
--- Associez la fonction de fermeture au bouton de fermeture
 buttonTalentMageClose:SetScript("OnClick", CloseTalentWindow)
 
--- Title bar
 local frameTalentMageTitleBar = CreateFrame("Frame", "frameTalentMageTitleBar", frameTalentMage, nil)
 frameTalentMageTitleBar:SetSize(135, 25)
 frameTalentMageTitleBar:SetBackdrop(
@@ -106,21 +91,17 @@ fontTalentMageTitleText:SetText("|cffFFC125Talents|r")
 local fontTalentMageFrameText = frameTalentMageTitleBar:CreateFontString("fontTalentMageFrameText")
 fontTalentMageFrameText:SetFont("Fonts\\FRIZQT__.TTF", 18)
 fontTalentMageFrameText:SetSize(200, 5)
-fontTalentMageFrameText:SetPoint("TOPLEFT", frameTalentMageTitleBar, "BOTTOMLEFT", -30, -35) -- Adjust the Y offset as needed
+fontTalentMageFrameText:SetPoint("TOPLEFT", frameTalentMageTitleBar, "BOTTOMLEFT", -30, -35)
 fontTalentMageFrameText:SetText("|cffFFC125Mage|r")
 
--- Remplacez votre ligne existante pour la création du texte par celle-ci
 local fontTalentMageFrameText = frameTalentMageTitleBar:CreateFontString("fontTalentMageFrameText")
 fontTalentMageFrameText:SetFont("Fonts\\FRIZQT__.TTF", 18)
 fontTalentMageFrameText:SetSize(200, 5)
-fontTalentMageFrameText:SetPoint("TOPLEFT", frameTalentMageTitleBar, "BOTTOMLEFT", -30, -60) -- Adjust the Y offset as needed
-fontTalentMageFrameText:SetText("0 / " .. MAX_TALENTS) -- Initialisez le texte avec 0 talents appris
+fontTalentMageFrameText:SetPoint("TOPLEFT", frameTalentMageTitleBar, "BOTTOMLEFT", -30, -60)
+fontTalentMageFrameText:SetText("0 / " .. MAX_TALENTS)
 
--------------------------------------------------------------
 
--------------------------------------------------------------
 
--- Fonction générique pour créer un bouton de sort
 local function CreateSpellButton(name, texturePath, tooltipText, talentHandler, positionX, positionY)
     local buttonClicked = false
     local talentLearned = false
@@ -133,50 +114,44 @@ local function CreateSpellButton(name, texturePath, tooltipText, talentHandler, 
     button:SetHighlightTexture("Interface/Buttons/checkbuttonhilight")
     button:SetPoint("TOPLEFT", positionX, positionY)
 
-    -- Texture pour l'indicateur d'apprentissage
     local learnIndicator = button:CreateTexture(nil, "OVERLAY")
     learnIndicator:SetTexture("Interface/Buttons/UI-CheckBox-Check")
     learnIndicator:SetSize(30, 30)
     learnIndicator:SetPoint("BOTTOMRIGHT", -2, 2)
     learnIndicator:Hide()
 
-    -- Texte pour afficher l'état du bouton (0 ou 1)
     local buttonText = button:CreateFontString("buttonText", "OVERLAY", "GameFontHighlight")
     buttonText:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -2, 2)
 
-    -- Fonction pour mettre à jour l'état du bouton et de l'indicateur d'apprentissage
     local function UpdateButtonState()
         if talentLearned then
-            button:SetAlpha(1) -- Réduire l'opacité pour indiquer que le bouton est désactivé
-            learnIndicator:Show() -- Afficher l'indicateur d'apprentissage
-            buttonText:SetText("|cffffda2b1|r") -- Mettre à jour le texte pour afficher "1"
+            button:SetAlpha(1)
+            learnIndicator:Show()
+            buttonText:SetText("|cffffda2b1|r")
         else
-            button:SetAlpha(1) -- Rétablir l'opacité pour indiquer que le bouton est activé
-            learnIndicator:Hide() -- Cacher l'indicateur d'apprentissage
-            buttonText:SetText("|cff1aff1a0|r") -- Mettre à jour le texte pour afficher "0"
+            button:SetAlpha(1)
+            learnIndicator:Hide()
+            buttonText:SetText("|cff1aff1a0|r")
         end
     end
 
-    -- Fonction à exécuter lorsque le bouton est cliqué
     button:SetScript("OnMouseUp", function()
         if not buttonClicked and not talentLearned then
-            -- Ajouter une vérification pour s'assurer que le joueur a des points de talent
             local talentItemID = 338404
             local hasTalentPoints = GetItemCount(talentItemID, false, true) > 0
 
             if hasTalentPoints then
                 AIO.Handle("TalentMagespell", talentHandler, 1)
                 PlaySoundFile(SPELL_TALENT_WINDOW_SOUND)
-                buttonClicked = true -- Marquer le bouton comme cliqué
-                talentLearned = true -- Marquer le talent comme appris
-                UpdateButtonState() -- Mettre à jour l'état du bouton
+                buttonClicked = true
+                talentLearned = true
+                UpdateButtonState()
             else
                 print("|cff00ffffVous n'avez plus de points de talent !|r")
             end
         end
     end)
 
-    -- Affichage du tooltip
     button:SetScript("OnEnter", function(self)
         GameTooltip:SetOwner(self, "TOPLEFT")
         GameTooltip:ClearLines()
@@ -184,24 +159,17 @@ local function CreateSpellButton(name, texturePath, tooltipText, talentHandler, 
         GameTooltip:Show()
     end)
 
-    -- Cacher le tooltip lorsque la souris quitte le bouton
     button:SetScript("OnLeave", function(self)
         GameTooltip:Hide()
     end)
 
-    -- Appel initial pour définir l'état du bouton au chargement
     UpdateButtonState()
 end
 
--- Utilisation de la fonction générique avec des positions spécifiques
 
--------------------------------------------------------------
 
--------------------------------------------------------------
 
--- Template 1
 
--- Arcanes
 
 CreateSpellButton("buttonSpellArcaneSubtlety", "Interface/icons/spell_holy_dispelmagic", "|cffffffffSubtilité des arcanes|r\n|cffffffffTalent|r |cff7755fdArcanes|r\n|cffffffffRequiert|r |cff40c7ebMage|r\n|cffffd100Réduit de 30% les chances que vos sorts bénéfiques soient dissipés et réduit de 40% la menace générée par vos sorts des Arcanes.|r", "spellarcanesubtlety", 100, -80)
 CreateSpellButton("buttonSpellArcaneFocus", "Interface/icons/spell_holy_devotion", "|cffffffffFocalisation des arcanes|r\n|cffffffffTalent|r |cff7755fdArcanes|r\n|cffffffffRequiert|r |cff40c7ebMage|r\n|cffffd100Augmente les chances de toucher et réduit le coût en mana de vos sorts des Arcanes de 3%.|r", "spellarcanefocus", 205, -75)
@@ -231,7 +199,6 @@ CreateSpellButton("buttonSpellMindMastery", "Interface/icons/spell_arcane_mindma
 CreateSpellButton("buttonSpellSlow", "Interface/icons/spell_nature_slow", "|cffffffffLenteur|r\n|cffffffffTalent|r |cff7755fdArcanes|r\n|cffffffffRequiert|r |cff40c7ebMage|r\n|cffffd100Réduit la vitesse de déplacement de la cible de 60%, augmente le temps entre les attaques à distance de 60% et augmente le temps d'incantation de 30%.\nDure 15 seconds.\nLenteur ne peut affecter qu'une seule cible à la fois.|r", "spellslow", 368, -350)
 CreateSpellButton("buttonSpellMissileBarrage", "Interface/icons/ability_mage_missilebarrage", "|cffffffffBarrage de projectiles|r\n|cffffffffTalent|r |cff7755fdArcanes|r\n|cffffffffRequiert|r |cff40c7ebMage|r\n|cffffd100Confère à votre Déflagration des arcanes 40% de chances et à vos sorts Barrage des arcanes, Boule de feu, Eclair de givre\net Eclair de givrefeu 20% de chances de réduire la durée de canalisation du prochain sort Projectiles des arcanes de 2.5 sec.\net réduit le coût en mana de 100%.\nDes projectiles sont tirés toutes les 0,5 sec.|r", "spellmissilebarrage", 478, -350)
 
--- Feu
 
 CreateSpellButton("buttonSpellNetherwindPresence", "Interface/icons/ability_mage_netherwindpresence", "|cffffffffPrésence de vent du Néant|r\n|cffffffffTalent|r |cff7755fdArcanes|r\n|cffffffffRequiert|r |cff40c7ebMage|r\n|cffffd100Augmente de 6% votre hâte des sorts.|r", "spellnetherwindpresence", 98, -405)
 CreateSpellButton("buttonSpellSpellPower", "Interface/icons/spell_arcane_arcanetorrent", "|cffffffffPuissance des sorts|r\n|cffffffffTalent|r |cff7755fdArcanes|r\n|cffffffffRequiert|r |cff40c7ebMage|r\n|cffffd100Augmente les points de dégâts supplémentaires infligés par les coups critiques de tous vos sorts de 50%.|r", "spellspellpower", 205, -405)
@@ -247,7 +214,6 @@ CreateSpellButton("buttonSpellImpact", "Interface/icons/spell_fire_meteorstorm",
 CreateSpellButton("buttonSpellPyroblast", "Interface/icons/spell_fire_fireball02", "|cffffffffExplosion pyrotechnique|r\n|cffffffffTalent|r |cffff8000Feu|r\n|cffffffffRequiert|r |cff40c7ebMage|r\n|cffffd100Lance un immense rocher enflammé qui inflige 163 à 215 points de dégâts de Feu et 60 à 64 points de dégâts de Feu supplémentaires en 12 seconds.|r", "spellpyroblast", 315, -510)
 CreateSpellButton("buttonSpellBurningSoul", "Interface/icons/spell_fire_fire", "|cffffffffAme ardente|r\n|cffffffffTalent|r |cffff8000Feu|r\n|cffffffffRequiert|r |cff40c7ebMage|r\n|cffffd100Réduit l'interruption causée par les attaques infligeant des dégâts pendant que vous incantez des sorts de Feu de 70% et réduit la menace générée par vos sorts de Feu de 20%.|r", "spellburningsoul", 422, -510)
 
--- Template 2
 
 CreateSpellButton("buttonSpellImprovedScorch", "Interface/icons/spell_fire_soulburn", "|cffffffffBrûlure améliorée|r\n|cffffffffTalent|r |cffff8000Feu|r\n|cffffffffRequiert|r |cff40c7ebMage|r\n|cffffd100Augmente vos chances de coup critique avec Brûlure, Boule de feu et Eclair de givrefeu de 3% supplémentaires\net vos sorts de Brûlure infligeant des dégâts ont 100% de chances de rendre votre cible vulnérable aux dégâts de sorts.\nCette vulnérabilité augmente les chances de coup critique avec les sorts contre cette cible de 5% et dure 30 seconds.|r", "spellimprovedscorch", 663, -75)
 CreateSpellButton("buttonSpellMolteShields", "Interface/icons/spell_fire_firearmor", "|cffffffffBoucliers de la fournaise|r\n|cffffffffTalent|r |cffff8000Feu|r\n|cffffffffRequiert|r |cff40c7ebMage|r\n|cffffd100Confère à vos sorts Gardien de feu et Gardien de givre 30% de chances de renvoyer les sorts tant qu'ils sont actifs.\nDe plus, votre Armure de la fournaise a 100% de chances d'affecter les attaques à distance et les sorts.|r", "spellmoltenshields", 770, -75)
@@ -265,7 +231,6 @@ CreateSpellButton("buttonSpellEmpoweredFire", "Interface/icons/spell_fire_flameb
 CreateSpellButton("buttonSpellFirestarter", "Interface/icons/ability_mage_firestarter", "|cffffffffBoute-flammes|r\n|cffffffffTalent|r |cffff8000Feu|r\n|cffffffffRequiert|r |cff40c7ebMage|r\n|cffffd100Lorsqu'ils infligent des dégâts, vos sorts Vague explosive et Souffle du dragon ont 100% de chances de rendre l'incantation de votre prochain sort Choc de flammes instantanée et sans coût en mana.\nDure 10 seconds.", "spellfirestarter", 1100, -184)
 
 
--- Givre
 
 CreateSpellButton("buttonSpellDragonsBreath", "Interface/icons/inv_misc_head_dragon_01", "|cffffffffSouffle du dragon|r\n|cffffffffTalent|r |cffff8000Feu|r\n|cffffffffRequiert|r |cff40c7ebMage|r\n|cffffd100Les cibles qui se trouvent dans une zone en forme de cône en face du lanceur de sorts subissent 420 à 487 points de dégâts de Feu et sont désorientées pendant 5 seconds.\nToute attaque directe qui inflige des dégâts réveille la cible.\nInterrompt l'attaque lors de son utilisation.|r", "spelldragonsbreath", 718, -240)
 CreateSpellButton("buttonSpellHotStreak", "Interface/icons/ability_mage_hotstreak", "|cffffffffChaleur continue|r\n|cffffffffTalent|r |cffff8000Feu|r\n|cffffffffRequiert|r |cff40c7ebMage|r\n|cffffd100Chaque fois que vous obtenez 2 coups critiques non périodiques de suite avec Boule de feu, Trait de feu, Brûlure, Bombe vivante ou Eclair de givrefeu,\nvous avez 100% de chances que votre prochain sort Explosion pyrotechnique lancé dans les 10 seconds soit instantané.|r", "spellhotstreak", 825, -240)
@@ -300,35 +265,28 @@ CreateSpellButton("buttonSpellEnduringWinter", "Interface/icons/spell_frost_summ
 CreateSpellButton("buttonSpellChilledtotheBone", "Interface/icons/ability_mage_chilledtothebone", "|cffffffffTransi jusqu'aux os|r\n|cffffffffTalent|r |cff2492ffGivre|r\n|cffffffffRequiert|r |cff40c7ebMage|r\n|cffffd100Augmente les points de dégâts infligés par vos sorts Eclair de givre, Eclair de givrefeu et Javelot de glace de 5% et réduit la vitesse de déplacement de toutes les cibles transies de 10% supplémentaires.|r", "spellchilledtothebone", 934, -564)
 CreateSpellButton("buttonSpellDeepFreeze", "Interface/icons/ability_mage_deepfreeze", "|cffffffffCongélation|r\n|cffffffffTalent|r |cff2492ffGivre|r\n|cffffffffRequiert|r |cff40c7ebMage|r\n|cffffd100Etourdit la cible pendant 5 seconds. Utilisable uniquement sur les cibles gelées.\nInflige de 3138 à 3440 points de dégâts aux cibles insensibles de manière permanente aux étourdissements.|r", "spelldeepfreeze", 1045, -564)
 
--------------------------------------------------------------
 
--------------------------------------------------------------
 
--- Ajoutez une variable pour suivre l'état du bouton Réinitialiser
 local resetButtonClicked = false
 
--- Créez le bouton Reset à l'intérieur de la fenêtre frameTalentMage
 local buttonReset = CreateFrame("Button", "buttonReset", frameTalentMage, "UIPanelButtonTemplate")
 buttonReset:SetSize(85, 25)
-buttonReset:SetPoint("BOTTOMRIGHT", buttonTalentMageClose, "BOTTOMLEFT", -95, 5) -- Place le bouton Reset à gauche du bouton Reload
+buttonReset:SetPoint("BOTTOMRIGHT", buttonTalentMageClose, "BOTTOMLEFT", -95, 5)
 buttonReset:SetText("Réinitialiser")
 
 local function ResetTalents()
-    -- Ajoutez ici la logique pour réinitialiser les talents du joueur
     AIO.Handle("TalentMagespell", "ResetTalents")
-    resetButtonClicked = true -- Marquez le bouton Réinitialiser comme cliqué
+    resetButtonClicked = true
 end
 
 buttonReset:SetScript("OnClick", ResetTalents)
 
--- Créez le bouton Reload à l'intérieur de la fenêtre frameTalentMage
 local buttonReload = CreateFrame("Button", "buttonReload", frameTalentMage, "UIPanelButtonTemplate")
 buttonReload:SetSize(85, 25)
-buttonReload:SetPoint("BOTTOMRIGHT", buttonTalentMageClose, "BOTTOMLEFT", -5, 5) -- Place le bouton Reload à gauche du bouton Close
+buttonReload:SetPoint("BOTTOMRIGHT", buttonTalentMageClose, "BOTTOMLEFT", -5, 5)
 buttonReload:SetText("Actualiser")
 
 local function ReloadClient()
-    -- Ajoutez une vérification pour s'assurer que le bouton Réinitialiser a été cliqué
     if resetButtonClicked then
         ReloadUI()
     else
@@ -338,7 +296,6 @@ end
 
 buttonReload:SetScript("OnClick", ReloadClient)
 
--- Ajoutez une variable globale pour suivre l'état de la fenêtre des talents
 local talentsWindowOpen = false
 
 local function OuvrirFermerInterfaceTalents()
@@ -352,37 +309,30 @@ local function OuvrirFermerInterfaceTalents()
         PlaySoundFile(OPEN_TALENT_WINDOW_SOUND)
     end
 
-    -- Inversez l'état de la fenêtre des talents
     talentsWindowOpen = not talentsWindowOpen
 end
 
--- Vérifier si le joueur est un Mage avant de créer le bouton
-local playerClass = select(2, UnitClass("player")) -- Obtenir la classe du joueur
+local playerClass = select(2, UnitClass("player"))
 if playerClass == "MAGE" then
     local buttonOuvrirTalents = CreateFrame("Button", "buttonOuvrirTalents", UIParent)
     buttonOuvrirTalents:SetSize(32, 33)
-    buttonOuvrirTalents:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -171, 8) -- Placer en bas à droite avec un décalage de 10 pixels
+    buttonOuvrirTalents:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -171, 8)
 
-    -- Ajouter une texture BLP au bouton
     buttonOuvrirTalents:SetNormalTexture("Interface\\TalentFrame\\Template\\MicroButton\\ButtonSystemTalent.blp")
 
-    -- Ajouter une texture de surbrillance
     local highlightTexture = buttonOuvrirTalents:CreateTexture(nil, "HIGHLIGHT")
     highlightTexture:SetAllPoints(buttonOuvrirTalents)
     highlightTexture:SetTexture("Interface\\TalentFrame\\Template\\MicroButton\\ButtonSystemTalentLight.blp")
     buttonOuvrirTalents:SetHighlightTexture(highlightTexture)
 
-    -- Supprimer le texte du bouton
     buttonOuvrirTalents:SetText("")
 
-    -- Ajouter une info-bulle
     buttonOuvrirTalents:SetScript("OnEnter", function(self)
-        GameTooltip:SetOwner(self, "ANCHOR_RIGHT") -- Définir l'ancre de l'info-bulle
-        GameTooltip:SetText("|cffffffffTalents|r |cff40c7eb(Mage)|r\n\nL'éventail des talents disponibles\npour améliorer et spécialiser\nvotre personnage.") -- Texte de l'info-bulle
+        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+        GameTooltip:SetText("|cffffffffTalents|r |cff40c7eb(Mage)|r\n\nL'éventail des talents disponibles\npour améliorer et spécialiser\nvotre personnage.")
         GameTooltip:Show()
     end)
 
-    -- Masquer l'info-bulle lorsque la souris quitte le bouton
     buttonOuvrirTalents:SetScript("OnLeave", function(self)
         GameTooltip:Hide()
     end)

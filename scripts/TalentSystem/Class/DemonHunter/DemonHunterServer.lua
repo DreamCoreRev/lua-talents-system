@@ -5,9 +5,7 @@ local TalentDemonhunterPointsSpend = {}
 local MAX_TALENTS = 21
 
 local talents = {
-	-- Template 1
 
-	-- Dévastation
 	
     ["spellwarglaiveschaos"] = {spellID = 98981, itemID = 338404},
 	["spelldemonspeed"] = {spellID = 98980, itemID = 338404},
@@ -29,14 +27,11 @@ local talents = {
 	["spellfelwounds"] = {spellID = 98860, itemID = 338404},
 	["spellfelbarrage"] = {spellID = 98868, itemID = 338404},
 	
-	-- Template 2
 
-	-- Vengeance
 	
 	["spellthickskin"] = {spellID = 320384, itemID = 338404},
 	["spelldemonicwards"] = {spellID = 203514, itemID = 338404},
 	
-	-- Maître du glaive
 	
 	["spellsharpenedglaives"] = {spellID = 98854, itemID = 338404},
 	["spelldisorientglaives"] = {spellID = 98851, itemID = 338404},

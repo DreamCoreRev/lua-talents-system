@@ -9,64 +9,53 @@ function WarlockHandlers.ShowTalentWarlock(player)
     frameTalentWarlock:Show()
 end
 
-local MAX_TALENTS = 41 -- Définition du nombre maximal de talents que le joueur peut apprendre
+local MAX_TALENTS = 41
 
 local OPEN_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_72_artifact_forge_final_trait_unlocked.ogg"
 local CLOSE_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_72_artifact_forge_trait_refund_end.ogg"
 local SPELL_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_80_azeritearmor_rotationends_02.ogg"
 
--- Attribute window
 local frameTalentWarlock = CreateFrame("Frame", "frameTalentWarlock", UIParent)
 frameTalentWarlock:SetSize(1200, 650)
 frameTalentWarlock:SetMovable(true)
 frameTalentWarlock:EnableMouse(true)
 frameTalentWarlock:RegisterForDrag("LeftButton")
-frameTalentWarlock:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 50, -50) -- Adjust the X and Y coordinates
+frameTalentWarlock:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 50, -50)
 frameTalentWarlock:SetBackdrop(
 {
-    -- bgFile = "interface/TalentFrame/talentsclassbackgroundWarlock", --Interface/AchievementFrame/UI-Achievement-Parchment-Horizontal
-    bgFile = "interface/TalentFrame/Template/Class/Warlock/talentsclassbackgroundwarlock", --Interface/AchievementFrame/UI-Achievement-Parchment-Horizontal
-    edgeFile = "interface/tooltips/ui-tooltip-border-corruptedwarlock", --Interface/DialogFrame/UI-DialogBox-Border
+    bgFile = "interface/TalentFrame/Template/Class/Warlock/talentsclassbackgroundwarlock",
+    edgeFile = "interface/tooltips/ui-tooltip-border-corruptedwarlock",
     edgeSize = 20,
     insets = { left = 5, right = 5, top = 5, bottom = 5 }
 })
 
--- Ajoutez la texture de l'icône du Démoniste
 local warlockIcon = frameTalentWarlock:CreateTexture("WarlockIcon", "OVERLAY")
 warlockIcon:SetTexture("Interface\\TalentFrame\\Template\\Class\\Warlock\\IconeWarlock.blp")
 warlockIcon:SetSize(60, 60)
 warlockIcon:SetPoint("TOPLEFT", frameTalentWarlock, "TOPLEFT", -10, 10)
 
--- Template Talent Frame
 
--- Ajoute une textureone pour l'image BLP
-local textureone = frameTalentWarlock:CreateTexture("TemplateTalentFrame", "OVERLAY") -- Utilisez "OVERLAY" pour être au-dessus des autres éléments
+local textureone = frameTalentWarlock:CreateTexture("TemplateTalentFrame", "OVERLAY")
 textureone:SetTexture("Interface\\TalentFrame\\Template\\Class\\Warlock\\TalentFrameTemplate.blp")
-textureone:SetSize(928, 928) -- Remplacez width et height par les dimensions souhaitées
-textureone:SetPoint("TOPLEFT", frameTalentWarlock, "TOPLEFT", -170, 140) -- Adjust the X and Y coordinates
+textureone:SetSize(928, 928)
+textureone:SetPoint("TOPLEFT", frameTalentWarlock, "TOPLEFT", -170, 140)
 
--- Ajuste l'ordre des calques pour être devant les autres éléments
-frameTalentWarlock:SetFrameLevel(100) -- Utilisez une valeur supérieure à celle des autres éléments
+frameTalentWarlock:SetFrameLevel(100)
 
--- Ajoute une texturetwo pour l'image BLP
-local texturetwo = frameTalentWarlock:CreateTexture("TemplateTalentFrame", "OVERLAY") -- Utilisez "OVERLAY" pour être au-dessus des autres éléments
+local texturetwo = frameTalentWarlock:CreateTexture("TemplateTalentFrame", "OVERLAY")
 texturetwo:SetTexture("Interface\\TalentFrame\\Template\\Class\\Warlock\\TalentFrameTemplateOriginal.blp")
-texturetwo:SetSize(928, 928) -- Remplacez width et height par les dimensions souhaitées
-texturetwo:SetPoint("TOPRIGHT", frameTalentWarlock, "TOPRIGHT", 170, 140) -- Adjust the X and Y coordinates
+texturetwo:SetSize(928, 928)
+texturetwo:SetPoint("TOPRIGHT", frameTalentWarlock, "TOPRIGHT", 170, 140)
 
--- Ajuste l'ordre des calques pour être devant les autres éléments
-frameTalentWarlock:SetFrameLevel(100) -- Utilisez une valeur supérieure à celle des autres éléments
+frameTalentWarlock:SetFrameLevel(100)
 
--- Drag & Drop
 frameTalentWarlock:SetScript("OnDragStart", frameTalentWarlock.StartMoving)
 frameTalentWarlock:SetScript("OnHide", frameTalentWarlock.StopMovingOrSizing)
 frameTalentWarlock:SetScript("OnDragStop", frameTalentWarlock.StopMovingOrSizing)
 frameTalentWarlock:Hide()
 
--- Nouveau template d'arête
-frameTalentWarlock:SetBackdropBorderColor(135, 135, 237) -- Couleur pourpre
+frameTalentWarlock:SetBackdropBorderColor(135, 135, 237)
 
--- Close button
 local buttonTalentWarlockClose = CreateFrame("Button", "buttonTalentWarlockClose", frameTalentWarlock, "UIPanelCloseButton")
 buttonTalentWarlockClose:SetPoint("TOPRIGHT", -12, -12)
 buttonTalentWarlockClose:EnableMouse(true)
@@ -77,10 +66,8 @@ local function CloseTalentWindow()
     PlaySoundFile(CLOSE_TALENT_WINDOW_SOUND)
 end
 
--- Associez la fonction de fermeture au bouton de fermeture
 buttonTalentWarlockClose:SetScript("OnClick", CloseTalentWindow)
 
--- Title bar
 local frameTalentWarlockTitleBar = CreateFrame("Frame", "frameTalentWarlockTitleBar", frameTalentWarlock, nil)
 frameTalentWarlockTitleBar:SetSize(135, 25)
 frameTalentWarlockTitleBar:SetBackdrop(
@@ -103,21 +90,17 @@ fontTalentWarlockTitleText:SetText("|cffFFC125Talents|r")
 local fontTalentWarlockFrameText = frameTalentWarlockTitleBar:CreateFontString("fontTalentWarlockFrameText")
 fontTalentWarlockFrameText:SetFont("Fonts\\FRIZQT__.TTF", 18)
 fontTalentWarlockFrameText:SetSize(200, 5)
-fontTalentWarlockFrameText:SetPoint("TOPLEFT", frameTalentWarlockTitleBar, "BOTTOMLEFT", -30, -35) -- Adjust the Y offset as needed
+fontTalentWarlockFrameText:SetPoint("TOPLEFT", frameTalentWarlockTitleBar, "BOTTOMLEFT", -30, -35)
 fontTalentWarlockFrameText:SetText("|cffFFC125Démoniste|r")
 
--- Remplacez votre ligne existante pour la création du texte par celle-ci
 local fontTalentWarlockFrameText = frameTalentWarlockTitleBar:CreateFontString("fontTalentWarlockFrameText")
 fontTalentWarlockFrameText:SetFont("Fonts\\FRIZQT__.TTF", 18)
 fontTalentWarlockFrameText:SetSize(200, 5)
-fontTalentWarlockFrameText:SetPoint("TOPLEFT", frameTalentWarlockTitleBar, "BOTTOMLEFT", -30, -60) -- Adjust the Y offset as needed
-fontTalentWarlockFrameText:SetText("0 / " .. MAX_TALENTS) -- Initialisez le texte avec 0 talents appris
+fontTalentWarlockFrameText:SetPoint("TOPLEFT", frameTalentWarlockTitleBar, "BOTTOMLEFT", -30, -60)
+fontTalentWarlockFrameText:SetText("0 / " .. MAX_TALENTS)
 
--------------------------------------------------------------
 
--------------------------------------------------------------
 
--- Fonction générique pour créer un bouton de sort
 local function CreateSpellButton(name, texturePath, tooltipText, talentHandler, positionX, positionY)
     local buttonClicked = false
     local talentLearned = false
@@ -130,50 +113,44 @@ local function CreateSpellButton(name, texturePath, tooltipText, talentHandler, 
     button:SetHighlightTexture("Interface/Buttons/checkbuttonhilight")
     button:SetPoint("TOPLEFT", positionX, positionY)
 
-    -- Texture pour l'indicateur d'apprentissage
     local learnIndicator = button:CreateTexture(nil, "OVERLAY")
     learnIndicator:SetTexture("Interface/Buttons/UI-CheckBox-Check")
     learnIndicator:SetSize(30, 30)
     learnIndicator:SetPoint("BOTTOMRIGHT", -2, 2)
     learnIndicator:Hide()
 
-    -- Texte pour afficher l'état du bouton (0 ou 1)
     local buttonText = button:CreateFontString("buttonText", "OVERLAY", "GameFontHighlight")
     buttonText:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -2, 2)
 
-    -- Fonction pour mettre à jour l'état du bouton et de l'indicateur d'apprentissage
     local function UpdateButtonState()
         if talentLearned then
-            button:SetAlpha(1) -- Réduire l'opacité pour indiquer que le bouton est désactivé
-            learnIndicator:Show() -- Afficher l'indicateur d'apprentissage
-            buttonText:SetText("|cffffda2b1|r") -- Mettre à jour le texte pour afficher "1"
+            button:SetAlpha(1)
+            learnIndicator:Show()
+            buttonText:SetText("|cffffda2b1|r")
         else
-            button:SetAlpha(1) -- Rétablir l'opacité pour indiquer que le bouton est activé
-            learnIndicator:Hide() -- Cacher l'indicateur d'apprentissage
-            buttonText:SetText("|cff1aff1a0|r") -- Mettre à jour le texte pour afficher "0"
+            button:SetAlpha(1)
+            learnIndicator:Hide()
+            buttonText:SetText("|cff1aff1a0|r")
         end
     end
 
-    -- Fonction à exécuter lorsque le bouton est cliqué
     button:SetScript("OnMouseUp", function()
         if not buttonClicked and not talentLearned then
-            -- Ajouter une vérification pour s'assurer que le joueur a des points de talent
             local talentItemID = 338404
             local hasTalentPoints = GetItemCount(talentItemID, false, true) > 0
 
             if hasTalentPoints then
                 AIO.Handle("TalentWarlockspell", talentHandler, 1)
                 PlaySoundFile(SPELL_TALENT_WINDOW_SOUND)
-                buttonClicked = true -- Marquer le bouton comme cliqué
-                talentLearned = true -- Marquer le talent comme appris
-                UpdateButtonState() -- Mettre à jour l'état du bouton
+                buttonClicked = true
+                talentLearned = true
+                UpdateButtonState()
             else
                 print("|cff00ffffVous n'avez plus de points de talent !|r")
             end
         end
     end)
 
-    -- Affichage du tooltip
     button:SetScript("OnEnter", function(self)
         GameTooltip:SetOwner(self, "TOPLEFT")
         GameTooltip:ClearLines()
@@ -181,24 +158,17 @@ local function CreateSpellButton(name, texturePath, tooltipText, talentHandler, 
         GameTooltip:Show()
     end)
 
-    -- Cacher le tooltip lorsque la souris quitte le bouton
     button:SetScript("OnLeave", function(self)
         GameTooltip:Hide()
     end)
 
-    -- Appel initial pour définir l'état du bouton au chargement
     UpdateButtonState()
 end
 
--- Utilisation de la fonction générique avec des positions spécifiques
 
--------------------------------------------------------------
 
--------------------------------------------------------------
 
--- Template 1
 
--- Affliction
 
 CreateSpellButton("buttonSpellImprovedCurseofAgony", "Interface/icons/spell_shadow_curseofsargeras", "|cffffffffMalédiction d'agonie améliorée|r\n|cffffffffTalent|r |cff008080Affliction|r\n|cffffffffRequiert|r |cff8787edDémoniste|r\n|cffffd100Augmente les dégâts infligés par votre sort Malédiction d'agonie de 10%.|r", "spellimprovedcurseofagony", 100, -80)
 CreateSpellButton("buttonSpellSuppression", "Interface/icons/spell_shadow_unsummonbuilding", "|cffffffffSuppression|r\n|cffffffffTalent|r |cff008080Affliction|r\n|cffffffffRequiert|r |cff8787edDémoniste|r\n|cffffd100Augmente de 3% vos chances de toucher avec les sorts, et réduit de 6% le coût en mana de vos sorts d'Affliction.|r", "spellsuppression", 205, -75)
@@ -229,7 +199,6 @@ CreateSpellButton("buttonSpellPandemic", "Interface/icons/spell_shadow_unstablea
 CreateSpellButton("buttonSpellEverlastingAffliction", "Interface/icons/ability_warlock_everlastingaffliction", "|cffffffffAffliction éternelle|r\n|cffffffffTalent|r |cff008080Affliction|r\n|cffffffffRequiert|r |cff8787edDémoniste|r\n|cffffd100Vos sorts Corruption et Affliction instable bénéficient de 5% supplémentaires de votre bonus aux dégâts des sorts,\net vos sorts Drain de vie, Drain d'âme, Trait de l'ombre et Hanter ont 100% de chances de réinitialiser la durée de votre sort Corruption sur la cible.|r", "spelleverlastingaffliction", 368, -350)
 CreateSpellButton("buttonSpellHaunt", "Interface/icons/ability_warlock_haunt", "|cffffffffHanter|r\n|cffffffffTalent|r |cff008080Affliction|r\n|cffffffffRequiert|r |cff8787edDémoniste|r\n|cffffd100Vous envoyez une âme fantomatique à l'intérieur de la cible, ce qui lui inflige 465 à 544 points de dégâts d'Ombre\net augmente tous les dégâts infligés par vos effets de dégâts d'Ombre sur la durée de 20% pendant 12 seconds.\nQuand le sort Hanter prend fin ou est dissipé, l'âme vous revient et vous soigne pour un montant\nde points de vie égal à 100% des dégâts qu'elle a infligés à la cible.|r", "spellhaunt", 478, -350)
 
--- Démonologie
 
 CreateSpellButton("buttonSpellImprovedHealthstone", "Interface/icons/inv_stone_04", "|cffffffffPierre de soins améliorée|r\n|cffffffffTalent|r |cff80ff00Démonologie|r\n|cffffffffRequiert|r |cff8787edDémoniste|r\n|cffffd100Augmente le montant de points de vie restaurés par votre Pierre de soin de 20%.|r", "spellimprovedhealthstone", 98, -405)
 CreateSpellButton("buttonSpellImprovedImp", "Interface/icons/spell_shadow_summonimp", "|cffffffffDiablotin amélioré|r\n|cffffffffTalent|r |cff80ff00Démonologie|r\n|cffffffffRequiert|r |cff8787edDémoniste|r\n|cffffd100Augmente les effets des sorts Eclair de feu, Bouclier de feu et Pacte de sang de votre diablotin de 30%.|r", "spellimprovedimp", 205, -405)
@@ -245,7 +214,6 @@ CreateSpellButton("buttonSpellDemonicAegis", "Interface/icons/spell_shadow_ragin
 CreateSpellButton("buttonSpellUnholyPower", "Interface/icons/spell_shadow_shadowworddominate", "|cffffffffPuissance impie|r\n|cffffffffTalent|r |cff80ff00Démonologie|r\n|cffffffffRequiert|r |cff8787edDémoniste|r\n|cffffd100Augmente de 20% les dégâts infligés par les attaques de mêlée du marcheur du Vide, de la succube,\ndu chasseur corrompu et du gangregarde et par l'Eclair de feu du diablotin.|r", "spellunholypower", 315, -510)
 CreateSpellButton("buttonSpellMasterSummoner", "Interface/icons/spell_shadow_impphaseshift", "|cffffffffMaître invocateur|r\n|cffffffffTalent|r |cff80ff00Démonologie|r\n|cffffffffRequiert|r |cff8787edDémoniste|r\n|cffffd100Réduit le temps d'incantation de vos sorts d'invocations de diablotin, de succube,\nde marcheur du Vide, de chasseur corrompu et de gangregarde de 4 sec. et leur coût en mana de 40%.|r", "spellmastersummoner", 422, -510)
 
--- Template 2
 
 CreateSpellButton("buttonSpellManaFeed", "Interface/icons/spell_shadow_manafeed", "|cffffffffFestin de mana|r\n|cffffffffTalent|r |cff80ff00Démonologie|r\n|cffffffffRequiert|r |cff8787edDémoniste|r\n|cffffd100Lorsque vous recevez du mana grâce aux sorts Drain de mana ou Connexion,\nvotre démon invoqué reçoit lui aussi 100% de ce montant de mana.|r", "spellmanafeed", 663, -75)
 CreateSpellButton("buttonSpellMasterConjuror", "Interface/icons/inv_ammo_firetar", "|cffffffffMaître conjurateur|r\n|cffffffffTalent|r |cff80ff00Démonologie|r\n|cffffffffRequiert|r |cff8787edDémoniste|r\n|cffffd100Augmente de 300% les scores de combat conférés par vos Pierres de feu et Pierres de sort invoquées.|r", "spellmasterconjuror", 770, -75)
@@ -263,7 +231,6 @@ CreateSpellButton("buttonSpellDemonicPact", "Interface/icons/spell_shadow_demoni
 CreateSpellButton("buttonSpellMetamorphosis", "Interface/icons/spell_shadow_demonform", "|cffffffffMétamorphe|r\n|cffffffffTalent|r |cff80ff00Démonologie|r\n|cffffffffRequiert|r |cff8787edDémoniste|r\n|cffffd100Vous vous transformez en démon pendant 30 seconds.\nCette forme augmente votre armure de 600% et vos dégâts de 20%,\nréduit la probabilité que vous soyez touché par des coups critiques en mêlée de 6%\net réduit la durée des effets d'étourdissement et de ralentissement qui vous affectent de 50%.\nVous bénéficiez de techniques démoniaques spécifiques en plus de vos techniques normales.\nTemps de recharge de 3 minutes.|r", "spellmetamorphosis", 1100, -184)
 
 
--- Destruction
 
 CreateSpellButton("buttonSpellImprovedShadowBolt", "Interface/icons/spell_shadow_shadowbolt", "|cffffffffTrait de l'ombre amélioré|r\n|cffffffffTalent|r |cffff8000Destruction|r\n|cffffffffRequiert|r |cff8787edDémoniste|r\n|cffffd100Augmente les dégâts infligés par votre sort Trait de l'ombre de 10%,\net votre Trait de l'ombre a également 100% de chances de rendre votre cible vulnérable aux dégâts des sorts,\nce qui augmente les chances de coup critique des sorts contre cette cible de 5%.\nL'effet dure 30 seconds.|r", "spellimprovedshadowbolt", 718, -240)
 CreateSpellButton("buttonSpellBane", "Interface/icons/spell_shadow_deathpact", "|cffffffffFléau|r\n|cffffffffTalent|r |cffff8000Destruction|r\n|cffffffffRequiert|r |cff8787edDémoniste|r\n|cffffd100Réduit le temps d'incantation de vos sorts Trait de l'ombre, Trait du chaos et Immolation de 0.5 sec. et Feu de l'âme de 2 sec.|r", "spellbane", 825, -240)
@@ -293,35 +260,28 @@ CreateSpellButton("buttonSpellFireandBrimstone", "Interface/icons/ability_warloc
 CreateSpellButton("buttonSpellChaosBolt", "Interface/icons/ability_warlock_chaosbolt", "|cffffffffTrait du chaos|r\n|cffffffffTalent|r |cffff8000Destruction|r\n|cffffffffRequiert|r |cff8787edDémoniste|r\n|cffffd100Lance un éclair de feu chaotique sur l'ennemi et lui inflige 942 à 1187 points de dégâts de Feu.\nOn ne peut pas résister à Trait du chaos, et il traverse tous les effets d'absorption.|r", "spellchaosbolt", 1100, -510)
 
 
--------------------------------------------------------------
 
--------------------------------------------------------------
 
--- Ajoutez une variable pour suivre l'état du bouton Réinitialiser
 local resetButtonClicked = false
 
--- Créez le bouton Reset à l'intérieur de la fenêtre frameTalentWarlock
 local buttonReset = CreateFrame("Button", "buttonReset", frameTalentWarlock, "UIPanelButtonTemplate")
 buttonReset:SetSize(85, 25)
-buttonReset:SetPoint("BOTTOMRIGHT", buttonTalentWarlockClose, "BOTTOMLEFT", -95, 5) -- Place le bouton Reset à gauche du bouton Reload
+buttonReset:SetPoint("BOTTOMRIGHT", buttonTalentWarlockClose, "BOTTOMLEFT", -95, 5)
 buttonReset:SetText("Réinitialiser")
 
 local function ResetTalents()
-    -- Ajoutez ici la logique pour réinitialiser les talents du joueur
     AIO.Handle("TalentWarlockspell", "ResetTalents")
-    resetButtonClicked = true -- Marquez le bouton Réinitialiser comme cliqué
+    resetButtonClicked = true
 end
 
 buttonReset:SetScript("OnClick", ResetTalents)
 
--- Créez le bouton Reload à l'intérieur de la fenêtre frameTalentWarlock
 local buttonReload = CreateFrame("Button", "buttonReload", frameTalentWarlock, "UIPanelButtonTemplate")
 buttonReload:SetSize(85, 25)
-buttonReload:SetPoint("BOTTOMRIGHT", buttonTalentWarlockClose, "BOTTOMLEFT", -5, 5) -- Place le bouton Reload à gauche du bouton Close
+buttonReload:SetPoint("BOTTOMRIGHT", buttonTalentWarlockClose, "BOTTOMLEFT", -5, 5)
 buttonReload:SetText("Actualiser")
 
 local function ReloadClient()
-    -- Ajoutez une vérification pour s'assurer que le bouton Réinitialiser a été cliqué
     if resetButtonClicked then
         ReloadUI()
     else
@@ -331,7 +291,6 @@ end
 
 buttonReload:SetScript("OnClick", ReloadClient)
 
--- Ajoutez une variable globale pour suivre l'état de la fenêtre des talents
 local talentsWindowOpen = false
 
 local function OuvrirFermerInterfaceTalents()
@@ -345,37 +304,30 @@ local function OuvrirFermerInterfaceTalents()
         PlaySoundFile(OPEN_TALENT_WINDOW_SOUND)
     end
 
-    -- Inversez l'état de la fenêtre des talents
     talentsWindowOpen = not talentsWindowOpen
 end
 
--- Vérifier si le joueur est un Warlock avant de créer le bouton
-local playerClass = select(2, UnitClass("player")) -- Obtenir la classe du joueur
+local playerClass = select(2, UnitClass("player"))
 if playerClass == "WARLOCK" then
     local buttonOuvrirTalents = CreateFrame("Button", "buttonOuvrirTalents", UIParent)
     buttonOuvrirTalents:SetSize(32, 33)
-    buttonOuvrirTalents:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -171, 8) -- Placer en bas à droite avec un décalage de 10 pixels
+    buttonOuvrirTalents:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -171, 8)
 
-    -- Ajouter une texture BLP au bouton
     buttonOuvrirTalents:SetNormalTexture("Interface\\TalentFrame\\Template\\MicroButton\\ButtonSystemTalent.blp")
 
-    -- Ajouter une texture de surbrillance
     local highlightTexture = buttonOuvrirTalents:CreateTexture(nil, "HIGHLIGHT")
     highlightTexture:SetAllPoints(buttonOuvrirTalents)
     highlightTexture:SetTexture("Interface\\TalentFrame\\Template\\MicroButton\\ButtonSystemTalentLight.blp")
     buttonOuvrirTalents:SetHighlightTexture(highlightTexture)
 
-    -- Supprimer le texte du bouton
     buttonOuvrirTalents:SetText("")
 
-    -- Ajouter une info-bulle
     buttonOuvrirTalents:SetScript("OnEnter", function(self)
-        GameTooltip:SetOwner(self, "ANCHOR_RIGHT") -- Définir l'ancre de l'info-bulle
-        GameTooltip:SetText("|cffffffffTalents|r |cff8787ed(Démoniste)|r\n\nL'éventail des talents disponibles\npour améliorer et spécialiser\nvotre personnage.") -- Texte de l'info-bulle
+        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+        GameTooltip:SetText("|cffffffffTalents|r |cff8787ed(Démoniste)|r\n\nL'éventail des talents disponibles\npour améliorer et spécialiser\nvotre personnage.")
         GameTooltip:Show()
     end)
 
-    -- Masquer l'info-bulle lorsque la souris quitte le bouton
     buttonOuvrirTalents:SetScript("OnLeave", function(self)
         GameTooltip:Hide()
     end)

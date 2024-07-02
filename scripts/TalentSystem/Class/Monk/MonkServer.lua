@@ -5,7 +5,6 @@ local TalentMonkPointsSpend = {}
 local MAX_TALENTS = 44
 
 local talents = {
-	-- Template 1
     ["spellpurifyingbrew"] = {spellID = 119582, itemID = 338404},
     ["spellkegsmash"] = {spellID = 121253, itemID = 338404},
     ["spellascension"] = {spellID = 115396, itemID = 338404},
@@ -20,7 +19,6 @@ local talents = {
 	["spellguard"] = {spellID = 115295, itemID = 338404},
 	["spelllegacyemperor"] = {spellID = 1117666, itemID = 338404},
 	["spelldetox"] = {spellID = 1215450, itemID = 338404},
-	-- Template 2
 	["spelladaptation"] = {spellID = 126046, itemID = 338404},
 	["spellchibarrage"] = {spellID = 144644, itemID = 338404},
 	["spellmonksleap"] = {spellID = 124008, itemID = 338404},

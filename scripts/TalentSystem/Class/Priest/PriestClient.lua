@@ -9,64 +9,53 @@ function PriestHandlers.ShowTalentPriest(player)
     frameTalentPriest:Show()
 end
 
-local MAX_TALENTS = 42 -- Définition du nombre maximal de talents que le joueur peut apprendre
+local MAX_TALENTS = 42
 
 local OPEN_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_72_artifact_forge_final_trait_unlocked.ogg"
 local CLOSE_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_72_artifact_forge_trait_refund_end.ogg"
 local SPELL_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_80_azeritearmor_rotationends_02.ogg"
 
--- Attribute window
 local frameTalentPriest = CreateFrame("Frame", "frameTalentPriest", UIParent)
 frameTalentPriest:SetSize(1200, 650)
 frameTalentPriest:SetMovable(true)
 frameTalentPriest:EnableMouse(true)
 frameTalentPriest:RegisterForDrag("LeftButton")
-frameTalentPriest:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 50, -50) -- Adjust the X and Y coordinates
+frameTalentPriest:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 50, -50)
 frameTalentPriest:SetBackdrop(
 {
-    -- bgFile = "interface/TalentFrame/talentsclassbackgroundPriest", --Interface/AchievementFrame/UI-Achievement-Parchment-Horizontal
-    bgFile = "interface/TalentFrame/Template/Class/Priest/talentsclassbackgroundpriest", --Interface/AchievementFrame/UI-Achievement-Parchment-Horizontal
-    edgeFile = "interface/tooltips/ui-tooltip-border-corruptedpriest", --Interface/DialogFrame/UI-DialogBox-Border
+    bgFile = "interface/TalentFrame/Template/Class/Priest/talentsclassbackgroundpriest",
+    edgeFile = "interface/tooltips/ui-tooltip-border-corruptedpriest",
     edgeSize = 20,
     insets = { left = 5, right = 5, top = 5, bottom = 5 }
 })
 
--- Ajoutez la texture de l'icône du Prêtre
 local priestIcon = frameTalentPriest:CreateTexture("PriestIcon", "OVERLAY")
 priestIcon:SetTexture("Interface\\TalentFrame\\Template\\Class\\Priest\\IconePriest.blp")
 priestIcon:SetSize(60, 60)
 priestIcon:SetPoint("TOPLEFT", frameTalentPriest, "TOPLEFT", -10, 10)
 
--- Template Talent Frame
 
--- Ajoute une textureone pour l'image BLP
-local textureone = frameTalentPriest:CreateTexture("TemplateTalentFrame", "OVERLAY") -- Utilisez "OVERLAY" pour être au-dessus des autres éléments
+local textureone = frameTalentPriest:CreateTexture("TemplateTalentFrame", "OVERLAY")
 textureone:SetTexture("Interface\\TalentFrame\\Template\\Class\\Priest\\TalentFrameTemplate.blp")
-textureone:SetSize(928, 928) -- Remplacez width et height par les dimensions souhaitées
-textureone:SetPoint("TOPLEFT", frameTalentPriest, "TOPLEFT", -170, 140) -- Adjust the X and Y coordinates
+textureone:SetSize(928, 928)
+textureone:SetPoint("TOPLEFT", frameTalentPriest, "TOPLEFT", -170, 140)
 
--- Ajuste l'ordre des calques pour être devant les autres éléments
-frameTalentPriest:SetFrameLevel(100) -- Utilisez une valeur supérieure à celle des autres éléments
+frameTalentPriest:SetFrameLevel(100)
 
--- Ajoute une texturetwo pour l'image BLP
-local texturetwo = frameTalentPriest:CreateTexture("TemplateTalentFrame", "OVERLAY") -- Utilisez "OVERLAY" pour être au-dessus des autres éléments
+local texturetwo = frameTalentPriest:CreateTexture("TemplateTalentFrame", "OVERLAY")
 texturetwo:SetTexture("Interface\\TalentFrame\\Template\\Class\\Priest\\TalentFrameTemplateOriginal.blp")
-texturetwo:SetSize(928, 928) -- Remplacez width et height par les dimensions souhaitées
-texturetwo:SetPoint("TOPRIGHT", frameTalentPriest, "TOPRIGHT", 170, 140) -- Adjust the X and Y coordinates
+texturetwo:SetSize(928, 928)
+texturetwo:SetPoint("TOPRIGHT", frameTalentPriest, "TOPRIGHT", 170, 140)
 
--- Ajuste l'ordre des calques pour être devant les autres éléments
-frameTalentPriest:SetFrameLevel(100) -- Utilisez une valeur supérieure à celle des autres éléments
+frameTalentPriest:SetFrameLevel(100)
 
--- Drag & Drop
 frameTalentPriest:SetScript("OnDragStart", frameTalentPriest.StartMoving)
 frameTalentPriest:SetScript("OnHide", frameTalentPriest.StopMovingOrSizing)
 frameTalentPriest:SetScript("OnDragStop", frameTalentPriest.StopMovingOrSizing)
 frameTalentPriest:Hide()
 
--- Nouveau template d'arête
-frameTalentPriest:SetBackdropBorderColor(255, 255, 255) -- Couleur blanc
+frameTalentPriest:SetBackdropBorderColor(255, 255, 255)
 
--- Close button
 local buttonTalentPriestClose = CreateFrame("Button", "buttonTalentPriestClose", frameTalentPriest, "UIPanelCloseButton")
 buttonTalentPriestClose:SetPoint("TOPRIGHT", -12, -12)
 buttonTalentPriestClose:EnableMouse(true)
@@ -77,10 +66,8 @@ local function CloseTalentWindow()
     PlaySoundFile(CLOSE_TALENT_WINDOW_SOUND)
 end
 
--- Associez la fonction de fermeture au bouton de fermeture
 buttonTalentPriestClose:SetScript("OnClick", CloseTalentWindow)
 
--- Title bar
 local frameTalentPriestTitleBar = CreateFrame("Frame", "frameTalentPriestTitleBar", frameTalentPriest, nil)
 frameTalentPriestTitleBar:SetSize(135, 25)
 frameTalentPriestTitleBar:SetBackdrop(
@@ -103,21 +90,17 @@ fontTalentPriestTitleText:SetText("|cffFFC125Talents|r")
 local fontTalentPriestFrameText = frameTalentPriestTitleBar:CreateFontString("fontTalentPriestFrameText")
 fontTalentPriestFrameText:SetFont("Fonts\\FRIZQT__.TTF", 18)
 fontTalentPriestFrameText:SetSize(200, 5)
-fontTalentPriestFrameText:SetPoint("TOPLEFT", frameTalentPriestTitleBar, "BOTTOMLEFT", -30, -35) -- Adjust the Y offset as needed
+fontTalentPriestFrameText:SetPoint("TOPLEFT", frameTalentPriestTitleBar, "BOTTOMLEFT", -30, -35)
 fontTalentPriestFrameText:SetText("|cffFFC125Prêtre|r")
 
--- Remplacez votre ligne existante pour la création du texte par celle-ci
 local fontTalentPriestFrameText = frameTalentPriestTitleBar:CreateFontString("fontTalentPriestFrameText")
 fontTalentPriestFrameText:SetFont("Fonts\\FRIZQT__.TTF", 18)
 fontTalentPriestFrameText:SetSize(200, 5)
-fontTalentPriestFrameText:SetPoint("TOPLEFT", frameTalentPriestTitleBar, "BOTTOMLEFT", -30, -60) -- Adjust the Y offset as needed
-fontTalentPriestFrameText:SetText("0 / " .. MAX_TALENTS) -- Initialisez le texte avec 0 talents appris
+fontTalentPriestFrameText:SetPoint("TOPLEFT", frameTalentPriestTitleBar, "BOTTOMLEFT", -30, -60)
+fontTalentPriestFrameText:SetText("0 / " .. MAX_TALENTS)
 
--------------------------------------------------------------
 
--------------------------------------------------------------
 
--- Fonction générique pour créer un bouton de sort
 local function CreateSpellButton(name, texturePath, tooltipText, talentHandler, positionX, positionY)
     local buttonClicked = false
     local talentLearned = false
@@ -130,50 +113,44 @@ local function CreateSpellButton(name, texturePath, tooltipText, talentHandler, 
     button:SetHighlightTexture("Interface/Buttons/checkbuttonhilight")
     button:SetPoint("TOPLEFT", positionX, positionY)
 
-    -- Texture pour l'indicateur d'apprentissage
     local learnIndicator = button:CreateTexture(nil, "OVERLAY")
     learnIndicator:SetTexture("Interface/Buttons/UI-CheckBox-Check")
     learnIndicator:SetSize(30, 30)
     learnIndicator:SetPoint("BOTTOMRIGHT", -2, 2)
     learnIndicator:Hide()
 
-    -- Texte pour afficher l'état du bouton (0 ou 1)
     local buttonText = button:CreateFontString("buttonText", "OVERLAY", "GameFontHighlight")
     buttonText:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -2, 2)
 
-    -- Fonction pour mettre à jour l'état du bouton et de l'indicateur d'apprentissage
     local function UpdateButtonState()
         if talentLearned then
-            button:SetAlpha(1) -- Réduire l'opacité pour indiquer que le bouton est désactivé
-            learnIndicator:Show() -- Afficher l'indicateur d'apprentissage
-            buttonText:SetText("|cffffda2b1|r") -- Mettre à jour le texte pour afficher "1"
+            button:SetAlpha(1)
+            learnIndicator:Show()
+            buttonText:SetText("|cffffda2b1|r")
         else
-            button:SetAlpha(1) -- Rétablir l'opacité pour indiquer que le bouton est activé
-            learnIndicator:Hide() -- Cacher l'indicateur d'apprentissage
-            buttonText:SetText("|cff1aff1a0|r") -- Mettre à jour le texte pour afficher "0"
+            button:SetAlpha(1)
+            learnIndicator:Hide()
+            buttonText:SetText("|cff1aff1a0|r")
         end
     end
 
-    -- Fonction à exécuter lorsque le bouton est cliqué
     button:SetScript("OnMouseUp", function()
         if not buttonClicked and not talentLearned then
-            -- Ajouter une vérification pour s'assurer que le joueur a des points de talent
             local talentItemID = 338404
             local hasTalentPoints = GetItemCount(talentItemID, false, true) > 0
 
             if hasTalentPoints then
                 AIO.Handle("TalentPriestspell", talentHandler, 1)
                 PlaySoundFile(SPELL_TALENT_WINDOW_SOUND)
-                buttonClicked = true -- Marquer le bouton comme cliqué
-                talentLearned = true -- Marquer le talent comme appris
-                UpdateButtonState() -- Mettre à jour l'état du bouton
+                buttonClicked = true
+                talentLearned = true
+                UpdateButtonState()
             else
                 print("|cff00ffffVous n'avez plus de points de talent !|r")
             end
         end
     end)
 
-    -- Affichage du tooltip
     button:SetScript("OnEnter", function(self)
         GameTooltip:SetOwner(self, "TOPLEFT")
         GameTooltip:ClearLines()
@@ -181,24 +158,17 @@ local function CreateSpellButton(name, texturePath, tooltipText, talentHandler, 
         GameTooltip:Show()
     end)
 
-    -- Cacher le tooltip lorsque la souris quitte le bouton
     button:SetScript("OnLeave", function(self)
         GameTooltip:Hide()
     end)
 
-    -- Appel initial pour définir l'état du bouton au chargement
     UpdateButtonState()
 end
 
--- Utilisation de la fonction générique avec des positions spécifiques
 
--------------------------------------------------------------
 
--------------------------------------------------------------
 
--- Template 1
 
--- Discipline
 
 CreateSpellButton("buttonSpellUnbreakableWill", "Interface/icons/spell_magic_magearmor", "|cffffffffVolonté inflexible|r\n|cffffffffTalent|r |cffffffbfDiscipline|r\n|cffffffffRequiert|r |cffffffffPrêtre|r\n|cffffd100Réduit la durée des effets d'étourdissement, de peur et de silence contre vous de 30% supplémentaires.|r", "spellunbreakablewill", 100, -80)
 CreateSpellButton("buttonSpellTwinDisciplines", "Interface/icons/spell_holy_sealofvengeance", "|cffffffffDisciplines jumelles|r\n|cffffffffTalent|r |cffffffbfDiscipline|r\n|cffffffffRequiert|r |cffffffffPrêtre|r\n|cffffd100Augmente de 5% les dégâts et les soins produits par vos sorts instantanés.|r", "spelltwindisciplines", 205, -75)
@@ -229,7 +199,6 @@ CreateSpellButton("buttonSpellGrace|r", "Interface/icons/spell_holy_hopeandgrace
 CreateSpellButton("buttonSpellBorrowedTime", "Interface/icons/spell_holy_borrowedtime", "|cffffffffSursis|r\n|cffffffffTalent|r |cffffffffSacré|r\n|cffffffffRequiert|r |cffffffffPrêtre|r\n|cffffd100Fait bénéficier votre prochain sort de 25% de hâte des sorts supplémentaire après avoir lancé Mot de pouvoir : Bouclier,\net augmente les dégâts absorbés par votre Mot de pouvoir : Bouclier d'un montant égal à 40% de votre puissance des sorts.|r", "spellborrowedtime", 368, -350)
 CreateSpellButton("buttonSpellPenance", "Interface/icons/spell_holy_penance", "|cffffffffPénitence|r\n|cffffffffTalent|r |cffffffffSacré|r\n|cffffffffRequiert|r |cffffffffPrêtre|r\n|cffffd100Lance une salve de lumière sacrée sur la cible et inflige 240 points de dégâts du Sacré à un ennemi ou rend 670 à 756 points de vie à un allié instantanément et toutes les 1 sec.\npendant 2 secondes.|r", "spellpenance", 478, -350)
 
--- Sacré
 
 CreateSpellButton("buttonSpellHealingFocus", "Interface/icons/spell_holy_healingfocus", "|cffffffffFocalisation des soins|r\n|cffffffffTalent|r |cffffffffSacré|r\n|cffffffffRequiert|r |cffffffffPrêtre|r\n|cffffd100Réduit de 70% l'interruption causée par les attaques infligeant des dégâts pendant que vous incantez tout sort de soins.|r", "spellhealingfocus", 98, -405)
 CreateSpellButton("buttonSpellImprovedRenew", "Interface/icons/spell_holy_renew", "|cffffffffRénovation améliorée|r\n|cffffffffTalent|r |cffffffffSacré|r\n|cffffffffRequiert|r |cffffffffPrêtre|r\n|cffffd100Augmente de 15% le montant de points de vie rendus par votre sort Rénovation.|r", "spellimprovedrenew", 205, -405)
@@ -245,7 +214,6 @@ CreateSpellButton("buttonSpellSearingLight", "Interface/icons/spell_holy_searing
 CreateSpellButton("buttonSpellHealingPrayers", "Interface/icons/spell_holy_prayerofhealing02", "|cffffffffPrières guérisseuses|r\n|cffffffffTalent|r |cffffffffSacré|r\n|cffffffffRequiert|r |cffffffffPrêtre|r\n|cffffd100Réduit le coût en mana de vos sorts Prière de soins et Prière de guérison de 20%.|r", "spellhealingprayers", 315, -510)
 CreateSpellButton("buttonSpellSpiritofRedemption", "Interface/icons/inv_enchant_essenceeternallarge", "|cffffffffEsprit de rédemption|r\n|cffffffffTalent|r |cffffffffSacré|r\n|cffffffffRequiert|r |cffffffffPrêtre|r\n|cffffd100Augmente le total d'Esprit de 5%, et au moment de sa mort, le prêtre devient l'Esprit de rédemption pendant 15 secondes.\nL'Esprit de rédemption ne peut pas se déplacer ou attaquer, ni être attaqué ou ciblé par aucun sort ou effet.\nTant qu'il est sous cette forme, le prêtre peut lancer tout sort de soins sans le moindre coût.\nÀ la fin de l'effet, le prêtre meurt.|r", "spellspiritofredemption", 422, -510)
 
--- Template 2
 
 CreateSpellButton("buttonSpellSpiritualGuidance", "Interface/icons/spell_holy_spiritualguidence", "|cffffffffDirection spirituelle|r\n|cffffffffTalent|r |cffffffffSacré|r\n|cffffffffRequiert|r |cffffffffPrêtre|r\n|cffffd100Augmente la puissance des sorts d'un montant égal à 25% de votre Esprit total.|r", "spellspiritualguidance", 663, -75)
 CreateSpellButton("buttonSpellSurgeofLight", "Interface/icons/spell_holy_surgeoflight", "|cffffffffVague de Lumière|r\n|cffffffffTalent|r |cffffffffSacré|r\n|cffffffffRequiert|r |cffffffffPrêtre|r\n|cffffd100Vos coups critiques avec les sorts confèrent 50% de chances à votre prochain sort Châtiment ou Soins rapides d'être instantané et de ne pas coûter de mana, mais sans pouvoir être un coup critique.\nCet effet dure 10 secondes.|r", "spellsurgeoflight", 770, -75)
@@ -263,7 +231,6 @@ CreateSpellButton("buttonSpellDivineProvidence", "Interface/icons/spell_holy_div
 CreateSpellButton("buttonSpellGuardianSpirit", "Interface/icons/spell_holy_guardianspirit", "|cffffffffEsprit gardien|r\n|cffffffffTalent|r |cffffffffSacré|r\n|cffffffffRequiert|r |cffffffffPrêtre|r\n|cffffd100Fait appel à un esprit gardien pour veiller sur la cible alliée.\nL'esprit augmente les soins prodigués à la cible de 40% et l'empêche également de mourir en se sacrifiant pour elle.\nCe sacrifice met fin à l'effet mais rend à la cible 50% de ses points de vie maximum.\nDure 10 secondes.", "spellguardianspirit", 1100, -184)
 
 
--- Ombre
 
 CreateSpellButton("buttonSpellSpiritTap", "Interface/icons/spell_shadow_requiem", "|cffffffffConnexion spirituelle|r\n|cffffffffTalent|r |cff919191Ombre|r\n|cffffffffRequiert|r |cffffffffPrêtre|r\n|cffffd100Vous donne 100% de chances de gagner un bonus de 100% à l'Esprit après avoir tué une cible qui rapporte de l'expérience ou de l'honneur.\nVotre mana se régénère à 83% de la vitesse de récupération normale pendant l'incantation de sorts.\nDure 15 secondes.|r", "spellspirittap", 718, -240)
 CreateSpellButton("buttonSpellImprovedSpiritTap", "Interface/icons/spell_shadow_requiem", "|cffffffffConnexion spirituelle améliorée|r\n|cffffffffTalent|r |cff919191Ombre|r\n|cffffffffRequiert|r |cffffffffPrêtre|r\n|cffffd100Vos coups critiques réussis avec Attaque mentale et Mot de l'ombre : Mort ont 100% de chances vos coups critiques avec Fouet mental ont 50% de chances d'augmenter votre total d'Esprit de 10%.\nPendant ce temps, votre mana se régénèrera à un taux de 33% lors des incantations.\nDure 8 secondes.|r", "spellimprovedspirittap", 825, -240)
@@ -293,35 +260,28 @@ CreateSpellButton("buttonSpellPainandSuffering", "Interface/icons/spell_shadow_p
 CreateSpellButton("buttonSpellTwistedFaith", "Interface/icons/spell_shadow_mindtwisting", "|cffffffffFoi distordue|r\n|cffffffffTalent|r |cff919191Ombre|r\n|cffffffffRequiert|r |cffffffffPrêtre|r\n|cffffd100Augmente la puissance de vos sorts de 20% de votre total d'Esprit,\net les dégâts que vous infligez avec Fouet mental et Attaque mentale sont augmentés de 10% si votre cible est affectée par Mot de l'ombre : Douleur.|r", "spelltwistedfaith", 1100, -510)
 CreateSpellButton("buttonSpellDispersion", "Interface/icons/spell_shadow_dispersion", "|cffffffffDispersion|r\n|cffffffffTalent|r |cff919191Ombre|r\n|cffffffffRequiert|r |cffffffffPrêtre|r\n|cffffd100Votre corps devient de l'énergie d'ombre pure, ce qui réduit tous les dégâts subis de 90%.\nVous ne pouvez pas attaquer ni lancer de sorts, mais vous régénérez 6% de votre mana toutes les 1 sec.\npendant 6 seconds.\nDispersion peut être lancé lorsque vous êtes étourdi, apeuré ou réduit au silence,\ndissipe tous les effets affectant le déplacement à son lancement et vous rend insensible à eux tant que vous êtes de l'énergie pure.|r", "spelldispersion", 880, -293)
 
--------------------------------------------------------------
 
--------------------------------------------------------------
 
--- Ajoutez une variable pour suivre l'état du bouton Réinitialiser
 local resetButtonClicked = false
 
--- Créez le bouton Reset à l'intérieur de la fenêtre frameTalentPriest
 local buttonReset = CreateFrame("Button", "buttonReset", frameTalentPriest, "UIPanelButtonTemplate")
 buttonReset:SetSize(85, 25)
-buttonReset:SetPoint("BOTTOMRIGHT", buttonTalentPriestClose, "BOTTOMLEFT", -95, 5) -- Place le bouton Reset à gauche du bouton Reload
+buttonReset:SetPoint("BOTTOMRIGHT", buttonTalentPriestClose, "BOTTOMLEFT", -95, 5)
 buttonReset:SetText("Réinitialiser")
 
 local function ResetTalents()
-    -- Ajoutez ici la logique pour réinitialiser les talents du joueur
     AIO.Handle("TalentPriestspell", "ResetTalents")
-    resetButtonClicked = true -- Marquez le bouton Réinitialiser comme cliqué
+    resetButtonClicked = true
 end
 
 buttonReset:SetScript("OnClick", ResetTalents)
 
--- Créez le bouton Reload à l'intérieur de la fenêtre frameTalentPriest
 local buttonReload = CreateFrame("Button", "buttonReload", frameTalentPriest, "UIPanelButtonTemplate")
 buttonReload:SetSize(85, 25)
-buttonReload:SetPoint("BOTTOMRIGHT", buttonTalentPriestClose, "BOTTOMLEFT", -5, 5) -- Place le bouton Reload à gauche du bouton Close
+buttonReload:SetPoint("BOTTOMRIGHT", buttonTalentPriestClose, "BOTTOMLEFT", -5, 5)
 buttonReload:SetText("Actualiser")
 
 local function ReloadClient()
-    -- Ajoutez une vérification pour s'assurer que le bouton Réinitialiser a été cliqué
     if resetButtonClicked then
         ReloadUI()
     else
@@ -331,7 +291,6 @@ end
 
 buttonReload:SetScript("OnClick", ReloadClient)
 
--- Ajoutez une variable globale pour suivre l'état de la fenêtre des talents
 local talentsWindowOpen = false
 
 local function OuvrirFermerInterfaceTalents()
@@ -345,37 +304,30 @@ local function OuvrirFermerInterfaceTalents()
         PlaySoundFile(OPEN_TALENT_WINDOW_SOUND)
     end
 
-    -- Inversez l'état de la fenêtre des talents
     talentsWindowOpen = not talentsWindowOpen
 end
 
--- Vérifier si le joueur est un Priest avant de créer le bouton
-local playerClass = select(2, UnitClass("player")) -- Obtenir la classe du joueur
+local playerClass = select(2, UnitClass("player"))
 if playerClass == "PRIEST" then
     local buttonOuvrirTalents = CreateFrame("Button", "buttonOuvrirTalents", UIParent)
     buttonOuvrirTalents:SetSize(32, 33)
-    buttonOuvrirTalents:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -171, 8) -- Placer en bas à droite avec un décalage de 10 pixels
+    buttonOuvrirTalents:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -171, 8)
 
-    -- Ajouter une texture BLP au bouton
     buttonOuvrirTalents:SetNormalTexture("Interface\\TalentFrame\\Template\\MicroButton\\ButtonSystemTalent.blp")
 
-    -- Ajouter une texture de surbrillance
     local highlightTexture = buttonOuvrirTalents:CreateTexture(nil, "HIGHLIGHT")
     highlightTexture:SetAllPoints(buttonOuvrirTalents)
     highlightTexture:SetTexture("Interface\\TalentFrame\\Template\\MicroButton\\ButtonSystemTalentLight.blp")
     buttonOuvrirTalents:SetHighlightTexture(highlightTexture)
 
-    -- Supprimer le texte du bouton
     buttonOuvrirTalents:SetText("")
 
-    -- Ajouter une info-bulle
     buttonOuvrirTalents:SetScript("OnEnter", function(self)
-        GameTooltip:SetOwner(self, "ANCHOR_RIGHT") -- Définir l'ancre de l'info-bulle
-        GameTooltip:SetText("|cffffffffTalents|r |cffffffff(Prêtre)|r\n\nL'éventail des talents disponibles\npour améliorer et spécialiser\nvotre personnage.") -- Texte de l'info-bulle
+        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+        GameTooltip:SetText("|cffffffffTalents|r |cffffffff(Prêtre)|r\n\nL'éventail des talents disponibles\npour améliorer et spécialiser\nvotre personnage.")
         GameTooltip:Show()
     end)
 
-    -- Masquer l'info-bulle lorsque la souris quitte le bouton
     buttonOuvrirTalents:SetScript("OnLeave", function(self)
         GameTooltip:Hide()
     end)

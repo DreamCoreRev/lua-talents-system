@@ -9,64 +9,53 @@ function HunterHandlers.ShowTalentHunter(player)
     frameTalentHunter:Show()
 end
 
-local MAX_TALENTS = 41 -- Définition du nombre maximal de talents que le joueur peut apprendre
+local MAX_TALENTS = 41
 
 local OPEN_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_72_artifact_forge_final_trait_unlocked.ogg"
 local CLOSE_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_72_artifact_forge_trait_refund_end.ogg"
 local SPELL_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_80_azeritearmor_rotationends_02.ogg"
 
--- Attribute window
 local frameTalentHunter = CreateFrame("Frame", "frameTalentHunter", UIParent)
 frameTalentHunter:SetSize(1200, 650)
 frameTalentHunter:SetMovable(true)
 frameTalentHunter:EnableMouse(true)
 frameTalentHunter:RegisterForDrag("LeftButton")
-frameTalentHunter:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 50, -50) -- Adjust the X and Y coordinates
+frameTalentHunter:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 50, -50)
 frameTalentHunter:SetBackdrop(
 {
-    -- bgFile = "interface/TalentFrame/talentsclassbackgroundHunter", --Interface/AchievementFrame/UI-Achievement-Parchment-Horizontal
-    bgFile = "interface/TalentFrame/talentsclassbackgroundhunter", --Interface/AchievementFrame/UI-Achievement-Parchment-Horizontal
-    edgeFile = "interface/tooltips/ui-tooltip-border-corruptedhunter", --Interface/DialogFrame/UI-DialogBox-Border
+    bgFile = "interface/TalentFrame/talentsclassbackgroundhunter",
+    edgeFile = "interface/tooltips/ui-tooltip-border-corruptedhunter",
     edgeSize = 20,
     insets = { left = 5, right = 5, top = 5, bottom = 5 }
 })
 
--- Ajoutez la texture de l'icône du Chasseur
 local hunterIcon = frameTalentHunter:CreateTexture("HunterIcon", "OVERLAY")
 hunterIcon:SetTexture("Interface\\TalentFrame\\Template\\Class\\Hunter\\IconeHunter.blp")
 hunterIcon:SetSize(60, 60)
 hunterIcon:SetPoint("TOPLEFT", frameTalentHunter, "TOPLEFT", -10, 10)
 
--- Template Talent Frame
 
--- Ajoute une textureone pour l'image BLP
-local textureone = frameTalentHunter:CreateTexture("TemplateTalentFrame", "OVERLAY") -- Utilisez "OVERLAY" pour être au-dessus des autres éléments
+local textureone = frameTalentHunter:CreateTexture("TemplateTalentFrame", "OVERLAY")
 textureone:SetTexture("Interface\\TalentFrame\\Template\\Class\\Hunter\\TalentFrameTemplate.blp")
-textureone:SetSize(928, 928) -- Remplacez width et height par les dimensions souhaitées
-textureone:SetPoint("TOPLEFT", frameTalentHunter, "TOPLEFT", -170, 140) -- Adjust the X and Y coordinates
+textureone:SetSize(928, 928)
+textureone:SetPoint("TOPLEFT", frameTalentHunter, "TOPLEFT", -170, 140)
 
--- Ajuste l'ordre des calques pour être devant les autres éléments
-frameTalentHunter:SetFrameLevel(100) -- Utilisez une valeur supérieure à celle des autres éléments
+frameTalentHunter:SetFrameLevel(100)
 
--- Ajoute une texturetwo pour l'image BLP
-local texturetwo = frameTalentHunter:CreateTexture("TemplateTalentFrame", "OVERLAY") -- Utilisez "OVERLAY" pour être au-dessus des autres éléments
+local texturetwo = frameTalentHunter:CreateTexture("TemplateTalentFrame", "OVERLAY")
 texturetwo:SetTexture("Interface\\TalentFrame\\Template\\Class\\Hunter\\TalentFrameTemplateOriginal.blp")
-texturetwo:SetSize(928, 928) -- Remplacez width et height par les dimensions souhaitées
-texturetwo:SetPoint("TOPRIGHT", frameTalentHunter, "TOPRIGHT", 170, 140) -- Adjust the X and Y coordinates
+texturetwo:SetSize(928, 928)
+texturetwo:SetPoint("TOPRIGHT", frameTalentHunter, "TOPRIGHT", 170, 140)
 
--- Ajuste l'ordre des calques pour être devant les autres éléments
-frameTalentHunter:SetFrameLevel(100) -- Utilisez une valeur supérieure à celle des autres éléments
+frameTalentHunter:SetFrameLevel(100)
 
--- Drag & Drop
 frameTalentHunter:SetScript("OnDragStart", frameTalentHunter.StartMoving)
 frameTalentHunter:SetScript("OnHide", frameTalentHunter.StopMovingOrSizing)
 frameTalentHunter:SetScript("OnDragStop", frameTalentHunter.StopMovingOrSizing)
 frameTalentHunter:Hide()
 
--- Nouveau template d'arête
-frameTalentHunter:SetBackdropBorderColor(169, 210, 113) -- Couleur vert
+frameTalentHunter:SetBackdropBorderColor(169, 210, 113)
 
--- Close button
 local buttonTalentHunterClose = CreateFrame("Button", "buttonTalentHunterClose", frameTalentHunter, "UIPanelCloseButton")
 buttonTalentHunterClose:SetPoint("TOPRIGHT", -12, -12)
 buttonTalentHunterClose:EnableMouse(true)
@@ -77,10 +66,8 @@ local function CloseTalentWindow()
     PlaySoundFile(CLOSE_TALENT_WINDOW_SOUND)
 end
 
--- Associez la fonction de fermeture au bouton de fermeture
 buttonTalentHunterClose:SetScript("OnClick", CloseTalentWindow)
 
--- Title bar
 local frameTalentHunterTitleBar = CreateFrame("Frame", "frameTalentHunterTitleBar", frameTalentHunter, nil)
 frameTalentHunterTitleBar:SetSize(135, 25)
 frameTalentHunterTitleBar:SetBackdrop(
@@ -103,21 +90,17 @@ fontTalentHunterTitleText:SetText("|cffFFC125Talents|r")
 local fontTalentHunterFrameText = frameTalentHunterTitleBar:CreateFontString("fontTalentHunterFrameText")
 fontTalentHunterFrameText:SetFont("Fonts\\FRIZQT__.TTF", 18)
 fontTalentHunterFrameText:SetSize(200, 5)
-fontTalentHunterFrameText:SetPoint("TOPLEFT", frameTalentHunterTitleBar, "BOTTOMLEFT", -30, -35) -- Adjust the Y offset as needed
+fontTalentHunterFrameText:SetPoint("TOPLEFT", frameTalentHunterTitleBar, "BOTTOMLEFT", -30, -35)
 fontTalentHunterFrameText:SetText("|cffFFC125Chasseur|r")
 
--- Remplacez votre ligne existante pour la création du texte par celle-ci
 local fontTalentHunterFrameText = frameTalentHunterTitleBar:CreateFontString("fontTalentHunterFrameText")
 fontTalentHunterFrameText:SetFont("Fonts\\FRIZQT__.TTF", 18)
 fontTalentHunterFrameText:SetSize(200, 5)
-fontTalentHunterFrameText:SetPoint("TOPLEFT", frameTalentHunterTitleBar, "BOTTOMLEFT", -30, -60) -- Adjust the Y offset as needed
-fontTalentHunterFrameText:SetText("0 / " .. MAX_TALENTS) -- Initialisez le texte avec 0 talents appris
+fontTalentHunterFrameText:SetPoint("TOPLEFT", frameTalentHunterTitleBar, "BOTTOMLEFT", -30, -60)
+fontTalentHunterFrameText:SetText("0 / " .. MAX_TALENTS)
 
--------------------------------------------------------------
 
--------------------------------------------------------------
 
--- Fonction générique pour créer un bouton de sort
 local function CreateSpellButton(name, texturePath, tooltipText, talentHandler, positionX, positionY)
     local buttonClicked = false
     local talentLearned = false
@@ -130,50 +113,44 @@ local function CreateSpellButton(name, texturePath, tooltipText, talentHandler, 
     button:SetHighlightTexture("Interface/Buttons/checkbuttonhilight")
     button:SetPoint("TOPLEFT", positionX, positionY)
 
-    -- Texture pour l'indicateur d'apprentissage
     local learnIndicator = button:CreateTexture(nil, "OVERLAY")
     learnIndicator:SetTexture("Interface/Buttons/UI-CheckBox-Check")
     learnIndicator:SetSize(30, 30)
     learnIndicator:SetPoint("BOTTOMRIGHT", -2, 2)
     learnIndicator:Hide()
 
-    -- Texte pour afficher l'état du bouton (0 ou 1)
     local buttonText = button:CreateFontString("buttonText", "OVERLAY", "GameFontHighlight")
     buttonText:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -2, 2)
 
-    -- Fonction pour mettre à jour l'état du bouton et de l'indicateur d'apprentissage
     local function UpdateButtonState()
         if talentLearned then
-            button:SetAlpha(1) -- Réduire l'opacité pour indiquer que le bouton est désactivé
-            learnIndicator:Show() -- Afficher l'indicateur d'apprentissage
-            buttonText:SetText("|cffffda2b1|r") -- Mettre à jour le texte pour afficher "1"
+            button:SetAlpha(1)
+            learnIndicator:Show()
+            buttonText:SetText("|cffffda2b1|r")
         else
-            button:SetAlpha(1) -- Rétablir l'opacité pour indiquer que le bouton est activé
-            learnIndicator:Hide() -- Cacher l'indicateur d'apprentissage
-            buttonText:SetText("|cff1aff1a0|r") -- Mettre à jour le texte pour afficher "0"
+            button:SetAlpha(1)
+            learnIndicator:Hide()
+            buttonText:SetText("|cff1aff1a0|r")
         end
     end
 
-    -- Fonction à exécuter lorsque le bouton est cliqué
     button:SetScript("OnMouseUp", function()
         if not buttonClicked and not talentLearned then
-            -- Ajouter une vérification pour s'assurer que le joueur a des points de talent
             local talentItemID = 338404
             local hasTalentPoints = GetItemCount(talentItemID, false, true) > 0
 
             if hasTalentPoints then
                 AIO.Handle("TalentHunterspell", talentHandler, 1)
                 PlaySoundFile(SPELL_TALENT_WINDOW_SOUND)
-                buttonClicked = true -- Marquer le bouton comme cliqué
-                talentLearned = true -- Marquer le talent comme appris
-                UpdateButtonState() -- Mettre à jour l'état du bouton
+                buttonClicked = true
+                talentLearned = true
+                UpdateButtonState()
             else
                 print("|cff00ffffVous n'avez plus de points de talent !|r")
             end
         end
     end)
 
-    -- Affichage du tooltip
     button:SetScript("OnEnter", function(self)
         GameTooltip:SetOwner(self, "TOPLEFT")
         GameTooltip:ClearLines()
@@ -181,24 +158,17 @@ local function CreateSpellButton(name, texturePath, tooltipText, talentHandler, 
         GameTooltip:Show()
     end)
 
-    -- Cacher le tooltip lorsque la souris quitte le bouton
     button:SetScript("OnLeave", function(self)
         GameTooltip:Hide()
     end)
 
-    -- Appel initial pour définir l'état du bouton au chargement
     UpdateButtonState()
 end
 
--- Utilisation de la fonction générique avec des positions spécifiques
 
--------------------------------------------------------------
 
--------------------------------------------------------------
 
--- Template 1
 
--- Maitrise des Bêtes
 
 CreateSpellButton("buttonSpellImprovedAspectoftheHawk", "Interface/icons/spell_nature_ravenform", "|cffffffffAspect du faucon amélioré|r\n|cffffffffTalent|r |cff0067ceMaitrise des Bêtes|r\n|cffffffffRequiert|r |cffa9d271Chasseur|r\n|cffffd100Pendant qu'Aspect du faucon ou Aspect du faucon-dragon est activé, toutes les attaques à distance normales ont 10% de chances d'augmenter la vitesse d'attaque à distance de 15% pendant 12 secondes.|r", "spellimprovedaspectofthehawk", 100, -80)
 CreateSpellButton("buttonSpellEnduranceTraining", "Interface/icons/spell_nature_reincarnation", "|cffffffffEntraînement à l'Endurance|r\n|cffffffffTalent|r |cff0067ceMaitrise des Bêtes|r\n|cffffffffRequiert|r |cffa9d271Chasseur|r\n|cffffd100Augmente les points de vie de votre familier de 10% et votre total de points de vie de 5%.|r", "spellendurancetraining", 205, -75)
@@ -229,7 +199,6 @@ CreateSpellButton("buttonSpellBeastMastery|r", "Interface/icons/ability_hunter_b
 CreateSpellButton("buttonSpellImprovedConcussiveShot", "Interface/icons/spell_frost_stun", "|cffffffffTrait de choc amélioré|r\n|cffffffffTalent|r |cffff8040Précision|r\n|cffffffffRequiert|r |cffa9d271Chasseur|r\n|cffffd100Augmente la durée de l'effet d'hébétement de votre Trait de choc de 2 sec.|r", "spellimprovedconcussiveshot", 368, -350)
 CreateSpellButton("buttonSpellFocusedAim", "Interface/icons/ability_hunter_focusedaim", "|cffffffffVisée focalisée|r\n|cffffffffTalent|r |cffff8040Précision|r\n|cffffffffRequiert|r |cffa9d271Chasseur|r\n|cffffd100Réduit de 70% l'interruption causée par les attaques infligeant des dégâts pendant que vous lancez Tir assuré et augmente de 3% les chances de toucher.|r", "spellfocusedaim", 478, -350)
 
--- Précision
 
 CreateSpellButton("buttonSpellLethalShots", "Interface/icons/ability_searingarrow", "|cffffffffCoups fatals|r\n|cffffffffTalent|r |cffff8040Précision|r\n|cffffffffRequiert|r |cffa9d271Chasseur|r\n|cffffd100Augmente vos chances d'infliger un coup critique avec vos armes à distance de 5%.|r", "spelllethalshots", 98, -405)
 CreateSpellButton("buttonSpellCarefulAim", "Interface/icons/ability_hunter_zenarchery", "|cffffffffVisée minutieuse|r\n|cffffffffTalent|r |cffff8040Précision|r\n|cffffffffRequiert|r |cffa9d271Chasseur|r\n|cffffd100Augmente votre puissance d'attaque à distance d'un montant égal à 100% de votre total d'Intelligence.|r", "spellcarefulaim", 205, -405)
@@ -245,7 +214,6 @@ CreateSpellButton("buttonSpellConcussiveBarrage", "Interface/icons/spell_arcane_
 CreateSpellButton("buttonSpellReadiness", "Interface/icons/ability_hunter_readiness", "|cffffffffPromptitude|r\n|cffffffffTalent|r |cffff8040Précision|r\n|cffffffffRequiert|r |cffa9d271Chasseur|r\n|cffffd100Quand elle est activée, cette technique met immédiatement fin au temps de recharge de vos autres techniques de chasseur, sauf Courroux bestial.|r", "spellreadiness", 315, -510)
 CreateSpellButton("buttonSpellBarrage", "Interface/icons/ability_upgrademoonglaive", "|cffffffffBarrage|r\n|cffffffffTalent|r |cffff8040Précision|r\n|cffffffffRequiert|r |cffa9d271Chasseur|r\n|cffffd100Augmente les dégâts infligés par vos sorts Flèches multiples, Visée et Salve de 12%.|r", "spellbarrage", 422, -510)
 
--- Template 2
 
 CreateSpellButton("buttonSpellCombatExperience", "Interface/icons/ability_hunter_combatexperience", "|cffffffffExpérience du combat|r\n|cffffffffTalent|r |cffff8040Précision|r\n|cffffffffRequiert|r |cffa9d271Chasseur|r\n|cffffd100Augmente votre total d'Agilité et votre total d'Intelligence de 4%.|r", "spellcombatexperience", 663, -75)
 CreateSpellButton("buttonSpellRangedWeaponSpecialization", "Interface/icons/inv_weapon_rifle_06", "|cffffffffSpécialisation Armes à distance|r\n|cffffffffTalent|r |cffff8040Précision|r\n|cffffffffRequiert|r |cffa9d271Chasseur|r\n|cffffd100Augmente les points de dégâts que vous infligez avec les armes à distance de 5%.|r", "spellrangedweaponspecialization", 770, -75)
@@ -263,7 +231,6 @@ CreateSpellButton("buttonSpellImprovedTracking", "Interface/icons/ability_hunter
 CreateSpellButton("buttonSpellHawkEye", "Interface/icons/ability_townwatch", "|cffffffffOeil de faucon|r\n|cffffffffTalent|r |cff00ea00Survie|r\n|cffffffffRequiert|r |cffa9d271Chasseur|r\n|cffffd100Augmente la portée de vos armes à distance de 6 mètres.|r", "spellhawkeye", 1100, -184)
 
 
--- Survie
 
 CreateSpellButton("buttonSpellSavageStrikes", "Interface/icons/ability_racial_bloodrage", "|cffffffffFrappes sauvages|r\n|cffffffffTalent|r |cff00ea00Survie|r\n|cffffffffRequiert|r |cffa9d271Chasseur|r\n|cffffd100Augmente de 20% les chances d'infliger un coup critique avec Attaque du raptor, Morsure de la mangouste et Contre-attaque.|r", "spellsavagestrikes", 718, -240)
 CreateSpellButton("buttonSpellSurefooted", "Interface/icons/ability_kick", "|cffffffffPied sûr|r\n|cffffffffTalent|r |cff00ea00Survie|r\n|cffffffffRequiert|r |cffa9d271Chasseur|r\n|cffffd100Diminue la durée des effets affectant le mouvement de 30%.|r", "spellsurefooted", 825, -240)
@@ -294,35 +261,28 @@ CreateSpellButton("buttonSpellHuntingParty", "Interface/icons/ability_hunter_hun
 CreateSpellButton("buttonSpellExplosiveShot", "Interface/icons/ability_hunter_explosiveshot", "|cffffffffTir explosif|r\n|cffffffffTalent|r |cff00ea00Survie|r\n|cffffffffRequiert|r |cffa9d271Chasseur|r\n|cffffd100Vous lancez une charge explosive sur la cible, infligeant 216-244 points de dégâts de Feu.\nLa charge explose ensuite sur la cible toutes les secondes pendant 2 secondes.\nsupplémentaires.|r", "spellexplosiveshot", 1100, -510)
 
 
--------------------------------------------------------------
 
--------------------------------------------------------------
 
--- Ajoutez une variable pour suivre l'état du bouton Réinitialiser
 local resetButtonClicked = false
 
--- Créez le bouton Reset à l'intérieur de la fenêtre frameTalentHunter
 local buttonReset = CreateFrame("Button", "buttonReset", frameTalentHunter, "UIPanelButtonTemplate")
 buttonReset:SetSize(85, 25)
-buttonReset:SetPoint("BOTTOMRIGHT", buttonTalentHunterClose, "BOTTOMLEFT", -95, 5) -- Place le bouton Reset à gauche du bouton Reload
+buttonReset:SetPoint("BOTTOMRIGHT", buttonTalentHunterClose, "BOTTOMLEFT", -95, 5)
 buttonReset:SetText("Réinitialiser")
 
 local function ResetTalents()
-    -- Ajoutez ici la logique pour réinitialiser les talents du joueur
     AIO.Handle("TalentHunterspell", "ResetTalents")
-    resetButtonClicked = true -- Marquez le bouton Réinitialiser comme cliqué
+    resetButtonClicked = true
 end
 
 buttonReset:SetScript("OnClick", ResetTalents)
 
--- Créez le bouton Reload à l'intérieur de la fenêtre frameTalentHunter
 local buttonReload = CreateFrame("Button", "buttonReload", frameTalentHunter, "UIPanelButtonTemplate")
 buttonReload:SetSize(85, 25)
-buttonReload:SetPoint("BOTTOMRIGHT", buttonTalentHunterClose, "BOTTOMLEFT", -5, 5) -- Place le bouton Reload à gauche du bouton Close
+buttonReload:SetPoint("BOTTOMRIGHT", buttonTalentHunterClose, "BOTTOMLEFT", -5, 5)
 buttonReload:SetText("Actualiser")
 
 local function ReloadClient()
-    -- Ajoutez une vérification pour s'assurer que le bouton Réinitialiser a été cliqué
     if resetButtonClicked then
         ReloadUI()
     else
@@ -332,7 +292,6 @@ end
 
 buttonReload:SetScript("OnClick", ReloadClient)
 
--- Ajoutez une variable globale pour suivre l'état de la fenêtre des talents
 local talentsWindowOpen = false
 
 local function OuvrirFermerInterfaceTalents()
@@ -346,37 +305,30 @@ local function OuvrirFermerInterfaceTalents()
         PlaySoundFile(OPEN_TALENT_WINDOW_SOUND)
     end
 
-    -- Inversez l'état de la fenêtre des talents
     talentsWindowOpen = not talentsWindowOpen
 end
 
--- Vérifier si le joueur est un Hunter avant de créer le bouton
-local playerClass = select(2, UnitClass("player")) -- Obtenir la classe du joueur
+local playerClass = select(2, UnitClass("player"))
 if playerClass == "HUNTER" then
     local buttonOuvrirTalents = CreateFrame("Button", "buttonOuvrirTalents", UIParent)
     buttonOuvrirTalents:SetSize(32, 33)
-    buttonOuvrirTalents:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -171, 8) -- Placer en bas à droite avec un décalage de 10 pixels
+    buttonOuvrirTalents:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -171, 8)
 
-    -- Ajouter une texture BLP au bouton
     buttonOuvrirTalents:SetNormalTexture("Interface\\TalentFrame\\Template\\MicroButton\\ButtonSystemTalent.blp")
 
-    -- Ajouter une texture de surbrillance
     local highlightTexture = buttonOuvrirTalents:CreateTexture(nil, "HIGHLIGHT")
     highlightTexture:SetAllPoints(buttonOuvrirTalents)
     highlightTexture:SetTexture("Interface\\TalentFrame\\Template\\MicroButton\\ButtonSystemTalentLight.blp")
     buttonOuvrirTalents:SetHighlightTexture(highlightTexture)
 
-    -- Supprimer le texte du bouton
     buttonOuvrirTalents:SetText("")
 
-    -- Ajouter une info-bulle
     buttonOuvrirTalents:SetScript("OnEnter", function(self)
-        GameTooltip:SetOwner(self, "ANCHOR_RIGHT") -- Définir l'ancre de l'info-bulle
-        GameTooltip:SetText("|cffffffffTalents|r |cffa9d271(Chasseur)|r\n\nL'éventail des talents disponibles\npour améliorer et spécialiser\nvotre personnage.") -- Texte de l'info-bulle
+        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+        GameTooltip:SetText("|cffffffffTalents|r |cffa9d271(Chasseur)|r\n\nL'éventail des talents disponibles\npour améliorer et spécialiser\nvotre personnage.")
         GameTooltip:Show()
     end)
 
-    -- Masquer l'info-bulle lorsque la souris quitte le bouton
     buttonOuvrirTalents:SetScript("OnLeave", function(self)
         GameTooltip:Hide()
     end)

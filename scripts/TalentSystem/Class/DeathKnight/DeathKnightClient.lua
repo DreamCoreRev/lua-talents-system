@@ -9,64 +9,53 @@ function DeathknightHandlers.ShowTalentDeathknight(player)
     frameTalentDeathknight:Show()
 end
 
-local MAX_TALENTS = 44 -- Définition du nombre maximal de talents que le joueur peut apprendre
+local MAX_TALENTS = 44
 
 local OPEN_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_72_artifact_forge_final_trait_unlocked.ogg"
 local CLOSE_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_72_artifact_forge_trait_refund_end.ogg"
 local SPELL_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_80_azeritearmor_rotationends_02.ogg"
 
--- Attribute window
 local frameTalentDeathknight = CreateFrame("Frame", "frameTalentDeathknight", UIParent)
 frameTalentDeathknight:SetSize(1200, 650)
 frameTalentDeathknight:SetMovable(true)
 frameTalentDeathknight:EnableMouse(true)
 frameTalentDeathknight:RegisterForDrag("LeftButton")
-frameTalentDeathknight:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 50, -50) -- Adjust the X and Y coordinates
+frameTalentDeathknight:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 50, -50)
 frameTalentDeathknight:SetBackdrop(
 {
-    -- bgFile = "interface/TalentFrame/talentsclassbackgroundDeathknight", --Interface/AchievementFrame/UI-Achievement-Parchment-Horizontal
-    bgFile = "interface/TalentFrame/Template/Class/Deathknight/talentsclassbackgrounddeathknight2", --Interface/AchievementFrame/UI-Achievement-Parchment-Horizontal
-    edgeFile = "interface/tooltips/ui-tooltip-border-corrupteddeathknight", --Interface/DialogFrame/UI-DialogBox-Border
+    bgFile = "interface/TalentFrame/Template/Class/Deathknight/talentsclassbackgrounddeathknight2",
+    edgeFile = "interface/tooltips/ui-tooltip-border-corrupteddeathknight",
     edgeSize = 20,
     insets = { left = 5, right = 5, top = 5, bottom = 5 }
 })
 
--- Ajoutez la texture de l'icône du Chevalier de la mort
 local deathknightIcon = frameTalentDeathknight:CreateTexture("DeathknightIcon", "OVERLAY")
 deathknightIcon:SetTexture("Interface\\TalentFrame\\Template\\Class\\Deathknight\\IconeDeathknight.blp")
 deathknightIcon:SetSize(60, 60)
 deathknightIcon:SetPoint("TOPLEFT", frameTalentDeathknight, "TOPLEFT", -10, 10)
 
--- Template Talent Frame
 
--- Ajoute une textureone pour l'image BLP
-local textureone = frameTalentDeathknight:CreateTexture("TemplateTalentFrame", "OVERLAY") -- Utilisez "OVERLAY" pour être au-dessus des autres éléments
+local textureone = frameTalentDeathknight:CreateTexture("TemplateTalentFrame", "OVERLAY")
 textureone:SetTexture("Interface\\TalentFrame\\Template\\Class\\Deathknight\\TalentFrameTemplate.blp")
-textureone:SetSize(928, 928) -- Remplacez width et height par les dimensions souhaitées
-textureone:SetPoint("TOPLEFT", frameTalentDeathknight, "TOPLEFT", -170, 140) -- Adjust the X and Y coordinates
+textureone:SetSize(928, 928)
+textureone:SetPoint("TOPLEFT", frameTalentDeathknight, "TOPLEFT", -170, 140)
 
--- Ajuste l'ordre des calques pour être devant les autres éléments
-frameTalentDeathknight:SetFrameLevel(100) -- Utilisez une valeur supérieure à celle des autres éléments
+frameTalentDeathknight:SetFrameLevel(100)
 
--- Ajoute une texturetwo pour l'image BLP
-local texturetwo = frameTalentDeathknight:CreateTexture("TemplateTalentFrame", "OVERLAY") -- Utilisez "OVERLAY" pour être au-dessus des autres éléments
+local texturetwo = frameTalentDeathknight:CreateTexture("TemplateTalentFrame", "OVERLAY")
 texturetwo:SetTexture("Interface\\TalentFrame\\Template\\Class\\Deathknight\\TalentFrameTemplateOriginal.blp")
-texturetwo:SetSize(928, 928) -- Remplacez width et height par les dimensions souhaitées
-texturetwo:SetPoint("TOPRIGHT", frameTalentDeathknight, "TOPRIGHT", 170, 140) -- Adjust the X and Y coordinates
+texturetwo:SetSize(928, 928)
+texturetwo:SetPoint("TOPRIGHT", frameTalentDeathknight, "TOPRIGHT", 170, 140)
 
--- Ajuste l'ordre des calques pour être devant les autres éléments
-frameTalentDeathknight:SetFrameLevel(100) -- Utilisez une valeur supérieure à celle des autres éléments
+frameTalentDeathknight:SetFrameLevel(100)
 
--- Drag & Drop
 frameTalentDeathknight:SetScript("OnDragStart", frameTalentDeathknight.StartMoving)
 frameTalentDeathknight:SetScript("OnHide", frameTalentDeathknight.StopMovingOrSizing)
 frameTalentDeathknight:SetScript("OnDragStop", frameTalentDeathknight.StopMovingOrSizing)
 frameTalentDeathknight:Hide()
 
--- Nouveau template d'arête
-frameTalentDeathknight:SetBackdropBorderColor(197, 31, 35) -- Couleur rouge
+frameTalentDeathknight:SetBackdropBorderColor(197, 31, 35)
 
--- Close button
 local buttonTalentDeathknightClose = CreateFrame("Button", "buttonTalentDeathknightClose", frameTalentDeathknight, "UIPanelCloseButton")
 buttonTalentDeathknightClose:SetPoint("TOPRIGHT", -12, -12)
 buttonTalentDeathknightClose:EnableMouse(true)
@@ -77,10 +66,8 @@ local function CloseTalentWindow()
     PlaySoundFile(CLOSE_TALENT_WINDOW_SOUND)
 end
 
--- Associez la fonction de fermeture au bouton de fermeture
 buttonTalentDeathknightClose:SetScript("OnClick", CloseTalentWindow)
 
--- Title bar
 local frameTalentDeathknightTitleBar = CreateFrame("Frame", "frameTalentDeathknightTitleBar", frameTalentDeathknight, nil)
 frameTalentDeathknightTitleBar:SetSize(135, 25)
 frameTalentDeathknightTitleBar:SetBackdrop(
@@ -103,21 +90,17 @@ fontTalentDeathknightTitleText:SetText("|cffFFC125Talents|r")
 local fontTalentDeathknightFrameText = frameTalentDeathknightTitleBar:CreateFontString("fontTalentDeathknightFrameText")
 fontTalentDeathknightFrameText:SetFont("Fonts\\FRIZQT__.TTF", 18)
 fontTalentDeathknightFrameText:SetSize(200, 5)
-fontTalentDeathknightFrameText:SetPoint("TOPLEFT", frameTalentDeathknightTitleBar, "BOTTOMLEFT", -30, -35) -- Adjust the Y offset as needed
+fontTalentDeathknightFrameText:SetPoint("TOPLEFT", frameTalentDeathknightTitleBar, "BOTTOMLEFT", -30, -35)
 fontTalentDeathknightFrameText:SetText("|cffFFC125Chevalier de la mort|r")
 
--- Remplacez votre ligne existante pour la création du texte par celle-ci
 local fontTalentDeathknightFrameText = frameTalentDeathknightTitleBar:CreateFontString("fontTalentDeathknightFrameText")
 fontTalentDeathknightFrameText:SetFont("Fonts\\FRIZQT__.TTF", 18)
 fontTalentDeathknightFrameText:SetSize(200, 5)
-fontTalentDeathknightFrameText:SetPoint("TOPLEFT", frameTalentDeathknightTitleBar, "BOTTOMLEFT", -30, -60) -- Adjust the Y offset as needed
-fontTalentDeathknightFrameText:SetText("0 / " .. MAX_TALENTS) -- Initialisez le texte avec 0 talents appris
+fontTalentDeathknightFrameText:SetPoint("TOPLEFT", frameTalentDeathknightTitleBar, "BOTTOMLEFT", -30, -60)
+fontTalentDeathknightFrameText:SetText("0 / " .. MAX_TALENTS)
 
--------------------------------------------------------------
 
--------------------------------------------------------------
 
--- Fonction générique pour créer un bouton de sort
 local function CreateSpellButton(name, texturePath, tooltipText, talentHandler, positionX, positionY)
     local buttonClicked = false
     local talentLearned = false
@@ -130,50 +113,44 @@ local function CreateSpellButton(name, texturePath, tooltipText, talentHandler, 
     button:SetHighlightTexture("Interface/Buttons/checkbuttonhilight")
     button:SetPoint("TOPLEFT", positionX, positionY)
 
-    -- Texture pour l'indicateur d'apprentissage
     local learnIndicator = button:CreateTexture(nil, "OVERLAY")
     learnIndicator:SetTexture("Interface/Buttons/UI-CheckBox-Check")
     learnIndicator:SetSize(30, 30)
     learnIndicator:SetPoint("BOTTOMRIGHT", -2, 2)
     learnIndicator:Hide()
 
-    -- Texte pour afficher l'état du bouton (0 ou 1)
     local buttonText = button:CreateFontString("buttonText", "OVERLAY", "GameFontHighlight")
     buttonText:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -2, 2)
 
-    -- Fonction pour mettre à jour l'état du bouton et de l'indicateur d'apprentissage
     local function UpdateButtonState()
         if talentLearned then
-            button:SetAlpha(1) -- Réduire l'opacité pour indiquer que le bouton est désactivé
-            learnIndicator:Show() -- Afficher l'indicateur d'apprentissage
-            buttonText:SetText("|cffffda2b1|r") -- Mettre à jour le texte pour afficher "1"
+            button:SetAlpha(1)
+            learnIndicator:Show()
+            buttonText:SetText("|cffffda2b1|r")
         else
-            button:SetAlpha(1) -- Rétablir l'opacité pour indiquer que le bouton est activé
-            learnIndicator:Hide() -- Cacher l'indicateur d'apprentissage
-            buttonText:SetText("|cff1aff1a0|r") -- Mettre à jour le texte pour afficher "0"
+            button:SetAlpha(1)
+            learnIndicator:Hide()
+            buttonText:SetText("|cff1aff1a0|r")
         end
     end
 
-    -- Fonction à exécuter lorsque le bouton est cliqué
     button:SetScript("OnMouseUp", function()
         if not buttonClicked and not talentLearned then
-            -- Ajouter une vérification pour s'assurer que le joueur a des points de talent
             local talentItemID = 338404
             local hasTalentPoints = GetItemCount(talentItemID, false, true) > 0
 
             if hasTalentPoints then
                 AIO.Handle("TalentDeathknightspell", talentHandler, 1)
                 PlaySoundFile(SPELL_TALENT_WINDOW_SOUND)
-                buttonClicked = true -- Marquer le bouton comme cliqué
-                talentLearned = true -- Marquer le talent comme appris
-                UpdateButtonState() -- Mettre à jour l'état du bouton
+                buttonClicked = true
+                talentLearned = true
+                UpdateButtonState()
             else
                 print("|cff00ffffVous n'avez plus de points de talent !|r")
             end
         end
     end)
 
-    -- Affichage du tooltip
     button:SetScript("OnEnter", function(self)
         GameTooltip:SetOwner(self, "TOPLEFT")
         GameTooltip:ClearLines()
@@ -181,24 +158,17 @@ local function CreateSpellButton(name, texturePath, tooltipText, talentHandler, 
         GameTooltip:Show()
     end)
 
-    -- Cacher le tooltip lorsque la souris quitte le bouton
     button:SetScript("OnLeave", function(self)
         GameTooltip:Hide()
     end)
 
-    -- Appel initial pour définir l'état du bouton au chargement
     UpdateButtonState()
 end
 
--- Utilisation de la fonction générique avec des positions spécifiques
 
--------------------------------------------------------------
 
--------------------------------------------------------------
 
--- Template 1
 
--- Sang
 
 CreateSpellButton("buttonSpellButchery", "Interface/icons/inv_axe_68", "|cffffffffBoucherie|r\n|cffffffffTalent|r |cffd20000Sang|r\n|cffffffffRequiert|r |cffc51f23Chevalier de la mort|r\n|cffffd100Chaque fois que vous tuez un ennemi qui rapporte de l'expérience ou de l'honneur,\nvous générez jusqu'à 20 points de puissance runique.\nDe plus, vous générez 2 points de puissance runique toutes les 5 sec.\npendant que vous êtes en combat.|r", "spellbutchery", 100, -80)
 CreateSpellButton("buttonSpellSubversion", "Interface/icons/spell_deathknight_subversion", "|cffffffffSubversion|r\n|cffffffffTalent|r |cffd20000Sang|r\n|cffffffffRequiert|r |cffc51f23Chevalier de la mort|r\n|cffffd100Augmente les chances de coup critique de Frappe de sang, Frappe du Fléau, Frappe au coeur et Anéantissement de 9%, et réduit la menace générée lorsque vous êtes en Présence de sang ou impie de 25%.|r", "spellbubversion", 205, -75)
@@ -229,7 +199,6 @@ CreateSpellButton("buttonSpellMightofMograine", "Interface/icons/spell_deathknig
 CreateSpellButton("buttonSpellBloodGorged", "Interface/icons/spell_nature_reincarnation", "|cffffffffGorgé de sang|r\n|cffffffffTalent|r |cffd20000Sang|r\n|cffffffffRequiert|r |cffc51f23Chevalier de la mort|r\n|cffffd100Quand vous disposez de plus de 75% de vos points de vie, vous infligez 10% de dégâts supplémentaires.\nDe plus, vos attaques ignorent jusqu'à 10% de l'armure de votre adversaire à tout moment.|r", "spellbloodgorged", 150, -350)
 CreateSpellButton("buttonSpellDancingRuneWeapon", "Interface/icons/inv_sword_07", "|cffffffffArme runique dansante|r\n|cffffffffTalent|r |cffd20000Sang|r\n|cffffffffRequiert|r |cffc51f23Chevalier de la mort|r\n|cffffd100Invoque une seconde arme runique qui combat toute seule pendant 12 seconds., en effectuant les mêmes attaques que le chevalier de la mort mais en infligeant 50% de dégâts de moins que lui.|r", "spelldancingruneweapon", 368, -350)
 
--- Givre
 
 CreateSpellButton("buttonSpellImprovedIcyTouch", "Interface/icons/spell_deathknight_icetouch", "|cffffffffToucher de glace amélioré|r\n|cffffffffTalent|r |cff00acffGivre|r\n|cffffffffRequiert|r |cffc51f23Chevalier de la mort|r\n|cffffd100Votre Toucher de glace inflige 15% de dégâts supplémentaires, et votre Fièvre de givre réduit les vitesses d'attaque en mêlée et à distance de 6% supplémentaires.|r", "spellimprovedicytouch", 527, -402)
 CreateSpellButton("buttonSpellRunicPowerMastery", "Interface/icons/spell_arcane_arcane01", "|cffffffffMaîtrise de la puissance runique|r\n|cffffffffTalent|r |cff00acffGivre|r\n|cffffffffRequiert|r |cffc51f23Chevalier de la mort|r\n|cffffd100Augmente votre puissance runique maximale de 30.|r", "spellrunicpowermastery", 478, -350)
@@ -247,7 +216,6 @@ CreateSpellButton("buttonSpellFrigid Dreadplate", "Interface/icons/inv_chest_mai
 CreateSpellButton("buttonSpellGlacierRot", "Interface/icons/spell_nature_removedisease", "|cffffffffPourriture des glaciers|r\n|cffffffffTalent|r |cff00acffGivre|r\n|cffffffffRequiert|r |cffc51f23Chevalier de la mort|r\n|cffffd100Vos sorts Toucher de glace, Rafale hurlante et Frappe de givre infligent 20% de dégâts supplémentaires aux cibles malades.\nDure 15 seconds.|r", "spellglacierrot", 315, -510)
 CreateSpellButton("buttonSpellDeathchill", "Interface/icons/spell_shadow_soulleech_2", "|cffffffffFroid de la mort|r\n|cffffffffTalent|r |cff00acffGivre|r\n|cffffffffRequiert|r |cffc51f23Chevalier de la mort|r\n|cffffd100Quand il est activé, il fait de votre prochain sort Toucher de glace, Rafale hurlante, Frappe de givre ou Anéantissement un coup critique si utilisé en 30 seconds maximum.|r", "spelldeathchill", 422, -510)
 
--- Template 2
 
 CreateSpellButton("buttonSpellImprovedIcyTalons", "Interface/icons/spell_deathknight_icytalons", "|cffffffffSerres de glace améliorées|r\n|cffffffffTalent|r |cff00acffGivre|r\n|cffffffffRequiert|r |cffc51f23Chevalier de la mort|r\n|cffffd100Augmente la hâte en mêlée de tous les membres de votre groupe ou raid à moins de 100 mètres de 20% et votre hâte de 5% supplémentaires.|r", "spellimprovedicytalons", 663, -75)
 CreateSpellButton("buttonSpellMercilessCombat", "Interface/icons/inv_sword_112", "|cffffffffCombat impitoyable|r\n|cffffffffTalent|r |cff00acffGivre|r\n|cffffffffRequiert|r |cffc51f23Chevalier de la mort|r\n|cffffd100Toucher de glace, Rafale hurlante, Anéantissement et Frappe de givre infligent 12% de dégâts supplémentaires aux cibles qui disposent de moins de 35% de leurs points de vie.|r", "spellmercilesscombat", 770, -75)
@@ -265,7 +233,6 @@ CreateSpellButton("buttonSpellTundraStalker", "Interface/icons/spell_nature_tran
 CreateSpellButton("buttonSpellHowlingBlast", "Interface/icons/spell_frost_arcticwinds", "|cffffffffRafale hurlante|r\n|cffffffffTalent|r |cff00acffGivre|r\n|cffffffffRequiert|r |cffc51f23Chevalier de la mort|r\n|cffffd100Un vent glacial frappe la cible et inflige 198 à 214 points de dégâts de Givre à tous les ennemis se trouvant à moins de 10 mètres.|r", "spellhowlingblast", 1100, -184)
 
 
--- Impie
 
 CreateSpellButton("buttonSpellViciousStrikes", "Interface/icons/spell_deathknight_plaguestrike", "|cffffffffAttaques vicieuses|r\n|cffffffffTalent|r |cff00b700Impie|r\n|cffffffffRequiert|r |cffc51f23Chevalier de la mort|r\n|cffffd100Augmente de 6% les chances de coup critique et de 30% le bonus de dégâts des coups critiques de vos sorts Frappe de peste et Frappe du Fléau.|r", "spellviciousstrikes", 718, -240)
 CreateSpellButton("buttonSpellVirulence", "Interface/icons/spell_shadow_burningspirit", "|cffffffffVirulence|r\n|cffffffffTalent|r |cff00b700Impie|r\n|cffffffffRequiert|r |cffc51f23Chevalier de la mort|r\n|cffffd100Augmente vos chances de toucher avec vos sorts de 3% et réduit de 30% la probabilité que vos maladies de dégâts sur la durée puissent être soignées.|r", "spellvirulence", 825, -240)
@@ -300,35 +267,28 @@ CreateSpellButton("buttonSpellRageofRivendare", "Interface/icons/inv_weapon_halb
 CreateSpellButton("buttonSpellSummonGargoyle", "Interface/icons/ability_hunter_pet_bat", "|cffffffffInvocation d'une gargouille|r\n|cffffffffTalent|r |cff00b700Impie|r\n|cffffffffRequiert|r |cffc51f23Chevalier de la mort|r\n|cffffd100Une gargouille bombarde la cible et lui inflige des dégâts de Nature modifiés par la puissance d'attaque du chevalier de la mort.\nPersiste pendant 30 seconds.|r", "spellsummongargoyle", 1045, -564)
 
 
--------------------------------------------------------------
 
--------------------------------------------------------------
 
--- Ajoutez une variable pour suivre l'état du bouton Réinitialiser
 local resetButtonClicked = false
 
--- Créez le bouton Reset à l'intérieur de la fenêtre frameTalentDeathknight
 local buttonReset = CreateFrame("Button", "buttonReset", frameTalentDeathknight, "UIPanelButtonTemplate")
 buttonReset:SetSize(85, 25)
-buttonReset:SetPoint("BOTTOMRIGHT", buttonTalentDeathknightClose, "BOTTOMLEFT", -95, 5) -- Place le bouton Reset à gauche du bouton Reload
+buttonReset:SetPoint("BOTTOMRIGHT", buttonTalentDeathknightClose, "BOTTOMLEFT", -95, 5)
 buttonReset:SetText("Réinitialiser")
 
 local function ResetTalents()
-    -- Ajoutez ici la logique pour réinitialiser les talents du joueur
     AIO.Handle("TalentDeathknightspell", "ResetTalents")
-    resetButtonClicked = true -- Marquez le bouton Réinitialiser comme cliqué
+    resetButtonClicked = true
 end
 
 buttonReset:SetScript("OnClick", ResetTalents)
 
--- Créez le bouton Reload à l'intérieur de la fenêtre frameTalentDeathknight
 local buttonReload = CreateFrame("Button", "buttonReload", frameTalentDeathknight, "UIPanelButtonTemplate")
 buttonReload:SetSize(85, 25)
-buttonReload:SetPoint("BOTTOMRIGHT", buttonTalentDeathknightClose, "BOTTOMLEFT", -5, 5) -- Place le bouton Reload à gauche du bouton Close
+buttonReload:SetPoint("BOTTOMRIGHT", buttonTalentDeathknightClose, "BOTTOMLEFT", -5, 5)
 buttonReload:SetText("Actualiser")
 
 local function ReloadClient()
-    -- Ajoutez une vérification pour s'assurer que le bouton Réinitialiser a été cliqué
     if resetButtonClicked then
         ReloadUI()
     else
@@ -340,37 +300,31 @@ buttonReload:SetScript("OnClick", ReloadClient)
 
 local function OuvrirInterfaceTalents()
     frameTalentDeathknight:Show()
-    buttonReload:Show() -- Affiche le bouton Reload lorsque la fenêtre des talents est ouverte
+    buttonReload:Show()
     PlaySoundFile(OPEN_TALENT_WINDOW_SOUND)
 end
 
--- Vérifier si le joueur est un Deathknight avant de créer le bouton
-local playerClass = select(2, UnitClass("player")) -- Obtenir la classe du joueur
+local playerClass = select(2, UnitClass("player"))
 if playerClass == "DEATHKNIGHT" then
     local buttonOuvrirTalents = CreateFrame("Button", "buttonOuvrirTalents", UIParent)
     buttonOuvrirTalents:SetSize(32, 33)
-    buttonOuvrirTalents:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -171, 8) -- Placer en bas à droite avec un décalage de 10 pixels
+    buttonOuvrirTalents:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -171, 8)
 
-    -- Ajouter une texture BLP au bouton
     buttonOuvrirTalents:SetNormalTexture("Interface\\TalentFrame\\Template\\MicroButton\\ButtonSystemTalent.blp")
 
-    -- Ajouter une texture de surbrillance
     local highlightTexture = buttonOuvrirTalents:CreateTexture(nil, "HIGHLIGHT")
     highlightTexture:SetAllPoints(buttonOuvrirTalents)
     highlightTexture:SetTexture("Interface\\TalentFrame\\Template\\MicroButton\\ButtonSystemTalentLight.blp")
     buttonOuvrirTalents:SetHighlightTexture(highlightTexture)
 
-    -- Supprimer le texte du bouton
     buttonOuvrirTalents:SetText("")
 
-    -- Ajouter une info-bulle
     buttonOuvrirTalents:SetScript("OnEnter", function(self)
-        GameTooltip:SetOwner(self, "ANCHOR_RIGHT") -- Définir l'ancre de l'info-bulle
-        GameTooltip:SetText("|cffffffffTalents|r |cffc51f23(Chevalier de la mort)|r\n\nL'éventail des talents disponibles\npour améliorer et spécialiser\nvotre personnage.") -- Texte de l'info-bulle
+        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+        GameTooltip:SetText("|cffffffffTalents|r |cffc51f23(Chevalier de la mort)|r\n\nL'éventail des talents disponibles\npour améliorer et spécialiser\nvotre personnage.")
         GameTooltip:Show()
     end)
 
-    -- Masquer l'info-bulle lorsque la souris quitte le bouton
     buttonOuvrirTalents:SetScript("OnLeave", function(self)
         GameTooltip:Hide()
     end)

@@ -9,64 +9,53 @@ function PaladinHandlers.ShowTalentPaladin(player)
     frameTalentPaladin:Show()
 end
 
-local MAX_TALENTS = 41 -- Définition du nombre maximal de talents que le joueur peut apprendre
+local MAX_TALENTS = 41
 
 local OPEN_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_72_artifact_forge_final_trait_unlocked.ogg"
 local CLOSE_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_72_artifact_forge_trait_refund_end.ogg"
 local SPELL_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_80_azeritearmor_rotationends_02.ogg"
 
--- Attribute window
 local frameTalentPaladin = CreateFrame("Frame", "frameTalentPaladin", UIParent)
 frameTalentPaladin:SetSize(1200, 650)
 frameTalentPaladin:SetMovable(true)
 frameTalentPaladin:EnableMouse(true)
 frameTalentPaladin:RegisterForDrag("LeftButton")
-frameTalentPaladin:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 50, -50) -- Adjust the X and Y coordinates
+frameTalentPaladin:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 50, -50)
 frameTalentPaladin:SetBackdrop(
 {
-    -- bgFile = "interface/TalentFrame/talentsclassbackgroundPaladin", --Interface/AchievementFrame/UI-Achievement-Parchment-Horizontal
-    bgFile = "interface/TalentFrame/Template/Class/Paladin/talentsclassbackgroundpaladin3", --Interface/AchievementFrame/UI-Achievement-Parchment-Horizontal
-    edgeFile = "interface/tooltips/ui-tooltip-border-corruptedpaladin", --Interface/DialogFrame/UI-DialogBox-Border
+    bgFile = "interface/TalentFrame/Template/Class/Paladin/talentsclassbackgroundpaladin3",
+    edgeFile = "interface/tooltips/ui-tooltip-border-corruptedpaladin",
     edgeSize = 20,
     insets = { left = 5, right = 5, top = 5, bottom = 5 }
 })
 
--- Ajoutez la texture de l'icône du Paladin
 local paladinIcon = frameTalentPaladin:CreateTexture("PaladinIcon", "OVERLAY")
 paladinIcon:SetTexture("Interface\\TalentFrame\\Template\\Class\\Paladin\\IconePaladin.blp")
 paladinIcon:SetSize(60, 60)
 paladinIcon:SetPoint("TOPLEFT", frameTalentPaladin, "TOPLEFT", -10, 10)
 
--- Template Talent Frame
 
--- Ajoute une textureone pour l'image BLP
-local textureone = frameTalentPaladin:CreateTexture("TemplateTalentFrame", "OVERLAY") -- Utilisez "OVERLAY" pour être au-dessus des autres éléments
+local textureone = frameTalentPaladin:CreateTexture("TemplateTalentFrame", "OVERLAY")
 textureone:SetTexture("Interface\\TalentFrame\\Template\\Class\\Paladin\\TalentFrameTemplate.blp")
-textureone:SetSize(928, 928) -- Remplacez width et height par les dimensions souhaitées
-textureone:SetPoint("TOPLEFT", frameTalentPaladin, "TOPLEFT", -170, 140) -- Adjust the X and Y coordinates
+textureone:SetSize(928, 928)
+textureone:SetPoint("TOPLEFT", frameTalentPaladin, "TOPLEFT", -170, 140)
 
--- Ajuste l'ordre des calques pour être devant les autres éléments
-frameTalentPaladin:SetFrameLevel(100) -- Utilisez une valeur supérieure à celle des autres éléments
+frameTalentPaladin:SetFrameLevel(100)
 
--- Ajoute une texturetwo pour l'image BLP
-local texturetwo = frameTalentPaladin:CreateTexture("TemplateTalentFrame", "OVERLAY") -- Utilisez "OVERLAY" pour être au-dessus des autres éléments
+local texturetwo = frameTalentPaladin:CreateTexture("TemplateTalentFrame", "OVERLAY")
 texturetwo:SetTexture("Interface\\TalentFrame\\Template\\Class\\Paladin\\TalentFrameTemplateOriginal.blp")
-texturetwo:SetSize(928, 928) -- Remplacez width et height par les dimensions souhaitées
-texturetwo:SetPoint("TOPRIGHT", frameTalentPaladin, "TOPRIGHT", 170, 140) -- Adjust the X and Y coordinates
+texturetwo:SetSize(928, 928)
+texturetwo:SetPoint("TOPRIGHT", frameTalentPaladin, "TOPRIGHT", 170, 140)
 
--- Ajuste l'ordre des calques pour être devant les autres éléments
-frameTalentPaladin:SetFrameLevel(100) -- Utilisez une valeur supérieure à celle des autres éléments
+frameTalentPaladin:SetFrameLevel(100)
 
--- Drag & Drop
 frameTalentPaladin:SetScript("OnDragStart", frameTalentPaladin.StartMoving)
 frameTalentPaladin:SetScript("OnHide", frameTalentPaladin.StopMovingOrSizing)
 frameTalentPaladin:SetScript("OnDragStop", frameTalentPaladin.StopMovingOrSizing)
 frameTalentPaladin:Hide()
 
--- Nouveau template d'arête
-frameTalentPaladin:SetBackdropBorderColor(135, 135, 237) -- Couleur pourpre
+frameTalentPaladin:SetBackdropBorderColor(135, 135, 237)
 
--- Close button
 local buttonTalentPaladinClose = CreateFrame("Button", "buttonTalentPaladinClose", frameTalentPaladin, "UIPanelCloseButton")
 buttonTalentPaladinClose:SetPoint("TOPRIGHT", -12, -12)
 buttonTalentPaladinClose:EnableMouse(true)
@@ -77,10 +66,8 @@ local function CloseTalentWindow()
     PlaySoundFile(CLOSE_TALENT_WINDOW_SOUND)
 end
 
--- Associez la fonction de fermeture au bouton de fermeture
 buttonTalentPaladinClose:SetScript("OnClick", CloseTalentWindow)
 
--- Title bar
 local frameTalentPaladinTitleBar = CreateFrame("Frame", "frameTalentPaladinTitleBar", frameTalentPaladin, nil)
 frameTalentPaladinTitleBar:SetSize(135, 25)
 frameTalentPaladinTitleBar:SetBackdrop(
@@ -103,21 +90,17 @@ fontTalentPaladinTitleText:SetText("|cffFFC125Talents|r")
 local fontTalentPaladinFrameText = frameTalentPaladinTitleBar:CreateFontString("fontTalentPaladinFrameText")
 fontTalentPaladinFrameText:SetFont("Fonts\\FRIZQT__.TTF", 18)
 fontTalentPaladinFrameText:SetSize(200, 5)
-fontTalentPaladinFrameText:SetPoint("TOPLEFT", frameTalentPaladinTitleBar, "BOTTOMLEFT", -30, -35) -- Adjust the Y offset as needed
+fontTalentPaladinFrameText:SetPoint("TOPLEFT", frameTalentPaladinTitleBar, "BOTTOMLEFT", -30, -35)
 fontTalentPaladinFrameText:SetText("|cffFFC125Paladin|r")
 
--- Remplacez votre ligne existante pour la création du texte par celle-ci
 local fontTalentPaladinFrameText = frameTalentPaladinTitleBar:CreateFontString("fontTalentPaladinFrameText")
 fontTalentPaladinFrameText:SetFont("Fonts\\FRIZQT__.TTF", 18)
 fontTalentPaladinFrameText:SetSize(200, 5)
-fontTalentPaladinFrameText:SetPoint("TOPLEFT", frameTalentPaladinTitleBar, "BOTTOMLEFT", -30, -60) -- Adjust the Y offset as needed
-fontTalentPaladinFrameText:SetText("0 / " .. MAX_TALENTS) -- Initialisez le texte avec 0 talents appris
+fontTalentPaladinFrameText:SetPoint("TOPLEFT", frameTalentPaladinTitleBar, "BOTTOMLEFT", -30, -60)
+fontTalentPaladinFrameText:SetText("0 / " .. MAX_TALENTS)
 
--------------------------------------------------------------
 
--------------------------------------------------------------
 
--- Fonction générique pour créer un bouton de sort
 local function CreateSpellButton(name, texturePath, tooltipText, talentHandler, positionX, positionY)
     local buttonClicked = false
     local talentLearned = false
@@ -130,50 +113,44 @@ local function CreateSpellButton(name, texturePath, tooltipText, talentHandler, 
     button:SetHighlightTexture("Interface/Buttons/checkbuttonhilight")
     button:SetPoint("TOPLEFT", positionX, positionY)
 
-    -- Texture pour l'indicateur d'apprentissage
     local learnIndicator = button:CreateTexture(nil, "OVERLAY")
     learnIndicator:SetTexture("Interface/Buttons/UI-CheckBox-Check")
     learnIndicator:SetSize(30, 30)
     learnIndicator:SetPoint("BOTTOMRIGHT", -2, 2)
     learnIndicator:Hide()
 
-    -- Texte pour afficher l'état du bouton (0 ou 1)
     local buttonText = button:CreateFontString("buttonText", "OVERLAY", "GameFontHighlight")
     buttonText:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -2, 2)
 
-    -- Fonction pour mettre à jour l'état du bouton et de l'indicateur d'apprentissage
     local function UpdateButtonState()
         if talentLearned then
-            button:SetAlpha(1) -- Réduire l'opacité pour indiquer que le bouton est désactivé
-            learnIndicator:Show() -- Afficher l'indicateur d'apprentissage
-            buttonText:SetText("|cffffda2b1|r") -- Mettre à jour le texte pour afficher "1"
+            button:SetAlpha(1)
+            learnIndicator:Show()
+            buttonText:SetText("|cffffda2b1|r")
         else
-            button:SetAlpha(1) -- Rétablir l'opacité pour indiquer que le bouton est activé
-            learnIndicator:Hide() -- Cacher l'indicateur d'apprentissage
-            buttonText:SetText("|cff1aff1a0|r") -- Mettre à jour le texte pour afficher "0"
+            button:SetAlpha(1)
+            learnIndicator:Hide()
+            buttonText:SetText("|cff1aff1a0|r")
         end
     end
 
-    -- Fonction à exécuter lorsque le bouton est cliqué
     button:SetScript("OnMouseUp", function()
         if not buttonClicked and not talentLearned then
-            -- Ajouter une vérification pour s'assurer que le joueur a des points de talent
             local talentItemID = 338404
             local hasTalentPoints = GetItemCount(talentItemID, false, true) > 0
 
             if hasTalentPoints then
                 AIO.Handle("TalentPaladinspell", talentHandler, 1)
                 PlaySoundFile(SPELL_TALENT_WINDOW_SOUND)
-                buttonClicked = true -- Marquer le bouton comme cliqué
-                talentLearned = true -- Marquer le talent comme appris
-                UpdateButtonState() -- Mettre à jour l'état du bouton
+                buttonClicked = true
+                talentLearned = true
+                UpdateButtonState()
             else
                 print("|cff00ffffVous n'avez plus de points de talent !|r")
             end
         end
     end)
 
-    -- Affichage du tooltip
     button:SetScript("OnEnter", function(self)
         GameTooltip:SetOwner(self, "TOPLEFT")
         GameTooltip:ClearLines()
@@ -181,24 +158,17 @@ local function CreateSpellButton(name, texturePath, tooltipText, talentHandler, 
         GameTooltip:Show()
     end)
 
-    -- Cacher le tooltip lorsque la souris quitte le bouton
     button:SetScript("OnLeave", function(self)
         GameTooltip:Hide()
     end)
 
-    -- Appel initial pour définir l'état du bouton au chargement
     UpdateButtonState()
 end
 
--- Utilisation de la fonction générique avec des positions spécifiques
 
--------------------------------------------------------------
 
--------------------------------------------------------------
 
--- Template 1
 
--- Sacré
 
 CreateSpellButton("buttonSpellSpiritualFocus", "Interface/icons/spell_arcane_blink", "|cffffffffFocalisation spirituelle|r\n|cffffffffTalent|r |cffffff80Sacré|r\n|cffffffffRequiert|r |cfff58cbaPaladin|r\n|cffffd100Réduit de 70% l'interruption causée par les attaques infligeant des dégâts pendant que vous incantez Lumière sacrée et Eclair lumineux.|r", "spellspiritualfocus", 100, -80)
 CreateSpellButton("buttonSpellSealsofthePure", "Interface/icons/ability_thunderbolt", "|cffffffffSceaux des purs|r\n|cffffffffTalent|r |cffffff80Sacré|r\n|cffffffffRequiert|r |cfff58cbaPaladin|r\n|cffffd100Augmente de 15% les dégâts infligés par vos Sceaux de piété, de vengeance et de corruption ainsi que les effets de leurs Jugements.|r", "spellsealsofthepure", 205, -75)
@@ -229,7 +199,6 @@ CreateSpellButton("buttonSpellBeaconofLight", "Interface/icons/ability_paladin_b
 CreateSpellButton("buttonSpellDivinity", "Interface/icons/spell_holy_blindingheal", "|cffffffffDivinité|r\n|cffffffffTalent|r |cff0080ffProtection|r\n|cffffffffRequiert|r |cfff58cbaPaladin|r\n|cffffd100Augmente tous les soins que vous prodiguez et tous les effets de soins sur vous de 5%.|r", "spelldivinity", 368, -350)
 CreateSpellButton("buttonDivineStrength", "Interface/icons/ability_golemthunderclap", "|cffffffffForce divine|r\n|cffffffffTalent|r |cff0080ffProtection|r\n|cffffffffRequiert|r |cfff58cbaPaladin|r\n|cffffd100Augmente votre total de Force de 15%.|r", "spelldivinestrength", 478, -350)
 
--- Protection
 
 CreateSpellButton("buttonSpellStoicism", "Interface/icons/spell_holy_stoicism", "|cffffffffStoïcisme|r\n|cffffffffTalent|r |cff0080ffProtection|r\n|cffffffffRequiert|r |cfff58cbaPaladin|r\n|cffffd100Réduit la durée de tous les effets d'étourdissement de 30% supplémentaires, et réduit la probabilité que vos sorts utiles et vos effets de dégâts sur la durée soient dissipés de 30% supplémentaires.|r", "spellstoicism", 98, -405)
 CreateSpellButton("buttonSpellGuardiansFavor", "Interface/icons/spell_holy_sealofprotection", "|cffffffffFaveur du Gardien|r\n|cffffffffTalent|r |cff0080ffProtection|r\n|cffffffffRequiert|r |cfff58cbaPaladin|r\n|cffffd100Réduit le temps de recharge de votre Main de protection de 2 min.\net augmente la durée de votre Main de liberté de 4 sec.|r", "spellguardiansfavor", 205, -405)
@@ -245,7 +214,6 @@ CreateSpellButton("buttonSpellReckoning", "Interface/icons/spell_holy_blessingof
 CreateSpellButton("buttonSpellSacredDuty", "Interface/icons/spell_holy_divineintervention", "|cffffffffDevoir sacré|r\n|cffffffffTalent|r |cff0080ffProtection|r\n|cffffffffRequiert|r |cfff58cbaPaladin|r\n|cffffd100Augmente votre total d'Endurance de 4% et réduit le temps de recharge de vos sorts Bouclier divin et Protection divine de 60 sec..|r", "spellsacredduty", 315, -510)
 CreateSpellButton("buttonSpellOneHandedWeaponSpecialization", "Interface/icons/inv_sword_20", "|cffffffffSpécialisation Arme 1M|r\n|cffffffffTalent|r |cff0080ffProtection|r\n|cffffffffRequiert|r |cfff58cbaPaladin|r\n|cffffd100Augmente tous les dégâts que vous infligez de 10% quand une arme de mêlée à une main est équipée.|r", "spellonehandedweaponspecialization", 422, -510)
 
--- Template 2
 
 CreateSpellButton("buttonSpiritualAttunement", "Interface/icons/spell_holy_revivechampion", "|cffffffffHarmonisation spirituelle|r\n|cffffffffTalent|r |cff0080ffProtectionProtectionProtection|r\n|cffffffffRequiert|r |cfff58cbaPaladin|r\n|cffffd100Une technique passive qui donne des points de mana au paladin lorsqu'il est soigné par les sorts d'autres cibles alliées.\nLa quantité de mana reçue est égale à 10% des points de vie rendus.|r", "spellimprovedscorch", 663, -75)
 CreateSpellButton("buttonSpellHolyShield", "Interface/icons/spell_holy_blessingofprotection", "|cffffffffBouclier sacré|r\n|cffffffffTalent|r |cff0080ffProtectionProtection|r\n|cffffffffRequiert|r |cfff58cbaPaladin|r\n|cffffd100Augmente les chances de bloquer de 30% pendant 10 secondes et inflige 79 points de dégâts du Sacré pour chaque attaque bloquée pendant qu'il est actif.\nChaque blocage dépense une charge.\n8 charges.|r", "spellholyshield", 770, -75)
@@ -263,7 +231,6 @@ CreateSpellButton("buttonSpellBenediction", "Interface/icons/spell_frost_windwal
 CreateSpellButton("buttonSpellImprovedJudgements", "Interface/icons/spell_holy_righteousfury", "|cffffffffJugements améliorés|r\n|cffffffffTalent|r |cffff8040Vindicte|r\n|cffffffffRequiert|r |cfff58cbaPaladin|r\n|cffffd100Réduit le temps de recharge de vos sorts de Jugement de 2 sec.", "spellimprovedjudgements", 1100, -184)
 
 
--- Vindicte
 
 CreateSpellButton("buttonSpellHeartoftheCrusader", "Interface/icons/spell_holy_holysmite", "|cffffffffCoeur du Croisé|r\n|cffffffffTalent|r |cffff8040Vindicte|r\n|cffffffffRequiert|r |cfff58cbaPaladin|r\n|cffffd100En plus des effets normaux, vos sorts de Jugement augmentent de 3% supplémentaires les chances de coup critique de toutes les attaques effectuées contre cette cible.|r", "spellheartofthecrusader", 718, -240)
 CreateSpellButton("buttonSpellImprovedBlessingofMight", "Interface/icons/spell_holy_fistofjustice", "|cffffffffBénédiction de puissance améliorée|r\n|cffffffffTalent|r |cffff8040Vindicte|r\n|cffffffffRequiert|r |cfff58cbaPaladin|r\n|cffffd100Augmente le bonus à la puissance d'attaque conféré par votre Bénédiction de puissance de 25%.|r", "spellimprovedblessingofmight", 825, -240)
@@ -290,35 +257,28 @@ CreateSpellButton("buttonSpellRighteousVengeance", "Interface/icons/ability_pala
 CreateSpellButton("buttonSpellDivineStorm", "Interface/icons/ability_paladin_divinestorm", "|cffffffffTempête divine|r\n|cffffffffTalent|r |cffff8040Vindicte|r\n|cffffffffRequiert|r |cfff58cbaPaladin|r\n|cffffd100Une attaque instantanée avec une arme qui inflige 110% des dégâts de l'arme à un maximum de 4 ennemis se trouvant à moins de 8 mètres.\nLa Tempête divine soigne jusqu'à 3 membres du groupe ou du raid pour un total de 25% des dégâts infligés.|r", "spelldivinestorm", 988, -510)
 
 
--------------------------------------------------------------
 
--------------------------------------------------------------
 
--- Ajoutez une variable pour suivre l'état du bouton Réinitialiser
 local resetButtonClicked = false
 
--- Créez le bouton Reset à l'intérieur de la fenêtre frameTalentPaladin
 local buttonReset = CreateFrame("Button", "buttonReset", frameTalentPaladin, "UIPanelButtonTemplate")
 buttonReset:SetSize(85, 25)
-buttonReset:SetPoint("BOTTOMRIGHT", buttonTalentPaladinClose, "BOTTOMLEFT", -95, 5) -- Place le bouton Reset à gauche du bouton Reload
+buttonReset:SetPoint("BOTTOMRIGHT", buttonTalentPaladinClose, "BOTTOMLEFT", -95, 5)
 buttonReset:SetText("Réinitialiser")
 
 local function ResetTalents()
-    -- Ajoutez ici la logique pour réinitialiser les talents du joueur
     AIO.Handle("TalentPaladinspell", "ResetTalents")
-    resetButtonClicked = true -- Marquez le bouton Réinitialiser comme cliqué
+    resetButtonClicked = true
 end
 
 buttonReset:SetScript("OnClick", ResetTalents)
 
--- Créez le bouton Reload à l'intérieur de la fenêtre frameTalentPaladin
 local buttonReload = CreateFrame("Button", "buttonReload", frameTalentPaladin, "UIPanelButtonTemplate")
 buttonReload:SetSize(85, 25)
-buttonReload:SetPoint("BOTTOMRIGHT", buttonTalentPaladinClose, "BOTTOMLEFT", -5, 5) -- Place le bouton Reload à gauche du bouton Close
+buttonReload:SetPoint("BOTTOMRIGHT", buttonTalentPaladinClose, "BOTTOMLEFT", -5, 5)
 buttonReload:SetText("Actualiser")
 
 local function ReloadClient()
-    -- Ajoutez une vérification pour s'assurer que le bouton Réinitialiser a été cliqué
     if resetButtonClicked then
         ReloadUI()
     else
@@ -328,7 +288,6 @@ end
 
 buttonReload:SetScript("OnClick", ReloadClient)
 
--- Ajoutez une variable globale pour suivre l'état de la fenêtre des talents
 local talentsWindowOpen = false
 
 local function OuvrirFermerInterfaceTalents()
@@ -342,37 +301,30 @@ local function OuvrirFermerInterfaceTalents()
         PlaySoundFile(OPEN_TALENT_WINDOW_SOUND)
     end
 
-    -- Inversez l'état de la fenêtre des talents
     talentsWindowOpen = not talentsWindowOpen
 end
 
--- Vérifier si le joueur est un Paladin avant de créer le bouton
-local playerClass = select(2, UnitClass("player")) -- Obtenir la classe du joueur
+local playerClass = select(2, UnitClass("player"))
 if playerClass == "PALADIN" then
     local buttonOuvrirTalents = CreateFrame("Button", "buttonOuvrirTalents", UIParent)
     buttonOuvrirTalents:SetSize(32, 33)
-    buttonOuvrirTalents:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -171, 8) -- Placer en bas à droite avec un décalage de 10 pixels
+    buttonOuvrirTalents:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -171, 8)
 
-    -- Ajouter une texture BLP au bouton
     buttonOuvrirTalents:SetNormalTexture("Interface\\TalentFrame\\Template\\MicroButton\\ButtonSystemTalent.blp")
 
-    -- Ajouter une texture de surbrillance
     local highlightTexture = buttonOuvrirTalents:CreateTexture(nil, "HIGHLIGHT")
     highlightTexture:SetAllPoints(buttonOuvrirTalents)
     highlightTexture:SetTexture("Interface\\TalentFrame\\Template\\MicroButton\\ButtonSystemTalentLight.blp")
     buttonOuvrirTalents:SetHighlightTexture(highlightTexture)
 
-    -- Supprimer le texte du bouton
     buttonOuvrirTalents:SetText("")
 
-    -- Ajouter une info-bulle
     buttonOuvrirTalents:SetScript("OnEnter", function(self)
-        GameTooltip:SetOwner(self, "ANCHOR_RIGHT") -- Définir l'ancre de l'info-bulle
-        GameTooltip:SetText("|cffffffffTalents|r |cfff58cba(Paladin)|r\n\nL'éventail des talents disponibles\npour améliorer et spécialiser\nvotre personnage.") -- Texte de l'info-bulle
+        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+        GameTooltip:SetText("|cffffffffTalents|r |cfff58cba(Paladin)|r\n\nL'éventail des talents disponibles\npour améliorer et spécialiser\nvotre personnage.")
         GameTooltip:Show()
     end)
 
-    -- Masquer l'info-bulle lorsque la souris quitte le bouton
     buttonOuvrirTalents:SetScript("OnLeave", function(self)
         GameTooltip:Hide()
     end)

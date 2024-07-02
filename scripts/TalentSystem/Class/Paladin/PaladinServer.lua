@@ -5,9 +5,7 @@ local TalentPaladinPointsSpend = {}
 local MAX_TALENTS = 41
 
 local talents = {
-	-- Template 1
 
-	-- Sacré
 	
 	["spellspiritualfocus"] = {spellID = 20208, itemID = 338404},
 	["spellsealsofthepure"] = {spellID = 20332, itemID = 338404},
@@ -38,7 +36,6 @@ local talents = {
 	["spelldivinity"] = {spellID = 63650, itemID = 338404},
 	["spelldivinestrength"] = {spellID = 20266, itemID = 338404},
 	
-	-- Protection
 	
 	["spellstoicism"] = {spellID = 53519, itemID = 338404},
 	["spellguardiansfavor"] = {spellID = 20175, itemID = 338404},
@@ -54,7 +51,6 @@ local talents = {
 	["spellsacredduty"] = {spellID = 31849, itemID = 338404},
 	["spellonehandedweaponspecialization"] = {spellID = 20198, itemID = 338404},
 	
-	-- Template 2
 	
 	["spellspiritualattunement"] = {spellID = 33776, itemID = 338404},
 	["spellholyshield"] = {spellID = 20925, itemID = 338404},
@@ -71,11 +67,10 @@ local talents = {
 	["spellbenediction"] = {spellID = 20105, itemID = 338404},
 	["spellimprovedjudgements"] = {spellID = 25957, itemID = 338404},
 	
-	-- Vindicte
 	
 	["spellheartofthecrusader"] = {spellID = 20337, itemID = 338404},
 	["spellimprovedblessingofmight"] = {spellID = 20045, itemID = 338404},
-	["spellindication"] = {spellID = 26016, itemID = 338404},--
+	["spellindication"] = {spellID = 26016, itemID = 338404},
 	["spellconviction"] = {spellID = 20121, itemID = 338404},
 	["spellsealofcommand"] = {spellID = 20375, itemID = 338404},
 	["spellpursuitofjustice"] = {spellID = 26023, itemID = 338404},
