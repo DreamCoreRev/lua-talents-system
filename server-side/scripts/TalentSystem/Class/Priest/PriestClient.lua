@@ -1530,3 +1530,17 @@ bagWatcher:SetScript("OnUpdate", function(self, elapsed)
         UpdateTalentCountFromBag()
     end
 end)
+
+-------------------------------------------------------------
+-- Touche Échap : ferme l'interface des talents
+-------------------------------------------------------------
+if playerClass == "PRIEST" then
+    -- Surcharge OnHide pour synchroniser talentsWindowOpen quand Échap est pressé
+    local _originalOnHide = frameTalentPriest:GetScript("OnHide")
+    frameTalentPriest:SetScript("OnHide", function(self)
+        talentsWindowOpen = false
+        if _originalOnHide then _originalOnHide(self) end
+    end)
+    -- WoW appelle automatiquement Hide() sur les frames listées ici quand Échap est pressé
+    tinsert(UISpecialFrames, "frameTalentPriest")
+end
