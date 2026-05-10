@@ -13,32 +13,38 @@ local OPEN_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_orderhall_talent_sele
 local CLOSE_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_9_0_covenant_ability_ability_button_appears.ogg"
 local SPELL_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_82_heartofazeroth_activateessenceslot_03.ogg"
 
+-- Attribute window
 local frameFormDruid = CreateFrame("Frame", "frameFormDruid", UIParent)
 frameFormDruid:SetSize(1000, 600)
 frameFormDruid:SetMovable(true)
 frameFormDruid:EnableMouse(true)
 frameFormDruid:RegisterForDrag("LeftButton")
-frameFormDruid:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 100, -100)
+frameFormDruid:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 100, -100) -- Adjust the X and Y coordinates
+frameFormDruid:SetFrameLevel(100)  -- Définit un niveau de frame élevé
 frameFormDruid:SetBackdrop(
 {
-    bgFile = "interface/TalentFrame/talentsclassbackgrounddruid2",
-    edgeFile = "interface/tooltips/ui-tooltip-border-corrupteddruid2",
+    bgFile = "interface/TalentFrame/talentsclassbackgrounddruid2", --Interface/AchievementFrame/UI-Achievement-Parchment-Horizontal
+    edgeFile = "interface/tooltips/ui-tooltip-border-corrupteddruid2", --Interface/DialogFrame/UI-DialogBox-Border
     edgeSize = 20,
     insets = { left = 5, right = 5, top = 5, bottom = 5 }
 })
 
+-- Ajoutez la texture de l'icône du Druid
 local formIcon = frameFormDruid:CreateTexture("FormIcon", "OVERLAY")
 formIcon:SetTexture("Interface\\TalentFrame\\Template\\Class\\Druid\\IconeDruid.blp")
 formIcon:SetSize(60, 60)
 formIcon:SetPoint("TOPLEFT", frameFormDruid, "TOPLEFT", -10, 10)
 
+-- Drag & Drop
 frameFormDruid:SetScript("OnDragStart", frameFormDruid.StartMoving)
 frameFormDruid:SetScript("OnHide", frameFormDruid.StopMovingOrSizing)
 frameFormDruid:SetScript("OnDragStop", frameFormDruid.StopMovingOrSizing)
 frameFormDruid:Hide()
 
-frameFormDruid:SetBackdropBorderColor(169, 210, 113)
+-- Nouveau template d'arête
+frameFormDruid:SetBackdropBorderColor(169, 210, 113) -- Couleur rouge pale
 
+-- Close button
 local buttonFormDruidClose = CreateFrame("Button", "buttonFormDruidClose", frameFormDruid, "UIPanelCloseButton")
 buttonFormDruidClose:SetPoint("TOPRIGHT", -5, -5)
 buttonFormDruidClose:EnableMouse(true)
@@ -49,8 +55,10 @@ local function CloseTalentWindow()
     PlaySoundFile(CLOSE_TALENT_WINDOW_SOUND)
 end
 
+-- Associez la fonction de fermeture au bouton de fermeture
 buttonFormDruidClose:SetScript("OnClick", CloseTalentWindow)
 
+-- Title bar
 local frameFormDruidTitleBar = CreateFrame("Frame", "frameFormDruidTitleBar", frameFormDruid, nil)
 frameFormDruidTitleBar:SetSize(135, 25)
 frameFormDruidTitleBar:SetBackdrop(
@@ -70,13 +78,15 @@ fontFormDruidTitleText:SetSize(190, 5)
 fontFormDruidTitleText:SetPoint("CENTER", 0, 0)
 fontFormDruidTitleText:SetText("|cffFFC125Forme|r")
 
+-- Forme Ours
 
 local fontFormDruidBearText = frameFormDruidTitleBar:CreateFontString("fontFormDruidBearText")
 fontFormDruidBearText:SetFont("Fonts\\FRIZQT__.TTF", 13)
 fontFormDruidBearText:SetSize(200, 5)
-fontFormDruidBearText:SetPoint("TOPLEFT", frameFormDruidTitleBar, "BOTTOMLEFT", -280, -15)
+fontFormDruidBearText:SetPoint("TOPLEFT", frameFormDruidTitleBar, "BOTTOMLEFT", -280, -15) -- Adjust the Y offset as needed
 fontFormDruidBearText:SetText("|cffFFC125Formes Ours|r")
 
+-- FormBear1
 
 local buttonFormBear1 = CreateFrame("Button", "buttonFormBear1", frameFormDruid, nil)
 buttonFormBear1:SetSize(40, 40)
@@ -89,6 +99,7 @@ buttonFormBear1:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "
 buttonFormBear1:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme Ours 1"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme d'ours redoutable.") ; GameTooltip:Show() end)
 buttonFormBear1:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormBear2
 
 local buttonFormBear2 = CreateFrame("Button", "buttonFormBear2", frameFormDruid, nil)
 buttonFormBear2:SetSize(40, 40)
@@ -101,6 +112,7 @@ buttonFormBear2:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "
 buttonFormBear2:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme Ours 2"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme d'ours redoutable.") ; GameTooltip:Show() end)
 buttonFormBear2:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormBear3
 
 local buttonFormBear3 = CreateFrame("Button", "buttonFormBear3", frameFormDruid, nil)
 buttonFormBear3:SetSize(40, 40)
@@ -113,6 +125,7 @@ buttonFormBear3:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "
 buttonFormBear3:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme Ours 3"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme d'ours redoutable.") ; GameTooltip:Show() end)
 buttonFormBear3:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormBear4
 
 local buttonFormBear4 = CreateFrame("Button", "buttonFormBear4", frameFormDruid, nil)
 buttonFormBear4:SetSize(40, 40)
@@ -125,7 +138,9 @@ buttonFormBear4:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "
 buttonFormBear4:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme Ours 4"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme d'ours redoutable.") ; GameTooltip:Show() end)
 buttonFormBear4:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-------------------
 
+-- FormBear5
 
 local buttonFormBear5 = CreateFrame("Button", "buttonFormBear5", frameFormDruid, nil)
 buttonFormBear5:SetSize(40, 40)
@@ -138,6 +153,7 @@ buttonFormBear5:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "
 buttonFormBear5:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme Ours 5"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme d'ours redoutable.") ; GameTooltip:Show() end)
 buttonFormBear5:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormBear6
 
 local buttonFormBear6 = CreateFrame("Button", "buttonFormBear6", frameFormDruid, nil)
 buttonFormBear6:SetSize(40, 40)
@@ -150,6 +166,7 @@ buttonFormBear6:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "
 buttonFormBear6:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme Ours 6"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme d'ours redoutable.") ; GameTooltip:Show() end)
 buttonFormBear6:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormBear7
 
 local buttonFormBear7 = CreateFrame("Button", "buttonFormBear7", frameFormDruid, nil)
 buttonFormBear7:SetSize(40, 40)
@@ -162,6 +179,7 @@ buttonFormBear7:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "
 buttonFormBear7:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme Ours 7"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme d'ours redoutable.") ; GameTooltip:Show() end)
 buttonFormBear7:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormBear14
 
 local buttonFormBear14 = CreateFrame("Button", "buttonFormBear14", frameFormDruid, nil)
 buttonFormBear14:SetSize(40, 40)
@@ -174,7 +192,9 @@ buttonFormBear14:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", 
 buttonFormBear14:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme Ours 8"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme d'ours redoutable.") ; GameTooltip:Show() end)
 buttonFormBear14:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-------------------
 
+-- FormBear8
 
 local buttonFormBear8 = CreateFrame("Button", "buttonFormBear8", frameFormDruid, nil)
 buttonFormBear8:SetSize(40, 40)
@@ -187,6 +207,7 @@ buttonFormBear8:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "
 buttonFormBear8:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme Ours 9"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme d'ours redoutable.") ; GameTooltip:Show() end)
 buttonFormBear8:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormBear9
 
 local buttonFormBear9 = CreateFrame("Button", "buttonFormBear9", frameFormDruid, nil)
 buttonFormBear9:SetSize(40, 40)
@@ -199,6 +220,7 @@ buttonFormBear9:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "
 buttonFormBear9:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme Ours 10"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme d'ours redoutable.") ; GameTooltip:Show() end)
 buttonFormBear9:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormBear10
 
 local buttonFormBear10 = CreateFrame("Button", "buttonFormBear10", frameFormDruid, nil)
 buttonFormBear10:SetSize(40, 40)
@@ -211,6 +233,7 @@ buttonFormBear10:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", 
 buttonFormBear10:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme Ours 11"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme d'ours redoutable.") ; GameTooltip:Show() end)
 buttonFormBear10:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormBear15
 
 local buttonFormBear15 = CreateFrame("Button", "buttonFormBear15", frameFormDruid, nil)
 buttonFormBear15:SetSize(40, 40)
@@ -223,7 +246,9 @@ buttonFormBear15:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", 
 buttonFormBear15:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme Ours 12"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme d'ours redoutable.") ; GameTooltip:Show() end)
 buttonFormBear15:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-------------------
 
+-- FormBear11
 
 local buttonFormBear11 = CreateFrame("Button", "buttonFormBear11", frameFormDruid, nil)
 buttonFormBear11:SetSize(40, 40)
@@ -236,6 +261,7 @@ buttonFormBear11:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", 
 buttonFormBear11:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme Ours 13"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme d'ours redoutable.") ; GameTooltip:Show() end)
 buttonFormBear11:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormBear12
 
 local buttonFormBear12 = CreateFrame("Button", "buttonFormBear12", frameFormDruid, nil)
 buttonFormBear12:SetSize(40, 40)
@@ -248,6 +274,7 @@ buttonFormBear12:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", 
 buttonFormBear12:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme Ours 14"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme d'ours redoutable.") ; GameTooltip:Show() end)
 buttonFormBear12:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormBear13
 
 local buttonFormBear13 = CreateFrame("Button", "buttonFormBear13", frameFormDruid, nil)
 buttonFormBear13:SetSize(40, 40)
@@ -260,6 +287,7 @@ buttonFormBear13:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", 
 buttonFormBear13:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme Ours 15"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme d'ours redoutable.") ; GameTooltip:Show() end)
 buttonFormBear13:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormBear16
 
 local buttonFormBear16 = CreateFrame("Button", "buttonFormBear16", frameFormDruid, nil)
 buttonFormBear16:SetSize(40, 40)
@@ -272,7 +300,9 @@ buttonFormBear16:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", 
 buttonFormBear16:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme Ours 16"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme d'ours redoutable.") ; GameTooltip:Show() end)
 buttonFormBear16:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-------------------
 
+-- FormBear17
 
 local buttonFormBear17 = CreateFrame("Button", "buttonFormBear17", frameFormDruid, nil)
 buttonFormBear17:SetSize(40, 40)
@@ -285,6 +315,7 @@ buttonFormBear17:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", 
 buttonFormBear17:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme Ours 17"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme d'ours redoutable.") ; GameTooltip:Show() end)
 buttonFormBear17:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormBear18
 
 local buttonFormBear18 = CreateFrame("Button", "buttonFormBear18", frameFormDruid, nil)
 buttonFormBear18:SetSize(40, 40)
@@ -297,6 +328,7 @@ buttonFormBear18:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", 
 buttonFormBear18:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme Ours 18"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme d'ours redoutable.") ; GameTooltip:Show() end)
 buttonFormBear18:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormBear19
 
 local buttonFormBear19 = CreateFrame("Button", "buttonFormBear19", frameFormDruid, nil)
 buttonFormBear19:SetSize(40, 40)
@@ -309,6 +341,7 @@ buttonFormBear19:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", 
 buttonFormBear19:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme Ours 19"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme d'ours redoutable.") ; GameTooltip:Show() end)
 buttonFormBear19:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormBear20
 
 local buttonFormBear20 = CreateFrame("Button", "buttonFormBear20", frameFormDruid, nil)
 buttonFormBear20:SetSize(40, 40)
@@ -321,7 +354,9 @@ buttonFormBear20:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", 
 buttonFormBear20:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme Ours 20"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme d'ours redoutable.") ; GameTooltip:Show() end)
 buttonFormBear20:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-------------------
 
+-- FormBear21
 
 local buttonFormBear21 = CreateFrame("Button", "buttonFormBear21", frameFormDruid, nil)
 buttonFormBear21:SetSize(40, 40)
@@ -334,6 +369,7 @@ buttonFormBear21:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", 
 buttonFormBear21:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme Ours 21"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme d'ours redoutable.") ; GameTooltip:Show() end)
 buttonFormBear21:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormBear22
 
 local buttonFormBear22 = CreateFrame("Button", "buttonFormBear22", frameFormDruid, nil)
 buttonFormBear22:SetSize(40, 40)
@@ -346,6 +382,7 @@ buttonFormBear22:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", 
 buttonFormBear22:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme Ours 22"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme d'ours redoutable.") ; GameTooltip:Show() end)
 buttonFormBear22:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormBear23
 
 local buttonFormBear23 = CreateFrame("Button", "buttonFormBear23", frameFormDruid, nil)
 buttonFormBear23:SetSize(40, 40)
@@ -358,6 +395,7 @@ buttonFormBear23:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", 
 buttonFormBear23:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme Ours 23"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme d'ours redoutable.") ; GameTooltip:Show() end)
 buttonFormBear23:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormBear24
 
 local buttonFormBear24 = CreateFrame("Button", "buttonFormBear24", frameFormDruid, nil)
 buttonFormBear24:SetSize(40, 40)
@@ -370,7 +408,9 @@ buttonFormBear24:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", 
 buttonFormBear24:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme Ours 24"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme d'ours redoutable.") ; GameTooltip:Show() end)
 buttonFormBear24:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-------------------
 
+-- FormBear25
 
 local buttonFormBear25 = CreateFrame("Button", "buttonFormBear25", frameFormDruid, nil)
 buttonFormBear25:SetSize(40, 40)
@@ -383,6 +423,7 @@ buttonFormBear25:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", 
 buttonFormBear25:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme Ours 25"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme d'ours redoutable.") ; GameTooltip:Show() end)
 buttonFormBear25:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormBear26
 
 local buttonFormBear26 = CreateFrame("Button", "buttonFormBear26", frameFormDruid, nil)
 buttonFormBear26:SetSize(40, 40)
@@ -395,6 +436,7 @@ buttonFormBear26:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", 
 buttonFormBear26:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme Ours 26"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme d'ours redoutable.") ; GameTooltip:Show() end)
 buttonFormBear26:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormBear27
 
 local buttonFormBear27 = CreateFrame("Button", "buttonFormBear27", frameFormDruid, nil)
 buttonFormBear27:SetSize(40, 40)
@@ -407,6 +449,7 @@ buttonFormBear27:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", 
 buttonFormBear27:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme Ours 27"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme d'ours redoutable.") ; GameTooltip:Show() end)
 buttonFormBear27:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormBear28
 
 local buttonFormBear28 = CreateFrame("Button", "buttonFormBear28", frameFormDruid, nil)
 buttonFormBear28:SetSize(40, 40)
@@ -419,7 +462,9 @@ buttonFormBear28:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", 
 buttonFormBear28:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme Ours 28"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme d'ours redoutable.") ; GameTooltip:Show() end)
 buttonFormBear28:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-------------------
 
+-- FormBear29
 
 local buttonFormBear29 = CreateFrame("Button", "buttonFormBear29", frameFormDruid, nil)
 buttonFormBear29:SetSize(40, 40)
@@ -432,6 +477,7 @@ buttonFormBear29:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", 
 buttonFormBear29:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme Ours 29"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme d'ours redoutable.") ; GameTooltip:Show() end)
 buttonFormBear29:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormBear30
 
 local buttonFormBear30 = CreateFrame("Button", "buttonFormBear30", frameFormDruid, nil)
 buttonFormBear30:SetSize(40, 40)
@@ -444,6 +490,7 @@ buttonFormBear30:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", 
 buttonFormBear30:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme Ours 30"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme d'ours redoutable.") ; GameTooltip:Show() end)
 buttonFormBear30:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormBear31
 
 local buttonFormBear31 = CreateFrame("Button", "buttonFormBear31", frameFormDruid, nil)
 buttonFormBear31:SetSize(40, 40)
@@ -456,6 +503,7 @@ buttonFormBear31:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", 
 buttonFormBear31:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme Ours 31"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme d'ours redoutable.") ; GameTooltip:Show() end)
 buttonFormBear31:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormBear32
 
 local buttonFormBear32 = CreateFrame("Button", "buttonFormBear32", frameFormDruid, nil)
 buttonFormBear32:SetSize(40, 40)
@@ -468,14 +516,17 @@ buttonFormBear32:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", 
 buttonFormBear32:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme Ours 32"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme d'ours redoutable.") ; GameTooltip:Show() end)
 buttonFormBear32:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-----------------------------------------------------------------------------------------------------
 
+-- Forme de Félin
 
 local fontFormDruidCatText = frameFormDruidTitleBar:CreateFontString("fontFormDruidCatText")
 fontFormDruidCatText:SetFont("Fonts\\FRIZQT__.TTF", 13)
 fontFormDruidCatText:SetSize(200, 5)
-fontFormDruidCatText:SetPoint("TOPLEFT", frameFormDruidTitleBar, "BOTTOMLEFT", 220, -15)
+fontFormDruidCatText:SetPoint("TOPLEFT", frameFormDruidTitleBar, "BOTTOMLEFT", 220, -15) -- Adjust the Y offset as needed
 fontFormDruidCatText:SetText("|cffFFC125Formes Félin/Voyage|r")
 
+-- FormCat1
 
 local buttonFormCat1 = CreateFrame("Button", "buttonFormCat1", frameFormDruid, nil)
 buttonFormCat1:SetSize(40, 40)
@@ -488,6 +539,7 @@ buttonFormCat1:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "f
 buttonFormCat1:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme de Félin 1"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme de félin.") ; GameTooltip:Show() end)
 buttonFormCat1:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormCat2
 
 local buttonFormCat2 = CreateFrame("Button", "buttonFormCat2", frameFormDruid, nil)
 buttonFormCat2:SetSize(40, 40)
@@ -500,6 +552,7 @@ buttonFormCat2:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "f
 buttonFormCat2:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme de Félin 2"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme de félin.") ; GameTooltip:Show() end)
 buttonFormCat2:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormCat3
 
 local buttonFormCat3 = CreateFrame("Button", "buttonFormCat3", frameFormDruid, nil)
 buttonFormCat3:SetSize(40, 40)
@@ -512,6 +565,7 @@ buttonFormCat3:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "f
 buttonFormCat3:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme de Félin 3"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme de félin.") ; GameTooltip:Show() end)
 buttonFormCat3:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormCat4
 
 local buttonFormCat4 = CreateFrame("Button", "buttonFormCat4", frameFormDruid, nil)
 buttonFormCat4:SetSize(40, 40)
@@ -524,7 +578,9 @@ buttonFormCat4:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "f
 buttonFormCat4:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme de Félin 4"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme de félin.") ; GameTooltip:Show() end)
 buttonFormCat4:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-------------------
 
+-- FormCat5
 
 local buttonFormCat5 = CreateFrame("Button", "buttonFormCat5", frameFormDruid, nil)
 buttonFormCat5:SetSize(40, 40)
@@ -537,6 +593,7 @@ buttonFormCat5:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "f
 buttonFormCat5:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme de Félin 5"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme de félin.") ; GameTooltip:Show() end)
 buttonFormCat5:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormCat6
 
 local buttonFormCat6 = CreateFrame("Button", "buttonFormCat6", frameFormDruid, nil)
 buttonFormCat6:SetSize(40, 40)
@@ -549,6 +606,7 @@ buttonFormCat6:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "f
 buttonFormCat6:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme de Félin 6"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme de félin.") ; GameTooltip:Show() end)
 buttonFormCat6:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormCat7
 
 local buttonFormCat7 = CreateFrame("Button", "buttonFormCat7", frameFormDruid, nil)
 buttonFormCat7:SetSize(40, 40)
@@ -561,6 +619,7 @@ buttonFormCat7:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "f
 buttonFormCat7:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme de Félin 7"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme de félin.") ; GameTooltip:Show() end)
 buttonFormCat7:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormCat8
 
 local buttonFormCat8 = CreateFrame("Button", "buttonFormCat8", frameFormDruid, nil)
 buttonFormCat8:SetSize(40, 40)
@@ -573,7 +632,9 @@ buttonFormCat8:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "f
 buttonFormCat8:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme de Félin 8"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme de félin.") ; GameTooltip:Show() end)
 buttonFormCat8:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-------------------
 
+-- FormCat9
 
 local buttonFormCat9 = CreateFrame("Button", "buttonFormCat9", frameFormDruid, nil)
 buttonFormCat9:SetSize(40, 40)
@@ -586,6 +647,7 @@ buttonFormCat9:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "f
 buttonFormCat9:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme de Félin 9"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme de félin.") ; GameTooltip:Show() end)
 buttonFormCat9:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormCat10
 
 local buttonFormCat10 = CreateFrame("Button", "buttonFormCat10", frameFormDruid, nil)
 buttonFormCat10:SetSize(40, 40)
@@ -598,6 +660,7 @@ buttonFormCat10:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "
 buttonFormCat10:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme de Félin 10"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme de félin.") ; GameTooltip:Show() end)
 buttonFormCat10:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormCat11
 
 local buttonFormCat11 = CreateFrame("Button", "buttonFormCat11", frameFormDruid, nil)
 buttonFormCat11:SetSize(40, 40)
@@ -610,6 +673,7 @@ buttonFormCat11:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "
 buttonFormCat11:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme de Félin 11"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme de félin.") ; GameTooltip:Show() end)
 buttonFormCat11:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormCat12
 
 local buttonFormCat12 = CreateFrame("Button", "buttonFormCat12", frameFormDruid, nil)
 buttonFormCat12:SetSize(40, 40)
@@ -622,7 +686,9 @@ buttonFormCat12:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "
 buttonFormCat12:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme de Félin 12"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme de félin.") ; GameTooltip:Show() end)
 buttonFormCat12:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-------------------
 
+-- FormCat13
 
 local buttonFormCat13 = CreateFrame("Button", "buttonFormCat13", frameFormDruid, nil)
 buttonFormCat13:SetSize(40, 40)
@@ -635,6 +701,7 @@ buttonFormCat13:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "
 buttonFormCat13:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme de Félin 13"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme de félin.") ; GameTooltip:Show() end)
 buttonFormCat13:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormCat14
 
 local buttonFormCat14 = CreateFrame("Button", "buttonFormCat14", frameFormDruid, nil)
 buttonFormCat14:SetSize(40, 40)
@@ -647,6 +714,7 @@ buttonFormCat14:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "
 buttonFormCat14:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme de Félin 14"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme de félin.") ; GameTooltip:Show() end)
 buttonFormCat14:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormCat15
 
 local buttonFormCat15 = CreateFrame("Button", "buttonFormCat15", frameFormDruid, nil)
 buttonFormCat15:SetSize(40, 40)
@@ -659,6 +727,7 @@ buttonFormCat15:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "
 buttonFormCat15:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme de Félin 15"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme de félin.") ; GameTooltip:Show() end)
 buttonFormCat15:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormCat16
 
 local buttonFormCat16 = CreateFrame("Button", "buttonFormCat16", frameFormDruid, nil)
 buttonFormCat16:SetSize(40, 40)
@@ -671,7 +740,9 @@ buttonFormCat16:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "
 buttonFormCat16:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme de Voyage 16"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme de voyage.") ; GameTooltip:Show() end)
 buttonFormCat16:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-------------------
 
+-- FormCat17
 
 local buttonFormCat17 = CreateFrame("Button", "buttonFormCat17", frameFormDruid, nil)
 buttonFormCat17:SetSize(40, 40)
@@ -684,6 +755,7 @@ buttonFormCat17:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "
 buttonFormCat17:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme de Voyage 17"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme de voyage.") ; GameTooltip:Show() end)
 buttonFormCat17:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormCat18
 
 local buttonFormCat18 = CreateFrame("Button", "buttonFormCat18", frameFormDruid, nil)
 buttonFormCat18:SetSize(40, 40)
@@ -696,6 +768,7 @@ buttonFormCat18:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "
 buttonFormCat18:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme de Voyage 18"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme de voyage.") ; GameTooltip:Show() end)
 buttonFormCat18:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormCat19
 
 local buttonFormCat19 = CreateFrame("Button", "buttonFormCat19", frameFormDruid, nil)
 buttonFormCat19:SetSize(40, 40)
@@ -708,6 +781,7 @@ buttonFormCat19:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "
 buttonFormCat19:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme de Voyage 19"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme de voyage.") ; GameTooltip:Show() end)
 buttonFormCat19:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormCat20
 
 local buttonFormCat20 = CreateFrame("Button", "buttonFormCat20", frameFormDruid, nil)
 buttonFormCat20:SetSize(40, 40)
@@ -720,7 +794,9 @@ buttonFormCat20:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "
 buttonFormCat20:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme de Voyage 20"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme de voyage.") ; GameTooltip:Show() end)
 buttonFormCat20:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-------------------
 
+-- FormCat21
 
 local buttonFormCat21 = CreateFrame("Button", "buttonFormCat21", frameFormDruid, nil)
 buttonFormCat21:SetSize(40, 40)
@@ -733,6 +809,7 @@ buttonFormCat21:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "
 buttonFormCat21:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme de Voyage 21"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme de voyage.") ; GameTooltip:Show() end)
 buttonFormCat21:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormCat22
 
 local buttonFormCat22 = CreateFrame("Button", "buttonFormCat22", frameFormDruid, nil)
 buttonFormCat22:SetSize(40, 40)
@@ -745,6 +822,7 @@ buttonFormCat22:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "
 buttonFormCat22:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme de Voyage 22"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme de voyage.") ; GameTooltip:Show() end)
 buttonFormCat22:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormCat23
 
 local buttonFormCat23 = CreateFrame("Button", "buttonFormCat23", frameFormDruid, nil)
 buttonFormCat23:SetSize(40, 40)
@@ -757,6 +835,7 @@ buttonFormCat23:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "
 buttonFormCat23:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme de Voyage 23"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme de voyage.") ; GameTooltip:Show() end)
 buttonFormCat23:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormCat24
 
 local buttonFormCat24 = CreateFrame("Button", "buttonFormCat24", frameFormDruid, nil)
 buttonFormCat24:SetSize(40, 40)
@@ -769,7 +848,9 @@ buttonFormCat24:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "
 buttonFormCat24:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme de Voyage 24"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme de voyage.") ; GameTooltip:Show() end)
 buttonFormCat24:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-------------------
 
+-- FormCat25
 
 local buttonFormCat25 = CreateFrame("Button", "buttonFormCat25", frameFormDruid, nil)
 buttonFormCat25:SetSize(40, 40)
@@ -782,6 +863,7 @@ buttonFormCat25:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "
 buttonFormCat25:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme de Voyage 25"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme de voyage.") ; GameTooltip:Show() end)
 buttonFormCat25:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormCat26
 
 local buttonFormCat26 = CreateFrame("Button", "buttonFormCat26", frameFormDruid, nil)
 buttonFormCat26:SetSize(40, 40)
@@ -794,6 +876,7 @@ buttonFormCat26:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "
 buttonFormCat26:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme de Voyage 26"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme de voyage.") ; GameTooltip:Show() end)
 buttonFormCat26:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormCat27
 
 local buttonFormCat27 = CreateFrame("Button", "buttonFormCat27", frameFormDruid, nil)
 buttonFormCat27:SetSize(40, 40)
@@ -806,6 +889,7 @@ buttonFormCat27:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "
 buttonFormCat27:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme de Voyage 27"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme de voyage.") ; GameTooltip:Show() end)
 buttonFormCat27:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-- FormCat28
 
 local buttonFormCat28 = CreateFrame("Button", "buttonFormCat28", frameFormDruid, nil)
 buttonFormCat28:SetSize(40, 40)
@@ -818,7 +902,9 @@ buttonFormCat28:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "
 buttonFormCat28:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme de Voyage 28"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme de voyage.") ; GameTooltip:Show() end)
 buttonFormCat28:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
+-------------------
 
+-- FormCat29
 
 local buttonFormCat29 = CreateFrame("Button", "buttonFormCat29", frameFormDruid, nil)
 buttonFormCat29:SetSize(40, 40)
@@ -831,13 +917,14 @@ buttonFormCat29:SetScript("OnMouseUp", function() AIO.Handle("FormDruidspell", "
 buttonFormCat29:SetScript("OnEnter", function(self) GameTooltip:SetOwner(self, "TOPLEFT"); GameTooltip:ClearLines(); GameTooltip:SetText("|cffffffffForme de Voyage 29"); GameTooltip:AddLine("|cffffffffInstantanée                                       "); GameTooltip:AddLine("|cffffffffRequiert|r |cffff7d0aDruide|r                              "); GameTooltip:AddLine("|cffffd100Transformé en forme de voyage.") ; GameTooltip:Show() end)
 buttonFormCat29:SetScript("OnLeave", function(self) GameTooltip:Hide() end)
 
-
+-------------------
 
 local function OuvrirInterfaceForms()
     frameFormDruid:Show()
 	PlaySoundFile(OPEN_TALENT_WINDOW_SOUND)
 end
 
+-- Ajoutez une variable globale pour suivre l'état de la fenêtre des talents
 local formsWindowOpen = false
 
 local function OuvrirFermerInterfaceForms()
@@ -851,30 +938,37 @@ local function OuvrirFermerInterfaceForms()
         PlaySoundFile(OPEN_TALENT_WINDOW_SOUND)
     end
 
+    -- Inversez l'état de la fenêtre des talents
     formsWindowOpen = not formsWindowOpen
 end
 
-local playerClass = select(2, UnitClass("player"))
+-- Vérifier si le joueur est un Druid avant de créer le bouton
+local playerClass = select(2, UnitClass("player")) -- Obtenir la classe du joueur
 if playerClass == "DRUID" then
     local buttonOuvrirForms = CreateFrame("Button", "buttonOuvrirForms", UIParent)
     buttonOuvrirForms:SetSize(32, 33)
-    buttonOuvrirForms:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -235, 8)
+    buttonOuvrirForms:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -208, 35) -- Placer en bas à droite avec un décalage de 10 pixels
 
+    -- Ajouter une texture BLP au bouton
     buttonOuvrirForms:SetNormalTexture("Interface\\TalentFrame\\Template\\MicroButton\\ButtonSystemForm.blp")
 
+    -- Ajouter une texture de surbrillance
     local highlightTexture = buttonOuvrirForms:CreateTexture(nil, "HIGHLIGHT")
     highlightTexture:SetAllPoints(buttonOuvrirForms)
     highlightTexture:SetTexture("Interface\\TalentFrame\\Template\\MicroButton\\ButtonSystemFormLight.blp")
     buttonOuvrirForms:SetHighlightTexture(highlightTexture)
 
+    -- Supprimer le texte du bouton
     buttonOuvrirForms:SetText("")
 
+    -- Ajouter une info-bulle
     buttonOuvrirForms:SetScript("OnEnter", function(self)
-        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+        GameTooltip:SetOwner(self, "ANCHOR_RIGHT") -- Définir l'ancre de l'info-bulle
         GameTooltip:SetText("|cffffffffForme|r |cffff7d0a(Druide)|r\n\nChanger l'apparence de votre druide\ntout en maintenant les compétences\nde la forme choisie.")
         GameTooltip:Show()
     end)
 
+    -- Masquer l'info-bulle lorsque la souris quitte le bouton
     buttonOuvrirForms:SetScript("OnLeave", function(self)
         GameTooltip:Hide()
     end)

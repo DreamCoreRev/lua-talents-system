@@ -1,11 +1,15 @@
-local AIO = AIO or require("AIO")
+if not AIO then return end
+if not AIO.IsServer() then return end  -- ← CRUCIAL, ignore les states non-main
+if not AIO.IsMainState() then return end  -- ← CRUCIAL
 local RogueHandlers = AIO.AddHandlers("TalentRoguespell", {})
 local TalentRoguePointsSpend = {}
 
-local MAX_TALENTS = 42
+local MAX_TALENTS = 35
 
 local talents = {
+	-- Template 1
 
+	-- Assassinat
 	
 	["spellimprovedeviscerate"] = {spellID = 14164, itemID = 338404},
 	["spellremorselessattacks"] = {spellID = 14148, itemID = 338404},
@@ -35,11 +39,11 @@ local talents = {
 	["spellcuttothechase"] = {spellID = 51669, itemID = 338404},
 	["spellhungerforblood"] = {spellID = 51662, itemID = 338404},
 	
+	-- Combat
 	
 	["spellimprovedgouge"] = {spellID = 13792, itemID = 338404},
 	["spellimprovedsinisterstrike"] = {spellID = 13863, itemID = 338404},
 	["spelldualwieldspecialization"] = {spellID = 13852, itemID = 338404},
-	["spelldualcrimsonvial"] = {spellID = 248777, itemID = 338404},
 	["spellimprovedsliceanddice"] = {spellID = 14166, itemID = 338404},
 	["spelldeflection"] = {spellID = 13854, itemID = 338404},
 	["spellprecision"] = {spellID = 13845, itemID = 338404},
@@ -54,6 +58,7 @@ local talents = {
 	["spellbladeflurry"] = {spellID = 13877, itemID = 338404},
 	["spellhackandslash"] = {spellID = 13964, itemID = 338404},
 	
+	-- Template 2
 	
 	["spellweaponexpertise"] = {spellID = 30920, itemID = 338404},
 	["spellbladetwisting"] = {spellID = 31126, itemID = 338404},
@@ -68,6 +73,7 @@ local talents = {
 	["spellpreyontheweak"] = {spellID = 51689, itemID = 338404},
 	["spellkillingspree"] = {spellID = 51690, itemID = 338404},
 	
+	-- Finesse
 	
 	["spellrelentlessstrikes"] = {spellID = 58425, itemID = 338404},
 	["spellmasterofdeception"] = {spellID = 13971, itemID = 338404},
@@ -101,12 +107,14 @@ local talents = {
 }
 
 local function LearnTalent(player, talent)
-    local spellID = talent.spellID
+    local accountID = player:GetAccountId() -- Récupération de l'ID du compte
+	local guid = player:GetGUIDLow() -- Récupération du GUID du personnage
+	local spellID = talent.spellID
     local itemID = talent.itemID
 
-    if player:IsInCombat() then
-        player:SendAreaTriggerMessage("|cffff0000Vous ne pouvez pas faire cela en combattant !|r")
-    else
+    --if player:IsInCombat() then
+    --    player:SendAreaTriggerMessage("|cffff0000Vous ne pouvez pas faire cela en combattant !|r")
+    --else
         if player:HasSpell(spellID) then
             player:SendAreaTriggerMessage("|cff00ffffVous connaissez déjà ce talent !|r")
         else
@@ -120,16 +128,16 @@ local function LearnTalent(player, talent)
                     table.insert(TalentRoguePointsSpend, spellID)
                     AIO.Handle(player, "TalentRoguespell", "UpdateTalentCount", #TalentRoguePointsSpend, MAX_TALENTS)
 
-                    local query = CharDBQuery("REPLACE INTO character_talentspell (guid, spell, active) VALUES (" .. player:GetGUIDLow() .. ", " .. spellID .. ", 1);")
+                    local query = CharDBQuery("REPLACE INTO character_talentspell (guid, account_id, spell, active) VALUES (" .. player:GetGUIDLow() .. ", " .. player:GetAccountId() .. ", " .. spellID .. ", 1);")
                     if not query then
                     end
+					LoadTalentProgression(player)
                 end
             else
                 player:SendAreaTriggerMessage("|cffff0000Vous n'avez pas de point de talent !|r")
             end
         end
     end
-end
 
 for talentName, talentData in pairs(talents) do
     RogueHandlers[talentName] = function(player, item)
@@ -139,16 +147,48 @@ end
 
 local function LoadTalentProgression(player)
     TalentRoguePointsSpend = {}
+    local learnedSpells = {}
 
-    local query = CharDBQuery("SELECT spell FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() .. " AND active = 1;")
+    local query = CharDBQuery("SELECT spell FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() .. " AND account_id = " .. player:GetAccountId() .. " AND active = 1;")
     if query then
         repeat
             local spellID = query:GetUInt32(0)
             table.insert(TalentRoguePointsSpend, spellID)
+            player:LearnSpell(spellID)
+            
+            -- Trouver le handler correspondant au spellID
+            for handler, talentData in pairs(talents) do
+                if talentData.spellID == spellID then
+                    learnedSpells[handler] = true
+                    break
+                end
+            end
         until not query:NextRow()
     end
 
     AIO.Handle(player, "TalentRoguespell", "UpdateTalentCount", #TalentRoguePointsSpend, MAX_TALENTS)
+    
+    -- Important : petit délai pour s'assurer que l'UI est chargée
+    player:RegisterEvent(function(eventId, delay, repeats, pPlayer)
+        AIO.Handle(pPlayer, "TalentRoguespell", "UpdateLearnedTalents", learnedSpells)
+    end, 10, 1)
+end
+
+RogueHandlers.RequestLearnedTalents = function(player)
+    local learnedSpells = {}
+    local query = CharDBQuery("SELECT spell FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() .. ";")
+    if query then
+        repeat
+            local spellID = query:GetUInt32(0)
+            for handler, talentData in pairs(talents) do
+                if talentData.spellID == spellID then
+                    learnedSpells[handler] = true
+                    break
+                end
+            end
+        until not query:NextRow()
+    end
+    AIO.Handle(player, "TalentRoguespell", "UpdateLearnedTalents", learnedSpells)
 end
 
 local function OnPlayerLogin(event, player)
@@ -157,9 +197,7 @@ end
 RegisterPlayerEvent(3, OnPlayerLogin)
 
 local function ResetTalentProgression(player)
-    local deleteQuery = CharDBQuery("DELETE FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() .. ";")
-    if not deleteQuery then
-    end
+    CharDBQuery("DELETE FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() .. " AND account_id = " .. player:GetAccountId() .. ";")
 end
 
 RogueHandlers.ResetTalents = function(player)
@@ -172,6 +210,9 @@ RogueHandlers.ResetTalents = function(player)
 
     TalentRoguePointsSpend = {}
     ResetTalentProgression(player)
+    
+    -- Réinitialiser l'état visuel des boutons
+    AIO.Handle(player, "TalentRoguespell", "ResetAllButtons")
     AIO.Handle(player, "TalentRoguespell", "UpdateTalentCount", 0, MAX_TALENTS)
 
     local pointsAfterReset = 0
@@ -184,11 +225,3 @@ RogueHandlers.ResetTalents = function(player)
     if addedItem then
     end
 end
-
-local function TalentRogueOnCommand(event, player, command)
-    if (command == "talentRogue") then
-        AIO.Handle(player, "TalentRoguespell", "ShowTalentRogue")
-        return false
-    end
-end
-RegisterPlayerEvent(42, TalentRogueOnCommand)

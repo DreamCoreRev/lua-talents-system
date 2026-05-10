@@ -1,11 +1,15 @@
-local AIO = AIO or require("AIO")
+if not AIO then return end
+if not AIO.IsServer() then return end  -- ← CRUCIAL, ignore les states non-main
+if not AIO.IsMainState() then return end  -- ← CRUCIAL
 local DeathknightHandlers = AIO.AddHandlers("TalentDeathknightspell", {})
 local TalentDeathknightPointsSpend = {}
 
-local MAX_TALENTS = 44
+local MAX_TALENTS = 35
 
 local talents = {
+	-- Template 1
 
+	-- Sang
 	
 	["spellbutchery"] = {spellID = 49483, itemID = 338404},
 	["spellsubversion"] = {spellID = 49491, itemID = 338404},
@@ -36,6 +40,7 @@ local talents = {
 	["spellbloodgorged"] = {spellID = 61158, itemID = 338404},
 	["spelldancingruneweapon"] = {spellID = 49028, itemID = 338404},
 	
+	-- Givre
 	
 	["spellimprovedicytouch"] = {spellID = 51456, itemID = 338404},
 	["spellrunicpowermastery"] = {spellID = 50147, itemID = 338404},
@@ -54,6 +59,7 @@ local talents = {
 	["spelldeathchill"] = {spellID = 49796, itemID = 338404},
 	["spellimprovedicytalons"] = {spellID = 55610, itemID = 338404},
 	
+	-- Template 2
 	
 	["spellmercilesscombat"] = {spellID = 49538, itemID = 338404},
 	["spellrime"] = {spellID = 59057, itemID = 338404},
@@ -69,6 +75,7 @@ local talents = {
 	["spelltundrastalker"] = {spellID = 50130, itemID = 338404},
 	["spellhowlingblast"] = {spellID = 49184, itemID = 338404},
 	
+	-- Impie
 	
 	["spellviciousstrikes"] = {spellID = 51746, itemID = 338404},
 	["spellvirulence"] = {spellID = 49568, itemID = 338404},
@@ -104,12 +111,14 @@ local talents = {
 }
 
 local function LearnTalent(player, talent)
-    local spellID = talent.spellID
+    local accountID = player:GetAccountId() -- Récupération de l'ID du compte
+	local guid = player:GetGUIDLow() -- Récupération du GUID du personnage
+	local spellID = talent.spellID
     local itemID = talent.itemID
 
-    if player:IsInCombat() then
-        player:SendAreaTriggerMessage("|cffff0000Vous ne pouvez pas faire cela en combattant !|r")
-    else
+    --if player:IsInCombat() then
+    --    player:SendAreaTriggerMessage("|cffff0000Vous ne pouvez pas faire cela en combattant !|r")
+    --else
         if player:HasSpell(spellID) then
             player:SendAreaTriggerMessage("|cff00ffffVous connaissez déjà ce talent !|r")
         else
@@ -123,16 +132,16 @@ local function LearnTalent(player, talent)
                     table.insert(TalentDeathknightPointsSpend, spellID)
                     AIO.Handle(player, "TalentDeathknightspell", "UpdateTalentCount", #TalentDeathknightPointsSpend, MAX_TALENTS)
 
-                    local query = CharDBQuery("REPLACE INTO character_talentspell (guid, spell, active) VALUES (" .. player:GetGUIDLow() .. ", " .. spellID .. ", 1);")
+                    local query = CharDBQuery("REPLACE INTO character_talentspell (guid, account_id, spell, active) VALUES (" .. player:GetGUIDLow() .. ", " .. player:GetAccountId() .. ", " .. spellID .. ", 1);")
                     if not query then
                     end
+					LoadTalentProgression(player)
                 end
             else
                 player:SendAreaTriggerMessage("|cffff0000Vous n'avez pas de point de talent !|r")
             end
         end
     end
-end
 
 for talentName, talentData in pairs(talents) do
     DeathknightHandlers[talentName] = function(player, item)
@@ -142,16 +151,48 @@ end
 
 local function LoadTalentProgression(player)
     TalentDeathknightPointsSpend = {}
+    local learnedSpells = {}
 
-    local query = CharDBQuery("SELECT spell FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() .. " AND active = 1;")
+    local query = CharDBQuery("SELECT spell FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() .. " AND account_id = " .. player:GetAccountId() .. " AND active = 1;")
     if query then
         repeat
             local spellID = query:GetUInt32(0)
             table.insert(TalentDeathknightPointsSpend, spellID)
+            player:LearnSpell(spellID)
+            
+            -- Trouver le handler correspondant au spellID
+            for handler, talentData in pairs(talents) do
+                if talentData.spellID == spellID then
+                    learnedSpells[handler] = true
+                    break
+                end
+            end
         until not query:NextRow()
     end
 
     AIO.Handle(player, "TalentDeathknightspell", "UpdateTalentCount", #TalentDeathknightPointsSpend, MAX_TALENTS)
+    
+    -- Important : petit délai pour s'assurer que l'UI est chargée
+    player:RegisterEvent(function(eventId, delay, repeats, pPlayer)
+        AIO.Handle(pPlayer, "TalentDeathknightspell", "UpdateLearnedTalents", learnedSpells)
+    end, 10, 1)
+end
+
+DeathknightHandlers.RequestLearnedTalents = function(player)
+    local learnedSpells = {}
+    local query = CharDBQuery("SELECT spell FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() .. ";")
+    if query then
+        repeat
+            local spellID = query:GetUInt32(0)
+            for handler, talentData in pairs(talents) do
+                if talentData.spellID == spellID then
+                    learnedSpells[handler] = true
+                    break
+                end
+            end
+        until not query:NextRow()
+    end
+    AIO.Handle(player, "TalentDeathknightspell", "UpdateLearnedTalents", learnedSpells)
 end
 
 local function OnPlayerLogin(event, player)
@@ -160,9 +201,7 @@ end
 RegisterPlayerEvent(3, OnPlayerLogin)
 
 local function ResetTalentProgression(player)
-    local deleteQuery = CharDBQuery("DELETE FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() .. ";")
-    if not deleteQuery then
-    end
+    CharDBQuery("DELETE FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() .. " AND account_id = " .. player:GetAccountId() .. ";")
 end
 
 DeathknightHandlers.ResetTalents = function(player)
@@ -175,6 +214,9 @@ DeathknightHandlers.ResetTalents = function(player)
 
     TalentDeathknightPointsSpend = {}
     ResetTalentProgression(player)
+    
+    -- Réinitialiser l'état visuel des boutons
+    AIO.Handle(player, "TalentDeathknightspell", "ResetAllButtons")
     AIO.Handle(player, "TalentDeathknightspell", "UpdateTalentCount", 0, MAX_TALENTS)
 
     local pointsAfterReset = 0
@@ -187,11 +229,3 @@ DeathknightHandlers.ResetTalents = function(player)
     if addedItem then
     end
 end
-
-local function TalentDeathknightOnCommand(event, player, command)
-    if (command == "talentDeathknight") then
-        AIO.Handle(player, "TalentDeathknightspell", "ShowTalentDeathknight")
-        return false
-    end
-end
-RegisterPlayerEvent(42, TalentDeathknightOnCommand)

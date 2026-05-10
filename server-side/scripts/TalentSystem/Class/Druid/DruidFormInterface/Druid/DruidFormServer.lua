@@ -1,4 +1,6 @@
-local AIO = AIO or require("AIO")
+if not AIO then return end
+if not AIO.IsServer() then return end  -- ← CRUCIAL, ignore les states non-main
+if not AIO.IsMainState() then return end  -- ← CRUCIAL
 local DruidHandlers = AIO.AddHandlers("FormDruidspell", {})
 local FormDruidPointsLeft = {}
 local FormDruidPointsSpend = {}
@@ -149,8 +151,11 @@ local function MorphForm(player, form)
         return
     end
 
+    -- Vérifier si le joueur a déjà le displayID requis (éviter de morpher inutilement)
     if player:GetDisplayId() ~= displayID then
+        -- Lancer le sort requis pour entrer dans la forme de druide normale
         player:CastSpell(player, requiredSpellId, true)
+        -- Changer le displayID du joueur
         player:SetDisplayId(displayID)
     end
 end

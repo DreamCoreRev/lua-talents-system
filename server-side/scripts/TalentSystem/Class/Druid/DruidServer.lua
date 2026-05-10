@@ -1,11 +1,15 @@
-local AIO = AIO or require("AIO")
+if not AIO then return end
+if not AIO.IsServer() then return end  -- ← CRUCIAL, ignore les states non-main
+if not AIO.IsMainState() then return end  -- ← CRUCIAL
 local DruidHandlers = AIO.AddHandlers("TalentDruidspell", {})
 local TalentDruidPointsSpend = {}
 
-local MAX_TALENTS = 44
+local MAX_TALENTS = 35
 
 local talents = {
+	-- Template 1
 
+	-- Equilibre
 	
 	["spellstarlightwrath"] = {spellID = 16818, itemID = 338404},
 	["spellgenesis"] = {spellID = 57814, itemID = 338404},
@@ -36,6 +40,7 @@ local talents = {
 	["spellearthandmoon"] = {spellID = 48511, itemID = 338404},
 	["spellstarfall"] = {spellID = 48505, itemID = 338404},
 	
+	-- Combat Farouche
 	
 	["spellferocity"] = {spellID = 16938, itemID = 338404},
 	["spellferalaggression"] = {spellID = 16862, itemID = 338404},
@@ -50,6 +55,7 @@ local talents = {
 	["spellprimalfury"] = {spellID = 37117, itemID = 338404},
 	["spellprimalprecision"] = {spellID = 48410, itemID = 338404},
 	
+	-- Template 2
 	
 	["spellimpactbrutal"] = {spellID = 16941, itemID = 338404},
 	["spellferalcharge"] = {spellID = 49377, itemID = 338404},
@@ -70,6 +76,7 @@ local talents = {
 	["spellinfectedwounds"] = {spellID = 48485, itemID = 338404},
 	["spellkingofthejungle"] = {spellID = 48495, itemID = 338404},
 	
+	-- Restauration
 	
 	["spellimprovedmarkofthewild"] = {spellID = 17051, itemID = 338404},
 	["spellnaturesfocus"] = {spellID = 17066, itemID = 338404},
@@ -101,12 +108,14 @@ local talents = {
 }
 
 local function LearnTalent(player, talent)
-    local spellID = talent.spellID
+    local accountID = player:GetAccountId() -- Récupération de l'ID du compte
+	local guid = player:GetGUIDLow() -- Récupération du GUID du personnage
+	local spellID = talent.spellID
     local itemID = talent.itemID
 
-    if player:IsInCombat() then
-        player:SendAreaTriggerMessage("|cffff0000Vous ne pouvez pas faire cela en combattant !|r")
-    else
+    --if player:IsInCombat() then
+    --    player:SendAreaTriggerMessage("|cffff0000Vous ne pouvez pas faire cela en combattant !|r")
+    --else
         if player:HasSpell(spellID) then
             player:SendAreaTriggerMessage("|cff00ffffVous connaissez déjà ce talent !|r")
         else
@@ -120,16 +129,16 @@ local function LearnTalent(player, talent)
                     table.insert(TalentDruidPointsSpend, spellID)
                     AIO.Handle(player, "TalentDruidspell", "UpdateTalentCount", #TalentDruidPointsSpend, MAX_TALENTS)
 
-                    local query = CharDBQuery("REPLACE INTO character_talentspell (guid, spell, active) VALUES (" .. player:GetGUIDLow() .. ", " .. spellID .. ", 1);")
+                    local query = CharDBQuery("REPLACE INTO character_talentspell (guid, account_id, spell, active) VALUES (" .. player:GetGUIDLow() .. ", " .. player:GetAccountId() .. ", " .. spellID .. ", 1);")
                     if not query then
                     end
+					LoadTalentProgression(player)
                 end
             else
                 player:SendAreaTriggerMessage("|cffff0000Vous n'avez pas de point de talent !|r")
             end
         end
     end
-end
 
 for talentName, talentData in pairs(talents) do
     DruidHandlers[talentName] = function(player, item)
@@ -139,16 +148,48 @@ end
 
 local function LoadTalentProgression(player)
     TalentDruidPointsSpend = {}
+    local learnedSpells = {}
 
-    local query = CharDBQuery("SELECT spell FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() .. " AND active = 1;")
+    local query = CharDBQuery("SELECT spell FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() .. " AND account_id = " .. player:GetAccountId() .. " AND active = 1;")
     if query then
         repeat
             local spellID = query:GetUInt32(0)
             table.insert(TalentDruidPointsSpend, spellID)
+            player:LearnSpell(spellID)
+            
+            -- Trouver le handler correspondant au spellID
+            for handler, talentData in pairs(talents) do
+                if talentData.spellID == spellID then
+                    learnedSpells[handler] = true
+                    break
+                end
+            end
         until not query:NextRow()
     end
 
     AIO.Handle(player, "TalentDruidspell", "UpdateTalentCount", #TalentDruidPointsSpend, MAX_TALENTS)
+    
+    -- Important : petit délai pour s'assurer que l'UI est chargée
+    player:RegisterEvent(function(eventId, delay, repeats, pPlayer)
+        AIO.Handle(pPlayer, "TalentDruidspell", "UpdateLearnedTalents", learnedSpells)
+    end, 10, 1)
+end
+
+DruidHandlers.RequestLearnedTalents = function(player)
+    local learnedSpells = {}
+    local query = CharDBQuery("SELECT spell FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() .. ";")
+    if query then
+        repeat
+            local spellID = query:GetUInt32(0)
+            for handler, talentData in pairs(talents) do
+                if talentData.spellID == spellID then
+                    learnedSpells[handler] = true
+                    break
+                end
+            end
+        until not query:NextRow()
+    end
+    AIO.Handle(player, "TalentDruidspell", "UpdateLearnedTalents", learnedSpells)
 end
 
 local function OnPlayerLogin(event, player)
@@ -157,9 +198,7 @@ end
 RegisterPlayerEvent(3, OnPlayerLogin)
 
 local function ResetTalentProgression(player)
-    local deleteQuery = CharDBQuery("DELETE FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() .. ";")
-    if not deleteQuery then
-    end
+    CharDBQuery("DELETE FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() .. " AND account_id = " .. player:GetAccountId() .. ";")
 end
 
 DruidHandlers.ResetTalents = function(player)
@@ -172,6 +211,9 @@ DruidHandlers.ResetTalents = function(player)
 
     TalentDruidPointsSpend = {}
     ResetTalentProgression(player)
+    
+    -- Réinitialiser l'état visuel des boutons
+    AIO.Handle(player, "TalentDruidspell", "ResetAllButtons")
     AIO.Handle(player, "TalentDruidspell", "UpdateTalentCount", 0, MAX_TALENTS)
 
     local pointsAfterReset = 0
@@ -184,11 +226,3 @@ DruidHandlers.ResetTalents = function(player)
     if addedItem then
     end
 end
-
-local function TalentDruidOnCommand(event, player, command)
-    if (command == "talentDruid") then
-        AIO.Handle(player, "TalentDruidspell", "ShowTalentDruid")
-        return false
-    end
-end
-RegisterPlayerEvent(42, TalentDruidOnCommand)

@@ -1,10 +1,13 @@
-local AIO = AIO or require("AIO")
+if not AIO then return end
+if not AIO.IsServer() then return end  -- ← CRUCIAL, ignore les states non-main
+if not AIO.IsMainState() then return end  -- ← CRUCIAL
 local MonkHandlers = AIO.AddHandlers("TalentMonkspell", {})
 local TalentMonkPointsSpend = {}
 
-local MAX_TALENTS = 44
+local MAX_TALENTS = 37
 
 local talents = {
+	-- Template 1
     ["spellpurifyingbrew"] = {spellID = 119582, itemID = 338404},
     ["spellkegsmash"] = {spellID = 121253, itemID = 338404},
     ["spellascension"] = {spellID = 115396, itemID = 338404},
@@ -19,6 +22,7 @@ local talents = {
 	["spellguard"] = {spellID = 115295, itemID = 338404},
 	["spelllegacyemperor"] = {spellID = 1117666, itemID = 338404},
 	["spelldetox"] = {spellID = 1215450, itemID = 338404},
+	-- Template 2
 	["spelladaptation"] = {spellID = 126046, itemID = 338404},
 	["spellchibarrage"] = {spellID = 144644, itemID = 338404},
 	["spellmonksleap"] = {spellID = 124008, itemID = 338404},
@@ -84,56 +88,93 @@ local talents = {
 	["spellmasterygiftserpent"] = {spellID = 117907, itemID = 338404},
 }
 
-local function LearnTalent(player, talent)
-    local spellID = talent.spellID
+local function LearnTalent(player, talent, talentHandler)
+    local accountID = player:GetAccountId()
+	local guid = player:GetGUIDLow()
+	local spellID = talent.spellID
     local itemID = talent.itemID
 
-    if player:IsInCombat() then
-        player:SendAreaTriggerMessage("|cffff0000Vous ne pouvez pas faire cela en combattant !|r")
+    if player:HasSpell(spellID) then
+        player:SendAreaTriggerMessage("|cff00ffffVous connaissez déjà ce talent !|r")
     else
-        if player:HasSpell(spellID) then
-            player:SendAreaTriggerMessage("|cff00ffffVous connaissez déjà ce talent !|r")
-        else
-            if player:HasItem(itemID) then
-                if #TalentMonkPointsSpend >= MAX_TALENTS then
-                    player:SendAreaTriggerMessage("|cffff0000Vous avez atteint la limite de talents !|r")
-                else
-                    player:RemoveItem(itemID, 1)
-                    player:SendAreaTriggerMessage("|cff00ff00Vous avez appris un nouveau talent !|r")
-                    player:LearnSpell(spellID)
-                    table.insert(TalentMonkPointsSpend, spellID)
-                    AIO.Handle(player, "TalentMonkspell", "UpdateTalentCount", #TalentMonkPointsSpend, MAX_TALENTS)
-
-                    local query = CharDBQuery("REPLACE INTO character_talentspell (guid, spell, active) VALUES (" .. player:GetGUIDLow() .. ", " .. spellID .. ", 1);")
-                    if not query then
-                    end
-                end
+        if player:HasItem(itemID) then
+            if #TalentMonkPointsSpend >= MAX_TALENTS then
+                player:SendAreaTriggerMessage("|cffff0000Vous avez atteint la limite de talents !|r")
             else
-                player:SendAreaTriggerMessage("|cffff0000Vous n'avez pas de point de talent !|r")
+                player:RemoveItem(itemID, 1)
+                player:SendAreaTriggerMessage("|cff00ff00Vous avez appris un nouveau talent !|r")
+                player:LearnSpell(spellID)
+                table.insert(TalentMonkPointsSpend, spellID)
+                
+                -- Sauvegarder dans la base de données avec le handler
+                CharDBQuery("REPLACE INTO character_talentspell (guid, account_id, spell, active) VALUES (" .. guid .. ", " .. accountID .. ", " .. spellID .. ", 1);")
+                
+                -- Mettre à jour le compteur
+                AIO.Handle(player, "TalentMonkspell", "UpdateTalentCount", #TalentMonkPointsSpend, MAX_TALENTS)
+                
+                -- Mettre à jour l'état visuel du bouton spécifique
+                local learnedSpells = {}
+                learnedSpells[talentHandler] = true
+                AIO.Handle(player, "TalentMonkspell", "UpdateLearnedTalents", learnedSpells)
             end
+        else
+            player:SendAreaTriggerMessage("|cffff0000Vous n'avez pas de point de talent !|r")
         end
     end
 end
 
 for talentName, talentData in pairs(talents) do
     MonkHandlers[talentName] = function(player, item)
-        LearnTalent(player, talentData)
+        LearnTalent(player, talentData, talentName)
     end
 end
 
 local function LoadTalentProgression(player)
     TalentMonkPointsSpend = {}
+    local learnedSpells = {}
 
-    local query = CharDBQuery("SELECT spell FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() .. " AND active = 1;")
+    local query = CharDBQuery("SELECT spell FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() .. " AND account_id = " .. player:GetAccountId() .. " AND active = 1;")
     if query then
         repeat
             local spellID = query:GetUInt32(0)
             table.insert(TalentMonkPointsSpend, spellID)
+            player:LearnSpell(spellID)
+            
+            -- Trouver le handler correspondant au spellID
+            for handler, talentData in pairs(talents) do
+                if talentData.spellID == spellID then
+                    learnedSpells[handler] = true
+                    break
+                end
+            end
         until not query:NextRow()
     end
 
     AIO.Handle(player, "TalentMonkspell", "UpdateTalentCount", #TalentMonkPointsSpend, MAX_TALENTS)
+    
+    -- Important : petit délai pour s'assurer que l'UI est chargée
+    player:RegisterEvent(function(eventId, delay, repeats, pPlayer)
+        AIO.Handle(pPlayer, "TalentMonkspell", "UpdateLearnedTalents", learnedSpells)
+    end, 10, 1)
 end
+
+MonkHandlers.RequestLearnedTalents = function(player)
+    local learnedSpells = {}
+    local query = CharDBQuery("SELECT spell FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() .. ";")
+    if query then
+        repeat
+            local spellID = query:GetUInt32(0)
+            for handler, talentData in pairs(talents) do
+                if talentData.spellID == spellID then
+                    learnedSpells[handler] = true
+                    break
+                end
+            end
+        until not query:NextRow()
+    end
+    AIO.Handle(player, "TalentMonkspell", "UpdateLearnedTalents", learnedSpells)
+end
+
 
 local function OnPlayerLogin(event, player)
     LoadTalentProgression(player)
@@ -141,9 +182,7 @@ end
 RegisterPlayerEvent(3, OnPlayerLogin)
 
 local function ResetTalentProgression(player)
-    local deleteQuery = CharDBQuery("DELETE FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() .. ";")
-    if not deleteQuery then
-    end
+    CharDBQuery("DELETE FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() .. " AND account_id = " .. player:GetAccountId() .. ";")
 end
 
 MonkHandlers.ResetTalents = function(player)
@@ -156,6 +195,9 @@ MonkHandlers.ResetTalents = function(player)
 
     TalentMonkPointsSpend = {}
     ResetTalentProgression(player)
+    
+    -- Réinitialiser l'état visuel des boutons
+    AIO.Handle(player, "TalentMonkspell", "ResetAllButtons")
     AIO.Handle(player, "TalentMonkspell", "UpdateTalentCount", 0, MAX_TALENTS)
 
     local pointsAfterReset = 0
@@ -168,11 +210,3 @@ MonkHandlers.ResetTalents = function(player)
     if addedItem then
     end
 end
-
-local function TalentMonkOnCommand(event, player, command)
-    if (command == "talentMonk") then
-        AIO.Handle(player, "TalentMonkspell", "ShowTalentMonk")
-        return false
-    end
-end
-RegisterPlayerEvent(42, TalentMonkOnCommand)

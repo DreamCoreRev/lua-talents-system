@@ -1,11 +1,15 @@
-local AIO = AIO or require("AIO")
+if not AIO then return end
+if not AIO.IsServer() then return end  -- ← CRUCIAL, ignore les states non-main
+if not AIO.IsMainState() then return end  -- ← CRUCIAL
 local PaladinHandlers = AIO.AddHandlers("TalentPaladinspell", {})
 local TalentPaladinPointsSpend = {}
 
-local MAX_TALENTS = 41
+local MAX_TALENTS = 35
 
 local talents = {
+	-- Template 1
 
+	-- Sacré
 	
 	["spellspiritualfocus"] = {spellID = 20208, itemID = 338404},
 	["spellsealsofthepure"] = {spellID = 20332, itemID = 338404},
@@ -36,6 +40,7 @@ local talents = {
 	["spelldivinity"] = {spellID = 63650, itemID = 338404},
 	["spelldivinestrength"] = {spellID = 20266, itemID = 338404},
 	
+	-- Protection
 	
 	["spellstoicism"] = {spellID = 53519, itemID = 338404},
 	["spellguardiansfavor"] = {spellID = 20175, itemID = 338404},
@@ -51,6 +56,7 @@ local talents = {
 	["spellsacredduty"] = {spellID = 31849, itemID = 338404},
 	["spellonehandedweaponspecialization"] = {spellID = 20198, itemID = 338404},
 	
+	-- Template 2
 	
 	["spellspiritualattunement"] = {spellID = 33776, itemID = 338404},
 	["spellholyshield"] = {spellID = 20925, itemID = 338404},
@@ -67,10 +73,11 @@ local talents = {
 	["spellbenediction"] = {spellID = 20105, itemID = 338404},
 	["spellimprovedjudgements"] = {spellID = 25957, itemID = 338404},
 	
+	-- Vindicte
 	
 	["spellheartofthecrusader"] = {spellID = 20337, itemID = 338404},
 	["spellimprovedblessingofmight"] = {spellID = 20045, itemID = 338404},
-	["spellindication"] = {spellID = 26016, itemID = 338404},
+	["spellindication"] = {spellID = 26016, itemID = 338404},--
 	["spellconviction"] = {spellID = 20121, itemID = 338404},
 	["spellsealofcommand"] = {spellID = 20375, itemID = 338404},
 	["spellpursuitofjustice"] = {spellID = 26023, itemID = 338404},
@@ -94,12 +101,14 @@ local talents = {
 }
 
 local function LearnTalent(player, talent)
-    local spellID = talent.spellID
+    local accountID = player:GetAccountId() -- Récupération de l'ID du compte
+	local guid = player:GetGUIDLow() -- Récupération du GUID du personnage
+	local spellID = talent.spellID
     local itemID = talent.itemID
 
-    if player:IsInCombat() then
-        player:SendAreaTriggerMessage("|cffff0000Vous ne pouvez pas faire cela en combattant !|r")
-    else
+    --if player:IsInCombat() then
+    --    player:SendAreaTriggerMessage("|cffff0000Vous ne pouvez pas faire cela en combattant !|r")
+    --else
         if player:HasSpell(spellID) then
             player:SendAreaTriggerMessage("|cff00ffffVous connaissez déjà ce talent !|r")
         else
@@ -113,16 +122,16 @@ local function LearnTalent(player, talent)
                     table.insert(TalentPaladinPointsSpend, spellID)
                     AIO.Handle(player, "TalentPaladinspell", "UpdateTalentCount", #TalentPaladinPointsSpend, MAX_TALENTS)
 
-                    local query = CharDBQuery("REPLACE INTO character_talentspell (guid, spell, active) VALUES (" .. player:GetGUIDLow() .. ", " .. spellID .. ", 1);")
+                    local query = CharDBQuery("REPLACE INTO character_talentspell (guid, account_id, spell, active) VALUES (" .. player:GetGUIDLow() .. ", " .. player:GetAccountId() .. ", " .. spellID .. ", 1);")
                     if not query then
                     end
+					LoadTalentProgression(player)
                 end
             else
                 player:SendAreaTriggerMessage("|cffff0000Vous n'avez pas de point de talent !|r")
             end
         end
     end
-end
 
 for talentName, talentData in pairs(talents) do
     PaladinHandlers[talentName] = function(player, item)
@@ -132,16 +141,48 @@ end
 
 local function LoadTalentProgression(player)
     TalentPaladinPointsSpend = {}
+    local learnedSpells = {}
 
-    local query = CharDBQuery("SELECT spell FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() .. " AND active = 1;")
+    local query = CharDBQuery("SELECT spell FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() .. " AND account_id = " .. player:GetAccountId() .. " AND active = 1;")
     if query then
         repeat
             local spellID = query:GetUInt32(0)
             table.insert(TalentPaladinPointsSpend, spellID)
+            player:LearnSpell(spellID)
+            
+            -- Trouver le handler correspondant au spellID
+            for handler, talentData in pairs(talents) do
+                if talentData.spellID == spellID then
+                    learnedSpells[handler] = true
+                    break
+                end
+            end
         until not query:NextRow()
     end
 
     AIO.Handle(player, "TalentPaladinspell", "UpdateTalentCount", #TalentPaladinPointsSpend, MAX_TALENTS)
+    
+    -- Important : petit délai pour s'assurer que l'UI est chargée
+    player:RegisterEvent(function(eventId, delay, repeats, pPlayer)
+        AIO.Handle(pPlayer, "TalentPaladinspell", "UpdateLearnedTalents", learnedSpells)
+    end, 10, 1)
+end
+
+PaladinHandlers.RequestLearnedTalents = function(player)
+    local learnedSpells = {}
+    local query = CharDBQuery("SELECT spell FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() .. ";")
+    if query then
+        repeat
+            local spellID = query:GetUInt32(0)
+            for handler, talentData in pairs(talents) do
+                if talentData.spellID == spellID then
+                    learnedSpells[handler] = true
+                    break
+                end
+            end
+        until not query:NextRow()
+    end
+    AIO.Handle(player, "TalentPaladinspell", "UpdateLearnedTalents", learnedSpells)
 end
 
 local function OnPlayerLogin(event, player)
@@ -150,9 +191,7 @@ end
 RegisterPlayerEvent(3, OnPlayerLogin)
 
 local function ResetTalentProgression(player)
-    local deleteQuery = CharDBQuery("DELETE FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() .. ";")
-    if not deleteQuery then
-    end
+    CharDBQuery("DELETE FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() .. " AND account_id = " .. player:GetAccountId() .. ";")
 end
 
 PaladinHandlers.ResetTalents = function(player)
@@ -165,6 +204,9 @@ PaladinHandlers.ResetTalents = function(player)
 
     TalentPaladinPointsSpend = {}
     ResetTalentProgression(player)
+    
+    -- Réinitialiser l'état visuel des boutons
+    AIO.Handle(player, "TalentPaladinspell", "ResetAllButtons")
     AIO.Handle(player, "TalentPaladinspell", "UpdateTalentCount", 0, MAX_TALENTS)
 
     local pointsAfterReset = 0
@@ -177,11 +219,3 @@ PaladinHandlers.ResetTalents = function(player)
     if addedItem then
     end
 end
-
-local function TalentPaladinOnCommand(event, player, command)
-    if (command == "talentPaladin") then
-        AIO.Handle(player, "TalentPaladinspell", "ShowTalentPaladin")
-        return false
-    end
-end
-RegisterPlayerEvent(42, TalentPaladinOnCommand)
