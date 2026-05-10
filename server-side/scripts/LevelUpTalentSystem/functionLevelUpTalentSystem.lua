@@ -6,13 +6,11 @@ local function GrantTalentPointsOnLevelUp(event, player, oldLevel)
     -- Points de talent dès le niveau 10
     if level >= 10 and level <= 80 then
         local talentLevels = {
-            10, 11, 12, 13, 14, 15, 16, 17, 18, 19,  -- niv 10-19 : 10 points
-            20, 21, 22, 23, 24, 25, 26, 27, 28, 29,  -- niv 20-29 : 10 points
-            30, 31, 32, 33, 34, 35, 36, 37, 38, 39,  -- niv 30-39 : 10 points
-            40, 41, 42, 43, 44, 45, 46, 47, 48, 49,  -- niv 40-49 : 10 points
-            50, 51, 52, 53, 54, 55, 56, 57, 58, 59,  -- niv 50-59 : 10 points
-            60, 62, 64, 66, 68, 70, 72, 74, 76, 80   -- niv 60-80 : 10 points
-        }
+			10, 11, 13, 15, 17, 18, 19,
+			20, 22, 24, 26, 28, 30, 32, 34, 36, 38,
+			40, 42, 44, 46, 48, 50, 52, 54, 56, 58,
+			60, 63, 66, 69, 72, 75, 78, 80
+		}
 
         if table.contains(talentLevels, level) then
             pointsToGrant = 1
