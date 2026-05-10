@@ -226,6 +226,15 @@ local function OnPlayerLogin(event, player)
 end
 RegisterPlayerEvent(3, OnPlayerLogin)
 
+-- Supprime les données de talent lorsqu'un personnage est supprimé.
+-- PLAYER_EVENT_ON_CHARACTER_DELETE (2) passe (event, guid) — pas d'objet player disponible.
+local function OnCharacterDelete(event, guid)
+    CharDBQuery(
+        "DELETE FROM character_talentspell WHERE guid = " .. guid .. ";"
+    )
+end
+RegisterPlayerEvent(2, OnCharacterDelete)
+
 local function ResetTalentProgression(player)
     CharDBQuery(
         "DELETE FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() ..
