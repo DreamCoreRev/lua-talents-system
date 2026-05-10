@@ -9,6 +9,8 @@ function MonkHandlers.ShowTalentMonk(player)
     frameTalentMonk:Show()
     -- Redemande au serveur l’état visuel au cas où
     AIO.Handle("TalentMonkspell", "RequestLearnedTalents")
+    -- Redemande le nombre de talents restants
+    AIO.Handle("TalentMonkspell", "GetTalentItemCount")
 end
 
 local MAX_TALENTS = 37 -- Définition du nombre maximal de talents que le joueur peut apprendre
@@ -128,6 +130,26 @@ fontTalentMonkFrameText:SetPoint("TOPLEFT", frameTalentMonkTitleBar, "BOTTOMLEFT
 fontTalentMonkFrameText:SetText("0 / " .. MAX_TALENTS) -- Initialisez le texte avec 0 talents appris
 
 -------------------------------------------------------------
+-- Affichage "Talents restants" (item 338404 dans le sac)
+-------------------------------------------------------------
+
+local frameTalentPointsRemaining = CreateFrame("Frame", "frameTalentPointsRemaining", frameTalentMonk, nil)
+frameTalentPointsRemaining:SetSize(220, 30)
+frameTalentPointsRemaining:SetBackdrop({
+    bgFile = "interface/corrupteditems/corruptedtooltipbackground",
+    edgeFile = "interface/tooltips/ui-tooltip-border-corruptedmonk",
+    tile = true,
+    edgeSize = 16,
+    tileSize = 16,
+    insets = { left = 5, right = 5, top = 5, bottom = 5 }
+})
+frameTalentPointsRemaining:SetPoint("BOTTOMRIGHT", frameTalentMonk, "BOTTOMRIGHT", -10, 10)
+
+local fontTalentPointsRemainingText = frameTalentPointsRemaining:CreateFontString("fontTalentPointsRemainingText")
+fontTalentPointsRemainingText:SetFont("Fonts\\FRIZQT__.TTF", 14)
+fontTalentPointsRemainingText:SetSize(210, 20)
+fontTalentPointsRemainingText:SetPoint("CENTER", 0, 0)
+fontTalentPointsRemainingText:SetText("|cff00ff96Talents restants : 0|r")
 
 -------------------------------------------------------------
 
@@ -1412,3 +1434,38 @@ MonkHandlers.UpdateTalentPointsUsed = function(player, pointsUsed, pointsBeforeR
     -- Utilisation du texte localisé pour les points avant réinitialisation
     print(string.format(GetLocalizedPointsBeforeResetText(), pointsBeforeReset))
 end
+
+-- Affichage des talents restants (items 338404 dans le sac)
+MonkHandlers.UpdateTalentItemCount = function(player, count)
+    if fontTalentPointsRemainingText then
+        fontTalentPointsRemainingText:SetText("|cff00ff96Talents restants : " .. count .. "|r")
+    end
+end
+
+-------------------------------------------------------------
+-- ✅ CORRECTION : mise à jour automatique quand le sac change
+-- BAG_UPDATE se déclenche à chaque ajout/retrait d'item dans l'inventaire
+-- On utilise GetItemCount() côté client directement, sans aller/retour serveur
+-------------------------------------------------------------
+local TALENT_ITEM_ID = 338404
+
+local function UpdateTalentCountFromBag()
+    local count = GetItemCount(TALENT_ITEM_ID, false, true)
+    if fontTalentPointsRemainingText then
+        fontTalentPointsRemainingText:SetText("|cff00ff96Talents restants : " .. (count or 0) .. "|r")
+    end
+end
+
+local bagWatcher = CreateFrame("Frame")
+bagWatcher:RegisterEvent("BAG_UPDATE")
+-- Petit délai via OnUpdate pour laisser le temps à l'inventaire de se finaliser
+local bagUpdatePending = false
+bagWatcher:SetScript("OnEvent", function(self, event)
+    bagUpdatePending = true
+end)
+bagWatcher:SetScript("OnUpdate", function(self, elapsed)
+    if bagUpdatePending then
+        bagUpdatePending = false
+        UpdateTalentCountFromBag()
+    end
+end)
