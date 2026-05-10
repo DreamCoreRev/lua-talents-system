@@ -1,7 +1,9 @@
 if not AIO then return end
-if not AIO.IsServer() then return end  -- ← CRUCIAL, ignore les states non-main
-if not AIO.IsMainState() then return end  -- ← CRUCIAL
+if not AIO.IsServer() then return end  -- CRUCIAL
+if not AIO.IsMainState() then return end  -- CRUCIAL
+
 local RogueHandlers = AIO.AddHandlers("TalentRoguespell", {})
+
 local TalentRoguePointsSpend = {}
 
 local MAX_TALENTS = 35
@@ -106,57 +108,79 @@ local talents = {
 	
 }
 
-local function LearnTalent(player, talent)
-    local accountID = player:GetAccountId() -- Récupération de l'ID du compte
-	local guid = player:GetGUIDLow() -- Récupération du GUID du personnage
-	local spellID = talent.spellID
-    local itemID = talent.itemID
+-- CORRECTION 1 : player:GetItemCount() est l'API Eluna correcte
+-- GetItemByBagAndSlot n'existe pas dans Eluna et provoquait le crash ligne 97
+local function GetTalentItemCount(player)
+    return player:GetItemCount(338404)
+end
 
-    --if player:IsInCombat() then
-    --    player:SendAreaTriggerMessage("|cffff0000Vous ne pouvez pas faire cela en combattant !|r")
-    --else
-        if player:HasSpell(spellID) then
-            player:SendAreaTriggerMessage("|cff00ffffVous connaissez déjà ce talent !|r")
-        else
-            if player:HasItem(itemID) then
-                if #TalentRoguePointsSpend >= MAX_TALENTS then
-                    player:SendAreaTriggerMessage("|cffff0000Vous avez atteint la limite de talents !|r")
-                else
-                    player:RemoveItem(itemID, 1)
-                    player:SendAreaTriggerMessage("|cff00ff00Vous avez appris un nouveau talent !|r")
-                    player:LearnSpell(spellID)
-                    table.insert(TalentRoguePointsSpend, spellID)
-                    AIO.Handle(player, "TalentRoguespell", "UpdateTalentCount", #TalentRoguePointsSpend, MAX_TALENTS)
+-- CORRECTION 2 : accesseur par GUID pour éviter la collision multi-joueurs
+local function GetSpendList(player)
+    local guid = player:GetGUIDLow()
+    if not TalentRoguePointsSpend[guid] then
+        TalentRoguePointsSpend[guid] = {}
+    end
+    return TalentRoguePointsSpend[guid]
+end
 
-                    local query = CharDBQuery("REPLACE INTO character_talentspell (guid, account_id, spell, active) VALUES (" .. player:GetGUIDLow() .. ", " .. player:GetAccountId() .. ", " .. spellID .. ", 1);")
-                    if not query then
-                    end
-					LoadTalentProgression(player)
-                end
+local function LearnTalent(player, talent, talentHandler)
+    local accountID = player:GetAccountId()
+    local guid      = player:GetGUIDLow()
+    local spellID   = talent.spellID
+    local itemID    = talent.itemID
+    local spendList = GetSpendList(player)
+
+    if player:HasSpell(spellID) then
+        player:SendAreaTriggerMessage("|cff00ffffVous connaissez déjà ce talent !|r")
+    else
+        if player:HasItem(itemID) then
+            if #spendList >= MAX_TALENTS then
+                player:SendAreaTriggerMessage("|cffff0000Vous avez atteint la limite de talents !|r")
             else
-                player:SendAreaTriggerMessage("|cffff0000Vous n'avez pas de point de talent !|r")
+                player:RemoveItem(itemID, 1)
+                player:SendAreaTriggerMessage("|cff00ff00Vous avez appris un nouveau talent !|r")
+                player:LearnSpell(spellID)
+                table.insert(spendList, spellID)
+
+                CharDBQuery("REPLACE INTO character_talentspell (guid, account_id, spell, active) VALUES ("
+                    .. guid .. ", " .. accountID .. ", " .. spellID .. ", 1);")
+
+                AIO.Handle(player, "TalentRoguespell", "UpdateTalentCount", #spendList, MAX_TALENTS)
+                AIO.Handle(player, "TalentRoguespell", "UpdateTalentItemCount", GetTalentItemCount(player))
+
+                local learnedSpells = {}
+                learnedSpells[talentHandler] = true
+                AIO.Handle(player, "TalentRoguespell", "UpdateLearnedTalents", learnedSpells)
             end
+        else
+            player:SendAreaTriggerMessage("|cffff0000Vous n'avez pas de point de talent !|r")
+            AIO.Handle(player, "TalentRoguespell", "UpdateTalentItemCount", GetTalentItemCount(player))
         end
     end
+end
 
 for talentName, talentData in pairs(talents) do
     RogueHandlers[talentName] = function(player, item)
-        LearnTalent(player, talentData)
+        LearnTalent(player, talentData, talentName)
     end
 end
 
 local function LoadTalentProgression(player)
-    TalentRoguePointsSpend = {}
+    local guid = player:GetGUIDLow()
+    TalentRoguePointsSpend[guid] = {}
+    local spendList    = TalentRoguePointsSpend[guid]
     local learnedSpells = {}
 
-    local query = CharDBQuery("SELECT spell FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() .. " AND account_id = " .. player:GetAccountId() .. " AND active = 1;")
+    local query = CharDBQuery(
+        "SELECT spell FROM character_talentspell WHERE guid = " .. guid ..
+        " AND account_id = " .. player:GetAccountId() .. " AND active = 1;"
+    )
     if query then
         repeat
             local spellID = query:GetUInt32(0)
-            table.insert(TalentRoguePointsSpend, spellID)
+            table.insert(spendList, spellID)
             player:LearnSpell(spellID)
-            
-            -- Trouver le handler correspondant au spellID
+
             for handler, talentData in pairs(talents) do
                 if talentData.spellID == spellID then
                     learnedSpells[handler] = true
@@ -166,17 +190,20 @@ local function LoadTalentProgression(player)
         until not query:NextRow()
     end
 
-    AIO.Handle(player, "TalentRoguespell", "UpdateTalentCount", #TalentRoguePointsSpend, MAX_TALENTS)
-    
-    -- Important : petit délai pour s'assurer que l'UI est chargée
+    AIO.Handle(player, "TalentRoguespell", "UpdateTalentCount", #spendList, MAX_TALENTS)
+
+    -- Petit délai pour s'assurer que l'UI client est chargée avant d'envoyer l'état
     player:RegisterEvent(function(eventId, delay, repeats, pPlayer)
         AIO.Handle(pPlayer, "TalentRoguespell", "UpdateLearnedTalents", learnedSpells)
+        AIO.Handle(pPlayer, "TalentRoguespell", "UpdateTalentItemCount", GetTalentItemCount(pPlayer))
     end, 10, 1)
 end
 
 RogueHandlers.RequestLearnedTalents = function(player)
     local learnedSpells = {}
-    local query = CharDBQuery("SELECT spell FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() .. ";")
+    local query = CharDBQuery(
+        "SELECT spell FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() .. ";"
+    )
     if query then
         repeat
             local spellID = query:GetUInt32(0)
@@ -191,37 +218,38 @@ RogueHandlers.RequestLearnedTalents = function(player)
     AIO.Handle(player, "TalentRoguespell", "UpdateLearnedTalents", learnedSpells)
 end
 
+RogueHandlers.GetTalentItemCount = function(player)
+    AIO.Handle(player, "TalentRoguespell", "UpdateTalentItemCount", GetTalentItemCount(player))
+end
+
 local function OnPlayerLogin(event, player)
     LoadTalentProgression(player)
 end
 RegisterPlayerEvent(3, OnPlayerLogin)
 
 local function ResetTalentProgression(player)
-    CharDBQuery("DELETE FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() .. " AND account_id = " .. player:GetAccountId() .. ";")
+    CharDBQuery(
+        "DELETE FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() ..
+        " AND account_id = " .. player:GetAccountId() .. ";"
+    )
 end
 
 RogueHandlers.ResetTalents = function(player)
-    local pointsBeforeReset = #TalentRoguePointsSpend
+    local spendList        = GetSpendList(player)
+    local pointsBeforeReset = #spendList
 
     for talentName, talentData in pairs(talents) do
-        local spellID = talentData.spellID
-        player:RemoveSpell(spellID)
+        player:RemoveSpell(talentData.spellID)
     end
 
-    TalentRoguePointsSpend = {}
+    local guid = player:GetGUIDLow()
+    TalentRoguePointsSpend[guid] = {}
     ResetTalentProgression(player)
-    
-    -- Réinitialiser l'état visuel des boutons
+
     AIO.Handle(player, "TalentRoguespell", "ResetAllButtons")
     AIO.Handle(player, "TalentRoguespell", "UpdateTalentCount", 0, MAX_TALENTS)
+    AIO.Handle(player, "TalentRoguespell", "UpdateTalentPointsUsed", 0, pointsBeforeReset)
 
-    local pointsAfterReset = 0
-    AIO.Handle(player, "TalentRoguespell", "UpdateTalentPointsUsed", pointsAfterReset, pointsBeforeReset)
-
-    local talentItemID = 338404
-    local itemCount = pointsBeforeReset
-    local addedItem = player:AddItem(talentItemID, itemCount)
-
-    if addedItem then
-    end
+    player:AddItem(338404, pointsBeforeReset)
+    AIO.Handle(player, "TalentRoguespell", "UpdateTalentItemCount", GetTalentItemCount(player))
 end

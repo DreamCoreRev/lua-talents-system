@@ -4,7 +4,6 @@ if not AIO.IsMainState() then return end  -- CRUCIAL
 
 local MonkHandlers = AIO.AddHandlers("TalentMonkspell", {})
 
--- ✅ CORRECTION : table indexée par GUID pour éviter la collision entre joueurs
 local TalentMonkPointsSpend = {}
 
 local MAX_TALENTS = 37
@@ -29,7 +28,7 @@ local talents = {
 	["spelladaptation"]                 = {spellID = 126046,   itemID = 338404},
 	["spellchibarrage"]                 = {spellID = 144644,   itemID = 338404},
 	["spellmonksleap"]                  = {spellID = 124008,   itemID = 338404},
-	["spellnimbrebrew"]                 = {spellID = 137562,   itemID = 338404},
+	["spellnimblebrew"]                 = {spellID = 137562,   itemID = 338404},
 	["spellpunch"]                      = {spellID = 109079,   itemID = 338404},
 	["spellblackoutkick"]               = {spellID = 109080,   itemID = 338404},
 	["spellrisingsunkick"]              = {spellID = 107428,   itemID = 338404},
@@ -91,13 +90,13 @@ local talents = {
 	["spellmasterygiftserpent"]         = {spellID = 117907,   itemID = 338404},
 }
 
--- ✅ CORRECTION 1 : player:GetItemCount() est l'API Eluna correcte
+-- CORRECTION 1 : player:GetItemCount() est l'API Eluna correcte
 -- GetItemByBagAndSlot n'existe pas dans Eluna et provoquait le crash ligne 97
 local function GetTalentItemCount(player)
     return player:GetItemCount(338404)
 end
 
--- ✅ CORRECTION 2 : accesseur par GUID pour éviter la collision multi-joueurs
+-- CORRECTION 2 : accesseur par GUID pour éviter la collision multi-joueurs
 local function GetSpendList(player)
     local guid = player:GetGUIDLow()
     if not TalentMonkPointsSpend[guid] then
