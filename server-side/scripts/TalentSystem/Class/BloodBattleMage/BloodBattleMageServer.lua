@@ -2,11 +2,13 @@ local AIO = AIO or require("AIO")
 local BloodbattlemageHandlers = AIO.AddHandlers("TalentBloodbattlemagespell", {})
 local TalentBloodbattlemagePointsSpend = {}
 
-local MAX_TALENTS = 31
+local MAX_TALENTS = 41
 
 local talents = {
 
+	-- Template 1
 	
+	-- Magie du sang
 	
 	["spellimprovedblood"] = {spellID = 300021, itemID = 338404},
 	["spellseedgrowth"] = {spellID = 300113, itemID = 338404},
@@ -34,7 +36,9 @@ local talents = {
 	["spellbloodstorm"] = {spellID = 300099, itemID = 338404},
 	["spellreinforcedblood"] = {spellID = 300125, itemID = 338404},
 	
+	-- Template 2
 	
+	-- Sacrifice de sang
 	
 	["spellabilitymotivation"] = {spellID = 300095, itemID = 338404},
 	["spellabilitybloodflow"] = {spellID = 300101, itemID = 338404},
@@ -48,6 +52,7 @@ local talents = {
 	["spellabilityimprovement"] = {spellID = 300180, itemID = 338404},
 	["spellabilitypotential"] = {spellID = 300175, itemID = 338404},
 	
+	-- Blessure de sang
 	
 	["spellbloodprovocation"] = {spellID = 1502003, itemID = 338404},
 	["spellmartialknowledge"] = {spellID = 300135, itemID = 338404},
@@ -65,55 +70,112 @@ local talents = {
 
 }
 
-local function LearnTalent(player, talent)
-    local spellID = talent.spellID
-    local itemID = talent.itemID
+-- Accesseur item talent (GetItemCount est l'API Eluna correcte)
+local function GetTalentItemCount(player)
+    return player:GetItemCount(338404)
+end
 
-    if player:IsInCombat() then
-        player:SendAreaTriggerMessage("|cffff0000Vous ne pouvez pas faire cela en combattant !|r")
+-- Accesseur par GUID pour éviter la collision multi-joueurs
+local function GetSpendList(player)
+    local guid = player:GetGUIDLow()
+    if not TalentBloodbattlemagePointsSpend[guid] then
+        TalentBloodbattlemagePointsSpend[guid] = {}
+    end
+    return TalentBloodbattlemagePointsSpend[guid]
+end
+
+local function LearnTalent(player, talent, talentHandler)
+    local accountID = player:GetAccountId()
+    local guid      = player:GetGUIDLow()
+    local spellID   = talent.spellID
+    local itemID    = talent.itemID
+    local spendList = GetSpendList(player)
+
+    if player:HasSpell(spellID) then
+        player:SendAreaTriggerMessage("|cff00ffffVous connaissez déjà ce talent !|r")
     else
-        if player:HasSpell(spellID) then
-            player:SendAreaTriggerMessage("|cff00ffffVous connaissez déjà ce talent !|r")
-        else
-            if player:HasItem(itemID) then
-                if #TalentBloodbattlemagePointsSpend >= MAX_TALENTS then
-                    player:SendAreaTriggerMessage("|cffff0000Vous avez atteint la limite de talents !|r")
-                else
-                    player:RemoveItem(itemID, 1)
-                    player:SendAreaTriggerMessage("|cff00ff00Vous avez appris un nouveau talent !|r")
-                    player:LearnSpell(spellID)
-                    table.insert(TalentBloodbattlemagePointsSpend, spellID)
-                    AIO.Handle(player, "TalentBloodbattlemagespell", "UpdateTalentCount", #TalentBloodbattlemagePointsSpend, MAX_TALENTS)
-
-                    local query = CharDBQuery("REPLACE INTO character_talentspell (guid, spell, active) VALUES (" .. player:GetGUIDLow() .. ", " .. spellID .. ", 1);")
-                    if not query then
-                    end
-                end
+        if player:HasItem(itemID) then
+            if #spendList >= MAX_TALENTS then
+                player:SendAreaTriggerMessage("|cffff0000Vous avez atteint la limite de talents !|r")
             else
-                player:SendAreaTriggerMessage("|cffff0000Vous n'avez pas de point de talent !|r")
+                player:RemoveItem(itemID, 1)
+                player:SendAreaTriggerMessage("|cff00ff00Vous avez appris un nouveau talent !|r")
+                player:LearnSpell(spellID)
+                table.insert(spendList, spellID)
+
+                CharDBQuery("REPLACE INTO character_talentspell (guid, account_id, spell, active) VALUES ("
+                    .. guid .. ", " .. accountID .. ", " .. spellID .. ", 1);")
+
+                AIO.Handle(player, "TalentBloodbattlemagespell", "UpdateTalentCount", #spendList, MAX_TALENTS)
+                AIO.Handle(player, "TalentBloodbattlemagespell", "UpdateTalentItemCount", GetTalentItemCount(player))
+
+                local learnedSpells = {}
+                learnedSpells[talentHandler] = true
+                AIO.Handle(player, "TalentBloodbattlemagespell", "UpdateLearnedTalents", learnedSpells)
             end
+        else
+            player:SendAreaTriggerMessage("|cffff0000Vous n'avez pas de point de talent !|r")
+            AIO.Handle(player, "TalentBloodbattlemagespell", "UpdateTalentItemCount", GetTalentItemCount(player))
         end
     end
 end
 
 for talentName, talentData in pairs(talents) do
     BloodbattlemageHandlers[talentName] = function(player, item)
-        LearnTalent(player, talentData)
+        LearnTalent(player, talentData, talentName)
     end
 end
 
 local function LoadTalentProgression(player)
-    TalentBloodbattlemagePointsSpend = {}
+    local guid = player:GetGUIDLow()
+    TalentBloodbattlemagePointsSpend[guid] = {}
+    local spendList    = TalentBloodbattlemagePointsSpend[guid]
+    local learnedSpells = {}
 
-    local query = CharDBQuery("SELECT spell FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() .. " AND active = 1;")
+    local query = CharDBQuery(
+        "SELECT spell FROM character_talentspell WHERE guid = " .. guid ..
+        " AND account_id = " .. player:GetAccountId() .. " AND active = 1;"
+    )
     if query then
         repeat
             local spellID = query:GetUInt32(0)
-            table.insert(TalentBloodbattlemagePointsSpend, spellID)
+            table.insert(spendList, spellID)
+            player:LearnSpell(spellID)
+
+            -- Trouver le handler correspondant au spellID
+            for handler, talentData in pairs(talents) do
+                if talentData.spellID == spellID then
+                    learnedSpells[handler] = true
+                    break
+                end
+            end
         until not query:NextRow()
     end
 
-    AIO.Handle(player, "TalentBloodbattlemagespell", "UpdateTalentCount", #TalentBloodbattlemagePointsSpend, MAX_TALENTS)
+    AIO.Handle(player, "TalentBloodbattlemagespell", "UpdateTalentCount", #spendList, MAX_TALENTS)
+
+    -- Petit délai pour s'assurer que l'UI client est chargée avant d'envoyer l'état
+    player:RegisterEvent(function(eventId, delay, repeats, pPlayer)
+        AIO.Handle(pPlayer, "TalentBloodbattlemagespell", "UpdateLearnedTalents", learnedSpells)
+        AIO.Handle(pPlayer, "TalentBloodbattlemagespell", "UpdateTalentItemCount", GetTalentItemCount(pPlayer))
+    end, 10, 1)
+end
+
+BloodbattlemageHandlers.RequestLearnedTalents = function(player)
+    local learnedSpells = {}
+    local query = CharDBQuery("SELECT spell FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() .. ";")
+    if query then
+        repeat
+            local spellID = query:GetUInt32(0)
+            for handler, talentData in pairs(talents) do
+                if talentData.spellID == spellID then
+                    learnedSpells[handler] = true
+                    break
+                end
+            end
+        until not query:NextRow()
+    end
+    AIO.Handle(player, "TalentBloodbattlemagespell", "UpdateLearnedTalents", learnedSpells)
 end
 
 local function OnPlayerLogin(event, player)
@@ -121,39 +183,39 @@ local function OnPlayerLogin(event, player)
 end
 RegisterPlayerEvent(3, OnPlayerLogin)
 
+-- Supprime les données de talent lorsqu'un personnage est supprimé.
+-- PLAYER_EVENT_ON_CHARACTER_DELETE (2) passe (event, guid) — pas d'objet player disponible.
+local function OnCharacterDelete(event, guid)
+    CharDBQuery(
+        "DELETE FROM character_talentspell WHERE guid = " .. guid .. ";"
+    )
+end
+RegisterPlayerEvent(2, OnCharacterDelete)
+
+BloodbattlemageHandlers.GetTalentItemCount = function(player)
+    AIO.Handle(player, "TalentBloodbattlemagespell", "UpdateTalentItemCount", GetTalentItemCount(player))
+end
+
 local function ResetTalentProgression(player)
-    local deleteQuery = CharDBQuery("DELETE FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() .. ";")
-    if not deleteQuery then
-    end
+    CharDBQuery("DELETE FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() .. " AND account_id = " .. player:GetAccountId() .. ";")
 end
 
 BloodbattlemageHandlers.ResetTalents = function(player)
-    local pointsBeforeReset = #TalentBloodbattlemagePointsSpend
+    local spendList        = GetSpendList(player)
+    local pointsBeforeReset = #spendList
 
     for talentName, talentData in pairs(talents) do
-        local spellID = talentData.spellID
-        player:RemoveSpell(spellID)
+        player:RemoveSpell(talentData.spellID)
     end
 
-    TalentBloodbattlemagePointsSpend = {}
+    local guid = player:GetGUIDLow()
+    TalentBloodbattlemagePointsSpend[guid] = {}
     ResetTalentProgression(player)
+
+    AIO.Handle(player, "TalentBloodbattlemagespell", "ResetAllButtons")
     AIO.Handle(player, "TalentBloodbattlemagespell", "UpdateTalentCount", 0, MAX_TALENTS)
+    AIO.Handle(player, "TalentBloodbattlemagespell", "UpdateTalentPointsUsed", 0, pointsBeforeReset)
 
-    local pointsAfterReset = 0
-    AIO.Handle(player, "TalentBloodbattlemagespell", "UpdateTalentPointsUsed", pointsAfterReset, pointsBeforeReset)
-
-    local talentItemID = 338404
-    local itemCount = pointsBeforeReset
-    local addedItem = player:AddItem(talentItemID, itemCount)
-
-    if addedItem then
-    end
+    player:AddItem(338404, pointsBeforeReset)
+    AIO.Handle(player, "TalentBloodbattlemagespell", "UpdateTalentItemCount", GetTalentItemCount(player))
 end
-
-local function TalentBloodbattlemageOnCommand(event, player, command)
-    if (command == "talentBloodbattlemage") then
-        AIO.Handle(player, "TalentBloodbattlemagespell", "ShowTalentBloodbattlemage")
-        return false
-    end
-end
-RegisterPlayerEvent(42, TalentBloodbattlemageOnCommand)

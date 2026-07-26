@@ -13,7 +13,7 @@ function PriestHandlers.ShowTalentPriest(player)
     AIO.Handle("TalentPriestspell", "GetTalentItemCount")
 end
 
-local MAX_TALENTS = 35 -- Définition du nombre maximal de talents que le joueur peut apprendre
+local MAX_TALENTS = 60 -- Définition du nombre maximal de talents que le joueur peut apprendre
 
 local OPEN_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_72_artifact_forge_final_trait_unlocked.ogg"
 local CLOSE_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_72_artifact_forge_trait_refund_end.ogg"
@@ -143,7 +143,7 @@ frameTalentPointsRemaining:SetBackdrop({
     tileSize = 16,
     insets = { left = 5, right = 5, top = 5, bottom = 5 }
 })
-frameTalentPointsRemaining:SetPoint("BOTTOMRIGHT", frameTalentPriest, "BOTTOMRIGHT", -10, 10)
+frameTalentPointsRemaining:SetPoint("BOTTOMRIGHT", frameTalentPriest, "BOTTOMRIGHT", -960, 10)
 
 local fontTalentPointsRemainingText = frameTalentPointsRemaining:CreateFontString("fontTalentPointsRemainingText")
 fontTalentPointsRemainingText:SetFont("Fonts\\FRIZQT__.TTF", 14)
@@ -1452,7 +1452,7 @@ local playerClass = select(2, UnitClass("player")) -- Obtenir la classe du joueu
 if playerClass == "PRIEST" then
     local buttonOuvrirTalents = CreateFrame("Button", "buttonOuvrirTalents", UIParent)
     buttonOuvrirTalents:SetSize(32, 33)
-    buttonOuvrirTalents:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -152, 8) -- Placer en bas à droite avec un décalage de 10 pixels
+    buttonOuvrirTalents:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -173, 8) -- Placer en bas à droite avec un décalage de 10 pixels
 
     -- Ajouter une texture BLP au bouton
     buttonOuvrirTalents:SetNormalTexture("Interface\\TalentFrame\\Template\\MicroButton\\ButtonSystemTalent.blp")
@@ -1504,7 +1504,7 @@ PriestHandlers.UpdateTalentItemCount = function(player, count)
 end
 
 -------------------------------------------------------------
--- ✅ CORRECTION : mise à jour automatique quand le sac change
+-- CORRECTION : mise à jour automatique quand le sac change
 -- BAG_UPDATE se déclenche à chaque ajout/retrait d'item dans l'inventaire
 -- On utilise GetItemCount() côté client directement, sans aller/retour serveur
 -------------------------------------------------------------

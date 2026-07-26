@@ -1,10 +1,8 @@
-if not AIO then return end
-if not AIO.IsServer() then return end  -- ← CRUCIAL, ignore les states non-main
-if not AIO.IsMainState() then return end  -- ← CRUCIAL
+local AIO = AIO or require("AIO")
 local WarriorHandlers = AIO.AddHandlers("TalentWarriorspell", {})
 local TalentWarriorPointsSpend = {}
 
-local MAX_TALENTS = 35
+local MAX_TALENTS = 60
 
 local talents = {
 	-- Template 1
@@ -107,13 +105,12 @@ local talents = {
 	["spellshockwave"] = {spellID = 46968, itemID = 338404},
 }
 
--- CORRECTION 1 : player:GetItemCount() est l'API Eluna correcte
--- GetItemByBagAndSlot n'existe pas dans Eluna et provoquait le crash ligne 97
+-- Accesseur item talent (GetItemCount est l'API Eluna correcte)
 local function GetTalentItemCount(player)
     return player:GetItemCount(338404)
 end
 
--- CORRECTION 2 : accesseur par GUID pour éviter la collision multi-joueurs
+-- Accesseur par GUID pour éviter la collision multi-joueurs
 local function GetSpendList(player)
     local guid = player:GetGUIDLow()
     if not TalentWarriorPointsSpend[guid] then
@@ -180,6 +177,7 @@ local function LoadTalentProgression(player)
             table.insert(spendList, spellID)
             player:LearnSpell(spellID)
 
+            -- Trouver le handler correspondant au spellID
             for handler, talentData in pairs(talents) do
                 if talentData.spellID == spellID then
                     learnedSpells[handler] = true
@@ -200,9 +198,7 @@ end
 
 WarriorHandlers.RequestLearnedTalents = function(player)
     local learnedSpells = {}
-    local query = CharDBQuery(
-        "SELECT spell FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() .. ";"
-    )
+    local query = CharDBQuery("SELECT spell FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() .. ";")
     if query then
         repeat
             local spellID = query:GetUInt32(0)
@@ -215,10 +211,6 @@ WarriorHandlers.RequestLearnedTalents = function(player)
         until not query:NextRow()
     end
     AIO.Handle(player, "TalentWarriorspell", "UpdateLearnedTalents", learnedSpells)
-end
-
-WarriorHandlers.GetTalentItemCount = function(player)
-    AIO.Handle(player, "TalentWarriorspell", "UpdateTalentItemCount", GetTalentItemCount(player))
 end
 
 local function OnPlayerLogin(event, player)
@@ -235,11 +227,12 @@ local function OnCharacterDelete(event, guid)
 end
 RegisterPlayerEvent(2, OnCharacterDelete)
 
+WarriorHandlers.GetTalentItemCount = function(player)
+    AIO.Handle(player, "TalentWarriorspell", "UpdateTalentItemCount", GetTalentItemCount(player))
+end
+
 local function ResetTalentProgression(player)
-    CharDBQuery(
-        "DELETE FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() ..
-        " AND account_id = " .. player:GetAccountId() .. ";"
-    )
+    CharDBQuery("DELETE FROM character_talentspell WHERE guid = " .. player:GetGUIDLow() .. " AND account_id = " .. player:GetAccountId() .. ";")
 end
 
 WarriorHandlers.ResetTalents = function(player)

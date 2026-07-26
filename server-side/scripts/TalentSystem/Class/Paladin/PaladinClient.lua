@@ -13,7 +13,7 @@ function PaladinHandlers.ShowTalentPaladin(player)
     AIO.Handle("TalentPaladinspell", "GetTalentItemCount")
 end
 
-local MAX_TALENTS = 35 -- Définition du nombre maximal de talents que le joueur peut apprendre
+local MAX_TALENTS = 60 -- Définition du nombre maximal de talents que le joueur peut apprendre
 
 local OPEN_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_72_artifact_forge_final_trait_unlocked.ogg"
 local CLOSE_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_72_artifact_forge_trait_refund_end.ogg"
@@ -143,7 +143,7 @@ frameTalentPointsRemaining:SetBackdrop({
     tileSize = 16,
     insets = { left = 5, right = 5, top = 5, bottom = 5 }
 })
-frameTalentPointsRemaining:SetPoint("BOTTOMRIGHT", frameTalentPaladin, "BOTTOMRIGHT", -10, 10)
+frameTalentPointsRemaining:SetPoint("BOTTOMRIGHT", frameTalentPaladin, "BOTTOMRIGHT", -960, 10)
 
 local fontTalentPointsRemainingText = frameTalentPointsRemaining:CreateFontString("fontTalentPointsRemainingText")
 fontTalentPointsRemainingText:SetFont("Fonts\\FRIZQT__.TTF", 14)
@@ -365,7 +365,7 @@ local spells = {
     position = {260, -130},
     handler = "spellillumination",
     tooltips = {
-        frFR = "|cffffffffIllumination|r\n|cffffffffTalent|r |cffffff80Sacré|r\n|cffffffffRequiert|r |cfff58cbaPaladin|r\n|cffffd100Lorsque vous obtenez un effet critique avec Eclair lumineux, Lumière sacrée, ou le sort de soins Horion sacré, vous avez 100% de chances de recevoir un montant de mana égal à 30% du coût de base du sort.|r",
+        frFR = "|cffffffffIllumination|r\n|cffffffffTalent|r |cffffff80Sacré|r\n|cffffffffRequiert|r |cfff58cbaPaladin|r\n|cffffd100Lorsque vous obtenez un effet critique avec Eclair lumineux, Lumière sacrée, ou le sort de soins Horion sacré,\nvous avez 100% de chances de recevoir un montant de mana égal à 30% du coût de base du sort.|r",
         enUS = "|cffffffffIllumination|r\n|cffffffffTalent|r |cffffff80Holy|r\n|cffffffffRequires|r |cfff58cbaPaladin|r\n|cffffd100When you score a critical hit with Flash of Light, Holy Light, or the healing spell Holy Shock, you have a 100% chance to gain mana equal to 30% of the spell's base cost.|r"
     }
 },
@@ -389,7 +389,7 @@ local spells = {
     position = {475, -133},
     handler = "spellimprovedconcentrationaura",
     tooltips = {
-        frFR = "|cffffffffAura de concentration améliorée|r\n|cffffffffTalent|r |cffffff80Sacré|r\n|cffffffffRequiert|r |cfff58cbaPaladin|r\n|cffffd100Augmente de 15% supplémentaires l'effet de votre Aura de concentration, et tant que n'importe quelle Aura est active, réduit de 30% la durée de tout effet de silence ou d'interruption utilisé contre un membre du groupe affecté.\nLa réduction de durée ne se cumule avec aucun autre effet.|r",
+        frFR = "|cffffffffAura de concentration améliorée|r\n|cffffffffTalent|r |cffffff80Sacré|r\n|cffffffffRequiert|r |cfff58cbaPaladin|r\n|cffffd100Augmente de 15% supplémentaires l'effet de votre Aura de concentration, et tant que n'importe quelle Aura est active,\nréduit de 30% la durée de tout effet de silence ou d'interruption utilisé contre un membre du groupe affecté.\nLa réduction de durée ne se cumule avec aucun autre effet.|r",
         enUS = "|cffffffffImproved Concentration Aura|r\n|cffffffffTalent|r |cffffff80Holy|r\n|cffffffffRequires|r |cfff58cbaPaladin|r\n|cffffd100Increases the effect of your Concentration Aura by an additional 15%, and while any Aura is active, reduces the duration of all silence or interrupt effects used against a group member by 30%.\nThis duration reduction does not stack with any other effect.|r"
     }
 },
@@ -693,7 +693,7 @@ local spells = {
     position = {422, -405},
     handler = "spelldivinesacrifice",
     tooltips = {
-        frFR = "|cffffffffSacrifice divin|r\n|cffffffffTalent|r |cff0080ffProtection|r\n|cffffffffRequiert|r |cfff58cbaPaladin|r\n|cffffd10030% de tous les dégâts subis par les membres du groupe se trouvant à moins de 30 mètres sont redirigés vers le paladin (jusqu'à un maximum de 40% des points de vie du paladin multiplié par le nombre de membres du groupe).\nLes dégâts qui font passer le paladin sous les 20% de points de vie interrompent l'effet.\nDure 10 secondes.|r",
+        frFR = "|cffffffffSacrifice divin|r\n|cffffffffTalent|r |cff0080ffProtection|r\n|cffffffffRequiert|r |cfff58cbaPaladin|r\n|cffffd10030% de tous les dégâts subis par les membres du groupe se trouvant à moins de 30 mètres\nsont redirigés vers le paladin (jusqu'à un maximum de 40% des points de vie du paladin multiplié par le nombre de membres du groupe).\nLes dégâts qui font passer le paladin sous les 20% de points de vie interrompent l'effet.\nDure 10 secondes.|r",
         enUS = "|cffffffffDivine Sacrifice|r\n|cffffffffTalent|r |cff0080ffProtection|r\n|cffffffffRequires|r |cfff58cbaPaladin|r\n|cffffd10030% of all damage taken by group members within 30 yards is redirected to the paladin (up to a maximum of 40% of the paladin's health, multiplied by the number of group members).\nDamage that reduces the paladin's health below 20% interrupts the effect.\nLasts for 10 seconds.|r"
     }
 },
@@ -775,7 +775,7 @@ local spells = {
     position = {205, -510},
     handler = "spellreckoning",
     tooltips = {
-        frFR = "|cffffffffRétribution|r\n|cffffffffTalent|r |cff0080ffProtection|r\n|cffffffffRequiert|r |cfff58cbaPaladin|r\n|cffffd100Confère 10% de chances lorsque vous êtes victime d'une attaque qui vous inflige des dégâts ou que vous l'avez bloquée de bénéficier d'une attaque supplémentaire avec les 4 frappes suivantes dans les 8 secondes.|r",
+        frFR = "|cffffffffRétribution|r\n|cffffffffTalent|r |cff0080ffProtection|r\n|cffffffffRequiert|r |cfff58cbaPaladin|r\n|cffffd100Confère 10% de chances lorsque vous êtes victime d'une attaque qui vous inflige des dégâts\nou que vous l'avez bloquée de bénéficier d'une attaque supplémentaire avec les 4 frappes suivantes dans les 8 secondes.|r",
         enUS = "|cffffffffReckoning|r\n|cffffffffTalent|r |cff0080ffProtection|r\n|cffffffffRequires|r |cfff58cbaPaladin|r\n|cffffd100Grants a 10% chance that when you are hit by an attack or block it, you will gain an additional attack with your next 4 strikes within 8 seconds.|r"
     }
 },
@@ -1166,7 +1166,7 @@ local spells = {
     position = {770, -402},
     handler = "spelltheartofwar",
     tooltips = {
-        frFR = "|cffffffffL'art de la guerre|r\n|cffffffffTalent|r |cffff8040Vindicte|r\n|cffffffffRequiert|r |cfff58cbaPaladin|r\n|cffffd100Augmente les dégâts de vos techniques de Jugement, Inquisition et Tempête divine de 10%, et quand vous réussissez un coup critique avec vos attaques de mêlée, votre prochain sort Eclair lumineux ou Exorcisme est instantané.|r",
+        frFR = "|cffffffffL'art de la guerre|r\n|cffffffffTalent|r |cffff8040Vindicte|r\n|cffffffffRequiert|r |cfff58cbaPaladin|r\n|cffffd100Augmente les dégâts de vos techniques de Jugement, Inquisition et Tempête divine de 10%,\net quand vous réussissez un coup critique avec vos attaques de mêlée, votre prochain sort Eclair lumineux ou Exorcisme est instantané.|r",
         enUS = "|cffffffffThe Art of War|r\n|cffffffffTalent|r |cffff8040Retribution|r\n|cffffffffRequires|r |cfff58cbaPaladin|r\n|cffffd100Increases the damage of your Judgment, Inquisition, and Divine Storm abilities by 10%, and when you score a critical hit with your melee attacks, your next Holy Shock or Exorcism is instant cast.|r"
     }
 },
@@ -1248,7 +1248,7 @@ local spells = {
     position = {1045, -456},
     handler = "spellsheathoflight",
     tooltips = {
-        frFR = "|cffffffffFourreau de lumière|r\n|cffffffffTalent|r |cffff8040Vindicte|r\n|cffffffffRequiert|r |cfff58cbaPaladin|r\n|cffffd100Augmente votre puissance des sorts d'un montant égal à 30% de votre puissance d'attaque et vos sorts de soins critiques rendent à la cible un montant de points de vie égal à 60% des points de vie rendus en 12 secondes.|r",
+        frFR = "|cffffffffFourreau de lumière|r\n|cffffffffTalent|r |cffff8040Vindicte|r\n|cffffffffRequiert|r |cfff58cbaPaladin|r\n|cffffd100Augmente votre puissance des sorts d'un montant égal à 30% de votre puissance d'attaque et vos sorts\nde soins critiques rendent à la cible un montant de points de vie égal à 60% des points de vie rendus en 12 secondes.|r",
         enUS = "|cffffffffSheath of Light|r\n|cffffffffTalent|r |cffff8040Retribution|r\n|cffffffffRequires|r |cfff58cbaPaladin|r\n|cffffd100Increases your spell power by an amount equal to 30% of your attack power and your critical healing spells will heal the target for 60% of the healing amount over 12 seconds.|r"
     }
 },
@@ -1463,7 +1463,7 @@ local playerClass = select(2, UnitClass("player")) -- Obtenir la classe du joueu
 if playerClass == "PALADIN" then
     local buttonOuvrirTalents = CreateFrame("Button", "buttonOuvrirTalents", UIParent)
     buttonOuvrirTalents:SetSize(32, 33)
-    buttonOuvrirTalents:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -152, 8) -- Placer en bas à droite avec un décalage de 10 pixels
+    buttonOuvrirTalents:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -173, 8) -- Placer en bas à droite avec un décalage de 10 pixels
 
     -- Ajouter une texture BLP au bouton
     buttonOuvrirTalents:SetNormalTexture("Interface\\TalentFrame\\Template\\MicroButton\\ButtonSystemTalent.blp")

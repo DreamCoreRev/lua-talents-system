@@ -9,11 +9,11 @@ function MonkHandlers.ShowTalentMonk(player)
     frameTalentMonk:Show()
     -- Redemande au serveur l’état visuel au cas où
     AIO.Handle("TalentMonkspell", "RequestLearnedTalents")
-    -- Redemande le nombre de talents restants
+	-- Redemande le nombre de talents restants
     AIO.Handle("TalentMonkspell", "GetTalentItemCount")
 end
 
-local MAX_TALENTS = 37 -- Définition du nombre maximal de talents que le joueur peut apprendre
+local MAX_TALENTS = 60 -- Définition du nombre maximal de talents que le joueur peut apprendre
 
 local OPEN_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_72_artifact_forge_final_trait_unlocked.ogg"
 local CLOSE_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_72_artifact_forge_trait_refund_end.ogg"
@@ -143,14 +143,13 @@ frameTalentPointsRemaining:SetBackdrop({
     tileSize = 16,
     insets = { left = 5, right = 5, top = 5, bottom = 5 }
 })
-frameTalentPointsRemaining:SetPoint("BOTTOMRIGHT", frameTalentMonk, "BOTTOMRIGHT", -10, 10)
+frameTalentPointsRemaining:SetPoint("BOTTOMRIGHT", frameTalentMonk, "BOTTOMRIGHT", -960, 10)
 
 local fontTalentPointsRemainingText = frameTalentPointsRemaining:CreateFontString("fontTalentPointsRemainingText")
 fontTalentPointsRemainingText:SetFont("Fonts\\FRIZQT__.TTF", 14)
 fontTalentPointsRemainingText:SetSize(210, 20)
 fontTalentPointsRemainingText:SetPoint("CENTER", 0, 0)
 fontTalentPointsRemainingText:SetText("|cff00ff96Talents restants : 0|r")
-
 -------------------------------------------------------------
 
 -- Définir les textes en fonction de la langue locale
@@ -1096,8 +1095,8 @@ local spells = {
     position = {805, -465},
     handler = "spellzenpilgrimage",
     tooltips = {
-        frFR = "|cffffffffPèlerinage zen|r\n|cffffffffTalent |cff80fbfcMarche-vent|r\n|cffffffffRequiert|r |cff00ff96Moine|r\n|cffffd100Votre esprit abandonne votre corps et voyage jusqu'au continent de L’île Vagabonde.|r",
-        enUS = "|cffffffffZen Pilgrimage|r\n|cffffffffTalent |cff80fbfcWindsweaver|r\n|cffffffffRequires|r |cff00ff96Monk|r\n|cffffd100Your spirit leaves your body and travels to the continent of The Wandering Isle.|r"
+        frFR = "|cffffffffPèlerinage zen|r\n|cffffffffTalent |cff80fbfcMarche-vent|r\n|cffffffffRequiert|r |cff00ff96Moine|r\n|cffffd100Votre esprit abandonne votre corps et voyage jusqu’au pic de la Sérénité en Pandarie.|r",
+        enUS = "|cffffffffZen Pilgrimage|r\n|cffffffffTalent |cff80fbfcWindsweaver|r\n|cffffffffRequires|r |cff00ff96Monk|r\n|cffffd100Your spirit travels to the Peak of Serenity in Pandaria, leaving your body behind.|r"
     }
 },
 
@@ -1391,7 +1390,7 @@ local playerClass = select(2, UnitClass("player")) -- Obtenir la classe du joueu
 if playerClass == "MONK" then
     local buttonOuvrirTalents = CreateFrame("Button", "buttonOuvrirTalents", UIParent)
     buttonOuvrirTalents:SetSize(32, 33)
-    buttonOuvrirTalents:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -152, 8) -- Placer en bas à droite avec un décalage de 10 pixels
+    buttonOuvrirTalents:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -173, 8) -- Placer en bas à droite avec un décalage de 10 pixels
 
     -- Ajouter une texture BLP au bouton
     buttonOuvrirTalents:SetNormalTexture("Interface\\TalentFrame\\Template\\MicroButton\\ButtonSystemTalent.blp")

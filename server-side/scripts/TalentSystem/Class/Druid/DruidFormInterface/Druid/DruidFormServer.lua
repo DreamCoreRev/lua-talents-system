@@ -1,6 +1,4 @@
-if not AIO then return end
-if not AIO.IsServer() then return end  -- ← CRUCIAL, ignore les states non-main
-if not AIO.IsMainState() then return end  -- ← CRUCIAL
+local AIO = AIO or require("AIO")
 local DruidHandlers = AIO.AddHandlers("FormDruidspell", {})
 local FormDruidPointsLeft = {}
 local FormDruidPointsSpend = {}

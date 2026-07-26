@@ -13,7 +13,7 @@ function RogueHandlers.ShowTalentRogue(player)
     AIO.Handle("TalentRoguespell", "GetTalentItemCount")
 end
 
-local MAX_TALENTS = 35 -- Définition du nombre maximal de talents que le joueur peut apprendre
+local MAX_TALENTS = 70 -- Définition du nombre maximal de talents que le joueur peut apprendre
 
 local OPEN_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_72_artifact_forge_final_trait_unlocked.ogg"
 local CLOSE_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_72_artifact_forge_trait_refund_end.ogg"
@@ -143,7 +143,7 @@ frameTalentPointsRemaining:SetBackdrop({
     tileSize = 16,
     insets = { left = 5, right = 5, top = 5, bottom = 5 }
 })
-frameTalentPointsRemaining:SetPoint("BOTTOMRIGHT", frameTalentRogue, "BOTTOMRIGHT", -10, 10)
+frameTalentPointsRemaining:SetPoint("BOTTOMRIGHT", frameTalentRogue, "BOTTOMRIGHT", -960, 10)
 
 local fontTalentPointsRemainingText = frameTalentPointsRemaining:CreateFontString("fontTalentPointsRemainingText")
 fontTalentPointsRemainingText:SetFont("Fonts\\FRIZQT__.TTF", 14)
@@ -630,11 +630,33 @@ local spells = {
     id = "spellDualWieldSpecialization",
     name = "buttonSpellDualWieldSpecialization",
     icon = "Interface/icons/ability_dualwield",
-    position = {478, -350},
+    position = {527, -510},
     handler = "spelldualwieldspecialization",
     tooltips = {
         frFR = "|cffffffffSpécialisation Ambidextrie|r\n|cffffffffTalent|r |cfffd7e00Combat|r\n|cffffffffRequiert|r |cfffff569Voleur|r\n|cffffd100Augmente les points de dégâts infligés par l'arme que vous utilisez en main gauche de 50%.|r",
         enUS = "|cffffffffDual Wield Specialization|r\n|cffffffffTalent|r |cfffd7e00Combat|r\n|cffffffffRequires|r |cfffff569Rogue|r\n|cffffd100Increases the damage dealt by the weapon you use in your off-hand by 50%.|r"
+    }
+},
+{
+    id = "spellCrimsonVial",
+    name = "buttonSpellCrimsonVial",
+    icon = "Interface/icons/ability_rogue_crimsonvial",
+    position = {478, -350},
+    handler = "spelldualcrimsonvial",
+    tooltips = {
+        frFR = "|cffffffffFiole cramoisie|r\n|cffffffffTalent|r |cffea0000Assassinat|r\n|cffffffffRequiert|r |cfffff569Voleur|r\n|cffffd100Vous buvez une décoction alchimique qui vous rend 400% de votre maximum de points de vie en 4 sec.|r",
+        enUS = "|cffffffffCrimson Vial|r\n|cffffffffTalent|r |cffea0000Assassination|r\n|cffffffffRequires|r |cfffff569Rogue|r\n|cffffd100You drink an alchemical concoction that restores 400% of your maximum health over 4 seconds.|r"
+    }
+},
+{
+    id = "spellShroudofConcealment",
+    name = "buttonSpellShroudofConcealment",
+    icon = "Interface/icons/ability_rogue_shroudofconcealment",
+    position = {527, -402},
+    handler = "spellshroudofconcealment",
+    tooltips = {
+        frFR = "|cffffffffVoile de dissimulation|r\n|cffffffffTalent|r |cffea0000Assassinat|r\n|cffffffffRequiert|r |cfffff569Voleur|r\n|cffffd100Déploie une cape qui enveloppe les membres du\ngroupe ou raid à moins de 20 mètres dans les\nombres, les dissimulant aux yeux des autres\npendant 15 s au maximum.|r",
+        enUS = "|cffffffffShroud of Concealment|r\n|cffffffffTalent|r |cffea0000Assassination|r\n|cffffffffRequires|r |cfffff569Rogue|r\n|cffffd100Extend a cloak that wraps party and raid\nmembers within 20 yards in shadows, concealing\nthem from sight for up to 15 sec.|r"
     }
 },
 {
@@ -712,6 +734,17 @@ local spells = {
     tooltips = {
         frFR = "|cffffffffCoup de pied amélioré|r\n|cffffffffTalent|r |cfffd7e00Combat|r\n|cffffffffRequiert|r |cfffff569Voleur|r\n|cffffd100Confère à votre technique Coup de pied 100% de chances de rendre la cible muette pendant 2 secondes.|r",
         enUS = "|cffffffffImproved Kick|r\n|cffffffffTalent|r |cfffd7e00Combat|r\n|cffffffffRequires|r |cfffff569Rogue|r\n|cffffd100Gives your Kick ability 100% chance to silence the target for 2 seconds.|r"
+    }
+},
+{
+    id = "spellRecuperate",
+    name = "buttonSpellRecuperate",
+    icon = "Interface/icons/ability_rogue_recuperate",
+    position = {260, -563},
+    handler = "spellrecuperate",
+    tooltips = {
+        frFR = "|cffffffffConversion|r\n|cffffffffTalent|r |cfffd7e00Combat|r\n|cffffffffRequiert|r |cfffff569Voleur|r\n|cffffd100Coup de grâce qui consomme les points de\ncombo sur une cible proche pour rendre [Conversion améliorée: 4] [3,5 / 3]%\ndu maximum des points de vie toutes les 3 s. La durée dépend du nombre de points de combo :\n1 point : 6 secondes\n2 points : 12 secondes\n3 points : 18 secondes\n4 points : 24 secondes\n5 points : 30 secondes|r",
+        enUS = "|cffffffffRecuperate|r\n|cffffffffTalent|r |cfffd7e00Combat|r\n|cffffffffRequires|r |cfffff569Rogue|r\n|cffffd100Finishing move that consumes combo points on\nany nearby target to restore [Improved Recuperate: 4] [3.5 / 3]%\nof maximum health every 3 sec.  Lasts longer per combo point:\n1 point : 6 seconds\n2 points : 12 seconds\n3 points : 18 seconds\n4 points : 24 seconds\n5 points : 30 seconds|r"
     }
 },
 {
@@ -1193,6 +1226,17 @@ local spells = {
     }
 },
 {
+    id = "spellShadowBlades",
+    name = "buttonSpellShadowBlades",
+    icon = "Interface/icons/inv_knife_1h_grimbatolraid_d_03",
+    position = {825, -560},
+    handler = "spellshadowblades",
+    tooltips = {
+        frFR = "|cffffffffLames de l’ombre|r\n|cffffffffTalent|r |cffffff00Finesse|r\n|cffffffffRequiert|r |cfffff569Voleur|r\n|cffffd100Vous puisez dans les ombres environnantes pour\nrenforcer vos armes, ce qui permet à vos\nattaques d’infliger 20 % de dégâts d’ombre\nsupplémentaires. En outre, vos techniques qui\ngénèrent des points de combo remplissent vos\npoints de combo pendant 16 s.|r",
+        enUS = "|cffffffffShadow Blades|r\n|cffffffffTalent|r |cffffff00Finesse|r\n|cffffffffRequires|r |cfffff569Rogue|r\n|cffffd100Draws upon surrounding shadows to empower\nyour weapons, causing your attacks to deal 20%\nadditional damage as Shadow and causing your\ncombo point generating abilities to generate full\ncombo points for 16 sec.|r"
+    }
+},
+{
     id = "spellSinisterCalling",
     name = "buttonSpellSinisterCalling",
     icon = "Interface/icons/ability_rogue_sinistercalling",
@@ -1460,7 +1504,7 @@ local playerClass = select(2, UnitClass("player")) -- Obtenir la classe du joueu
 if playerClass == "ROGUE" then
     local buttonOuvrirTalents = CreateFrame("Button", "buttonOuvrirTalents", UIParent)
     buttonOuvrirTalents:SetSize(32, 33)
-    buttonOuvrirTalents:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -152, 8) -- Placer en bas à droite avec un décalage de 10 pixels
+    buttonOuvrirTalents:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -173, 8) -- Placer en bas à droite avec un décalage de 10 pixels
 
     -- Ajouter une texture BLP au bouton
     buttonOuvrirTalents:SetNormalTexture("Interface\\TalentFrame\\Template\\MicroButton\\ButtonSystemTalent.blp")

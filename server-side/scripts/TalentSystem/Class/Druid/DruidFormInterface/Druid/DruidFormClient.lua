@@ -23,7 +23,7 @@ frameFormDruid:SetPoint("TOPLEFT", UIParent, "TOPLEFT", 100, -100) -- Adjust the
 frameFormDruid:SetFrameLevel(100)  -- Définit un niveau de frame élevé
 frameFormDruid:SetBackdrop(
 {
-    bgFile = "interface/TalentFrame/Template/Class/Druid/talentsclassbackgrounddruid2", --Interface/AchievementFrame/UI-Achievement-Parchment-Horizontal
+    bgFile = "interface/TalentFrame/talentsclassbackgrounddruid2", --Interface/AchievementFrame/UI-Achievement-Parchment-Horizontal
     edgeFile = "interface/tooltips/ui-tooltip-border-corrupteddruid2", --Interface/DialogFrame/UI-DialogBox-Border
     edgeSize = 20,
     insets = { left = 5, right = 5, top = 5, bottom = 5 }

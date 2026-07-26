@@ -13,7 +13,7 @@ function WarriorHandlers.ShowTalentWarrior(player)
     AIO.Handle("TalentWarriorspell", "GetTalentItemCount")
 end
 
-local MAX_TALENTS = 35 -- Définition du nombre maximal de talents que le joueur peut apprendre
+local MAX_TALENTS = 60 -- Définition du nombre maximal de talents que le joueur peut apprendre
 
 local OPEN_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_72_artifact_forge_final_trait_unlocked.ogg"
 local CLOSE_TALENT_WINDOW_SOUND = "Sound\\TalentsSystem\\ui_72_artifact_forge_trait_refund_end.ogg"
@@ -206,7 +206,7 @@ local function CreateSpellButton(name, texturePath, tooltipText, talentHandler, 
 	-- Stocker le bouton pour pouvoir le mettre à jour plus tard
     spellButtons[talentHandler] = button
 	
-	-- ✅ AJOUT DU CADRE VISUEL SUPERPOSÉ SUR LE BOUTON
+	--  AJOUT DU CADRE VISUEL SUPERPOSÉ SUR LE BOUTON
     local buttonFrame = button:CreateTexture(nil, "OVERLAY")
     buttonFrame:SetTexture("Interface/TALENTFRAME/Template/Button_Talent.blp")
     buttonFrame:SetSize(36, 36)
@@ -219,12 +219,12 @@ learnIndicator:SetTexture("Interface/Buttons/UI-CheckBox-Check")
 learnIndicator:SetSize(30, 30)
 learnIndicator:SetPoint("BOTTOMRIGHT", -2, 2)
 learnIndicator:Hide()
-button.learnIndicator = learnIndicator -- ✅ rendre accessible à l’extérieur
+button.learnIndicator = learnIndicator --  rendre accessible à l’extérieur
 
 -- Texte pour afficher l'état du bouton (0 ou 1)
 local buttonText = button:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
 buttonText:SetPoint("BOTTOMRIGHT", button, "BOTTOMRIGHT", -2, 2)
-button.buttonText = buttonText -- ✅ rendre accessible à l’extérieur
+button.buttonText = buttonText --  rendre accessible à l’extérieur
 
     -- Fonction pour mettre à jour l'état du bouton et de l'indicateur d'apprentissage
     local function UpdateButtonState()
@@ -1484,7 +1484,7 @@ local playerClass = select(2, UnitClass("player")) -- Obtenir la classe du joueu
 if playerClass == "WARRIOR" then
     local buttonOuvrirTalents = CreateFrame("Button", "buttonOuvrirTalents", UIParent)
     buttonOuvrirTalents:SetSize(32, 33)
-    buttonOuvrirTalents:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -152, 8) -- Placer en bas à droite avec un décalage de 10 pixels
+    buttonOuvrirTalents:SetPoint("BOTTOMRIGHT", UIParent, "BOTTOMRIGHT", -173, 8) -- Placer en bas à droite avec un décalage de 10 pixels
 
     -- Ajouter une texture BLP au bouton
     buttonOuvrirTalents:SetNormalTexture("Interface\\TalentFrame\\Template\\MicroButton\\ButtonSystemTalent.blp")
@@ -1536,7 +1536,7 @@ WarriorHandlers.UpdateTalentItemCount = function(player, count)
 end
 
 -------------------------------------------------------------
--- ✅ CORRECTION : mise à jour automatique quand le sac change
+--  CORRECTION : mise à jour automatique quand le sac change
 -- BAG_UPDATE se déclenche à chaque ajout/retrait d'item dans l'inventaire
 -- On utilise GetItemCount() côté client directement, sans aller/retour serveur
 -------------------------------------------------------------
